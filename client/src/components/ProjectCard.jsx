@@ -14,19 +14,36 @@ const ProjectCard = ({ project, onClick }) => {
     }
   };
 
+  const isValidUrl = (url) => {
+    if (!url || typeof url !== 'string') return false;
+    const cleanUrl = url.trim().toLowerCase();
+    if (cleanUrl === '' || 
+        cleanUrl === '#' || 
+        cleanUrl === '-' || 
+        cleanUrl === 'coming soon' || 
+        cleanUrl === 'todo' || 
+        cleanUrl === 'placeholder' ||
+        cleanUrl === 'null' ||
+        cleanUrl === 'undefined') {
+      return false;
+    }
+    return true;
+  };
+
   const title = project.title || "";
   const subtitle = project.subtitle || project.shortDescription || "";
   const techStack = project.techStack || project.technologies || [];
   
   const links = project.links || {};
-  const quickLinks = [
-    { key: 'demo', icon: '🌐', url: links.demo || project.demoUrl || project.demo || project.liveUrl },
-    { key: 'github', icon: '💻', url: links.github || project.githubUrl || project.github },
-    { key: 'figma', icon: '🎨', url: links.figma },
-    { key: 'drive', icon: '📂', url: links.drive || links.googleDrive },
-    { key: 'rab', icon: '📊', url: links.rab },
-    { key: 'model', icon: '🏗️', url: links.model || links.modelPreview },
-  ].filter(link => link.url);
+  const demoUrl = project.liveUrl || links.demo || links.live || project.demoUrl || project.demo;
+  const githubUrl = project.githubUrl || links.github || project.github;
+  const figmaUrl = project.figmaUrl || links.figma || project.figma;
+
+  const primaryCTAs = [
+    { key: 'demo', label: 'Demo', icon: '🌐', url: demoUrl },
+    { key: 'github', label: 'GitHub', icon: '💻', url: githubUrl },
+    { key: 'figma', label: 'Figma', icon: '🎨', url: figmaUrl },
+  ];
 
   const cardVariants = {
     hidden: { opacity: 0, y: 30 },
@@ -104,23 +121,39 @@ const ProjectCard = ({ project, onClick }) => {
           </button>
 
           {/* Quick Links Row */}
-          {quickLinks.length > 0 && (
-            <div className="project-quick-links">
-              {quickLinks.map(link => (
-                <a 
-                  key={link.key}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="quick-link-btn"
-                  title={link.key.toUpperCase()}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {link.icon}
-                </a>
-              ))}
-            </div>
-          )}
+          <div className="project-quick-links" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px', width: '100%' }}>
+            {primaryCTAs.map(link => {
+              const valid = isValidUrl(link.url);
+              if (valid) {
+                return (
+                  <a 
+                    key={link.key}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="quick-link-btn-card"
+                    title={link.label}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <span style={{ fontSize: '0.95rem' }}>{link.icon}</span>
+                    <span className="quick-link-text">{link.label}</span>
+                  </a>
+                );
+              } else {
+                return (
+                  <div 
+                    key={link.key}
+                    className="quick-link-btn-card-disabled"
+                    title={`${link.label} - Coming Soon`}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <span style={{ fontSize: '0.95rem' }}>{link.icon}</span>
+                    <span className="quick-link-text">{link.label} — Soon</span>
+                  </div>
+                );
+              }
+            })}
+          </div>
         </div>
       </div>
     </motion.div>

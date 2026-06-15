@@ -398,3 +398,55 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Added in Batch F15H.2 */
+.quick-link-btn-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 4px;
+  border-radius: 6px;
+  background: rgba(var(--primary-color-rgb), 0.05);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.15);
+  color: var(--text-primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: all var(--transition-fast) ease;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.quick-link-btn-card:hover {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(var(--primary-color-rgb), 0.2);
+}
+
+.quick-link-btn-card-disabled {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 4px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed var(--border-color);
+  color: var(--text-secondary);
+  font-size: 0.65rem;
+  font-weight: 500;
+  opacity: 0.5;
+  cursor: not-allowed;
+  user-select: none;
+}
+
+.quick-link-text {
+  font-size: 0.72rem;
+}
+
+.quick-link-btn-card-disabled .quick-link-text {
+  font-size: 0.65rem;
+}
+

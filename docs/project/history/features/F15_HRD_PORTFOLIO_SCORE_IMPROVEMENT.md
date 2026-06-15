@@ -18,6 +18,7 @@ Meningkatkan keterbacaan website portfolio oleh crawler sederhana, recruiter too
 - Poles Pengalaman Kerja / Experience Timeline (Batch F15D) selesai dikerjakan pada `experienceFallback.js` dengan memformulasikan deskripsi pekerjaan, kontribusi teknis (REST API, CRUD, authentication, RBAC, admin dashboard), serta tech stack pada masing-masing timeline pengalaman agar lebih konkret, terukur, dan selaras dengan target kompetensi Full Stack Web Developer.
 - Kurasi Relevansi Kredensial / Credentials Relevance Polish (Batch F15E) selesai dikerjakan pada `credentialsData.js` dengan memoles ringkasan (summary) dan daftar skill pada sertifikat IT utama (BNSP Junior Web Developer, BBPVP Node.js & React, RevoU Intro to Software Engineering, dsb) agar berfokus pada validasi kemampuan developer. Selain itu, status penayangan (featured flag) untuk sertifikat non-IT dideaktivasi agar tidak mengaburkan fokus visual utama bagi perekrut Full Stack.
 - Merapikan tombol CTA utama (Demo, GitHub, Figma) pada Detail Proyek serta mengintegrasikan pengelolaan Figma URL di admin project form & database (Batch F15H.1) agar link Figma bisa dikelola langsung dari CMS.
+- Menyinkronkan tombol CTA utama (Demo, GitHub, Figma) pada Project Card (Batch F15H.2) agar konsisten dengan modal detail proyek, menampilkan status "Soon" secara visual jika link kosong/tidak valid.
 - Snapshot berisi professional summary, core stack, featured work, dan recruiter links.
 - Tampilan visual React Home saat JS aktif tidak terpengaruh sedikit pun.
 
@@ -32,6 +33,7 @@ Meningkatkan keterbacaan website portfolio oleh crawler sederhana, recruiter too
 | F15D | Experience Timeline Polish | Completed | Menyempurnakan deskripsi pencapaian pada modul pengalaman. | F15C.1 |
 | F15E | Credentials Relevance Polish | Completed | Kurasi relevansi dan deskripsi kredensial/sertifikasi. | F15D |
 | F15H.1 | Project CTA Buttons + Admin Figma URL | Completed | Merapikan tombol utama (Demo, GitHub, Figma) pada detail project modal dengan status Coming Soon jika kosong serta menambahkan field figmaUrl di Project form & db. | F15E |
+| F15H.2 | Project Card CTA Buttons | Completed | Merapikan tombol utama (Demo, GitHub, Figma) pada Project Card dengan status Soon jika kosong. | F15H.1 |
 | F15F | Security and GitHub Recruiter Audit | Pending | Audit repositori dan profil GitHub untuk kebutuhan rekrutmen. | F15E |
 | F15G | Lighthouse and Final HRD Score QA | Pending | Pengukuran skor akhir dengan Lighthouse QA. | F15F |
 
