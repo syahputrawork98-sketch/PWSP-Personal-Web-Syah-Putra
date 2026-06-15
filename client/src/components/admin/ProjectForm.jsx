@@ -10,6 +10,7 @@ const ProjectForm = ({ initialData, onSubmit, onCancel, loading }) => {
     techStack: '', // Comma-separated string for input
     githubUrl: '',
     liveUrl: '',
+    figmaUrl: '',
     featured: false,
     status: 'DRAFT',
     order: 0,
@@ -24,6 +25,7 @@ const ProjectForm = ({ initialData, onSubmit, onCancel, loading }) => {
         imageUrl: initialData.imageUrl || '',
         githubUrl: initialData.githubUrl || '',
         liveUrl: initialData.liveUrl || '',
+        figmaUrl: initialData.figmaUrl || '',
       });
     }
   }, [initialData]);
@@ -143,7 +145,7 @@ const ProjectForm = ({ initialData, onSubmit, onCancel, loading }) => {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-4)' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--space-4)' }}>
         <div className="form-group">
           <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>GitHub URL</label>
           <input 
@@ -158,6 +160,15 @@ const ProjectForm = ({ initialData, onSubmit, onCancel, loading }) => {
           <input 
             name="liveUrl"
             value={formData.liveUrl}
+            onChange={handleChange}
+            style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
+          />
+        </div>
+        <div className="form-group">
+          <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>Figma URL</label>
+          <input 
+            name="figmaUrl"
+            value={formData.figmaUrl}
             onChange={handleChange}
             style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
           />

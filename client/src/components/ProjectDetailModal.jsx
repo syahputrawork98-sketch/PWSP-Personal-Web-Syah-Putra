@@ -23,14 +23,18 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
     return true;
   };
 
-  const linkTiles = [
-    { key: 'demo', label: 'Demo / Live', icon: '🌐', url: links.demo || project.demoUrl || project.demo || project.liveUrl },
+  const primaryCTAs = [
+    { key: 'demo', label: 'Demo', icon: '🌐', url: links.demo || project.demoUrl || project.demo || project.liveUrl },
     { key: 'github', label: 'GitHub', icon: '💻', url: links.github || project.githubUrl || project.github },
-    { key: 'figma', label: 'Figma', icon: '🎨', url: links.figma },
+    { key: 'figma', label: 'Figma', icon: '🎨', url: links.figma || project.figmaUrl || project.figma },
+  ];
+
+  const secondaryLinks = [
     { key: 'drive', label: 'Google Drive', icon: '📂', url: links.drive || links.googleDrive },
     { key: 'rab', label: 'RAB / Estimasi', icon: '📊', url: links.rab },
     { key: 'model', label: 'Model Preview', icon: '🏗️', url: links.model || links.modelPreview },
   ].filter(tile => isValidUrl(tile.url));
+
 
   return (
     <AnimatePresence>
@@ -209,38 +213,88 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
                     <h4 style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1.5px', color: 'var(--text-secondary)', marginBottom: 'var(--space-3)', fontWeight: 700 }}>
                       Tautan & Aset
                     </h4>
-                    {linkTiles.length > 0 ? (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                        {linkTiles.map(tile => (
-                          <a 
-                            key={tile.key}
-                            href={tile.url.trim()}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="modal-link-item"
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              padding: '12px 16px',
-                              background: 'var(--surface-color)',
-                              border: '1px solid var(--border-color)',
-                              borderRadius: 'var(--radius-md)',
-                              textDecoration: 'none',
-                              color: 'var(--text-primary)',
-                              gap: '12px'
-                            }}
-                          >
-                            <span style={{ fontSize: '1.25rem' }}>{tile.icon}</span>
-                            <span style={{ fontSize: '0.88rem', fontWeight: 600, flex: 1 }}>{tile.label}</span>
-                            <span className="modal-link-arrow" style={{ transition: 'transform 0.2s ease', opacity: 0.6 }}>→</span>
-                          </a>
-                        ))}
-                      </div>
-                    ) : (
-                      <div style={{ padding: 'var(--space-4)', background: 'var(--surface-color)', borderRadius: 'var(--radius-md)', border: '1px dashed var(--border-color)', textAlign: 'center' }}>
-                        <p style={{ fontSize: '0.85rem', opacity: 0.6, margin: 0, fontStyle: 'italic', color: 'var(--text-secondary)' }}>Tautan belum tersedia</p>
-                      </div>
-                    )}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      {/* Primary CTAs */}
+                      {primaryCTAs.map(tile => {
+                        const valid = isValidUrl(tile.url);
+                        if (valid) {
+                          return (
+                            <a 
+                              key={tile.key}
+                              href={tile.url.trim()}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="modal-link-item"
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                padding: '12px 16px',
+                                background: 'var(--surface-color)',
+                                border: '1px solid var(--border-color)',
+                                borderRadius: 'var(--radius-md)',
+                                textDecoration: 'none',
+                                color: 'var(--text-primary)',
+                                gap: '12px'
+                              }}
+                            >
+                              <span style={{ fontSize: '1.25rem' }}>{tile.icon}</span>
+                              <span style={{ fontSize: '0.88rem', fontWeight: 600, flex: 1 }}>{tile.label}</span>
+                              <span className="modal-link-arrow" style={{ transition: 'transform 0.2s ease', opacity: 0.8, fontSize: '0.8rem', fontWeight: 700, color: 'var(--primary-color)' }}>Open &rarr;</span>
+                            </a>
+                          );
+                        } else {
+                          return (
+                            <div 
+                              key={tile.key}
+                              className="modal-link-item-disabled"
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                padding: '12px 16px',
+                                background: 'var(--surface-color)',
+                                border: '1px solid var(--border-color)',
+                                borderRadius: 'var(--radius-md)',
+                                color: 'var(--text-secondary)',
+                                gap: '12px',
+                                opacity: 0.5,
+                                cursor: 'not-allowed',
+                                userSelect: 'none'
+                              }}
+                            >
+                              <span style={{ fontSize: '1.25rem' }}>{tile.icon}</span>
+                              <span style={{ fontSize: '0.88rem', fontWeight: 600, flex: 1, opacity: 0.7 }}>{tile.label}</span>
+                              <span style={{ fontSize: '0.75rem', fontWeight: 600, opacity: 0.6, letterSpacing: '0.5px', textTransform: 'uppercase' }}>Coming Soon</span>
+                            </div>
+                          );
+                        }
+                      })}
+
+                      {/* Secondary Links */}
+                      {secondaryLinks.map(tile => (
+                        <a 
+                          key={tile.key}
+                          href={tile.url.trim()}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="modal-link-item"
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            padding: '12px 16px',
+                            background: 'var(--surface-color)',
+                            border: '1px solid var(--border-color)',
+                            borderRadius: 'var(--radius-md)',
+                            textDecoration: 'none',
+                            color: 'var(--text-primary)',
+                            gap: '12px'
+                          }}
+                        >
+                          <span style={{ fontSize: '1.25rem' }}>{tile.icon}</span>
+                          <span style={{ fontSize: '0.88rem', fontWeight: 600, flex: 1 }}>{tile.label}</span>
+                          <span className="modal-link-arrow" style={{ transition: 'transform 0.2s ease', opacity: 0.6 }}>&rarr;</span>
+                        </a>
+                      ))}
+                    </div>
                   </div>
 
                 </div>

@@ -43,7 +43,7 @@ const getProjectById = async (req, res, next) => {
 const createProject = async (req, res, next) => {
   const {
     title, slug, shortDescription, description, imageUrl,
-    techStack, githubUrl, liveUrl, featured, status, order
+    techStack, githubUrl, liveUrl, figmaUrl, featured, status, order
   } = req.body || {};
 
   // Basic Validation
@@ -91,6 +91,7 @@ const createProject = async (req, res, next) => {
         techStack: techStack || [],
         githubUrl,
         liveUrl,
+        figmaUrl,
         featured: featured || false,
         status: status || 'DRAFT',
         order: order || 0,
@@ -109,7 +110,7 @@ const updateProject = async (req, res, next) => {
   const { id } = req.params;
   const {
     title, slug, shortDescription, description, imageUrl,
-    techStack, githubUrl, liveUrl, featured, status, order
+    techStack, githubUrl, liveUrl, figmaUrl, featured, status, order
   } = req.body || {};
 
   // Partial Validation
@@ -164,6 +165,7 @@ const updateProject = async (req, res, next) => {
         techStack: techStack !== undefined ? techStack : existingProject.techStack,
         githubUrl: githubUrl !== undefined ? githubUrl : existingProject.githubUrl,
         liveUrl: liveUrl !== undefined ? liveUrl : existingProject.liveUrl,
+        figmaUrl: figmaUrl !== undefined ? figmaUrl : existingProject.figmaUrl,
         featured: featured !== undefined ? featured : existingProject.featured,
         status: status !== undefined ? status : existingProject.status,
         order: order !== undefined ? order : existingProject.order,
