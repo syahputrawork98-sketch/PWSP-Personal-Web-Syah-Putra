@@ -367,4 +367,188 @@ export const translations = {
       }
     }
   },
+  JA: {
+    nav: {
+      home: 'ホーム',
+      about: '私について',
+      experience: '職歴',
+      credentials: '資格',
+      projects: 'プロジェクト',
+      learn: '学習ライブラリ',
+      contact: 'お問い合わせ',
+      menu: 'メニュー',
+    },
+    home: {
+      contactMe: '連絡する',
+      loading: 'データを読み込み中...',
+    },
+    experience: {
+      title: '職歴',
+      p1: 'Full Stack Developerとしてのフォーカスを補完する、プロフェッショナルなバックグラウンド、フリーランスIT、および部門横断的な業務の概要です。契約業務については以下に記載しており、技術的な証明や詳細なケーススタディは',
+      portfolioLinkText: 'プロジェクトポートフォリオ',
+      p2: 'ページで確認できます。',
+      loading: '職歴データを読み込み中...',
+      empty: '職歴データは現在利用できません。',
+      sections: {
+        IT_FREELANCE: {
+          title: '💻 フリーランス Full Stack & IT業務',
+          subtitle: 'Web開発、デジタルシステム、ダッシュボード、API、および技術実装におけるクライアントベースの実績。',
+        },
+        FORMAL_WORK: {
+          title: '🏢 社員としての実務経験',
+          subtitle: '業務規律、プロフェッショナルなコミュニケーション、および納品責任を養った実務経験。',
+        },
+        GENERAL_FREELANCE: {
+          title: '🛠️ その他のフリーランス / 技術サポート業務',
+          subtitle: 'ビジネスプロセスの理解、技術ドキュメント、およびクライアント要件をサポートした非ITフリーランスの実績。',
+        },
+      },
+    },
+    projects: {
+      title: 'プロジェクトポートフォリオ',
+      description: 'ソフトウェア開発から精密機械の設計、建築コスト見積もりまで、様々な分野 of プロジェクトをご覧ください。',
+      loading: 'プロジェクトデータを読み込み中...',
+      empty: 'プロジェクトデータは現在利用できません。',
+      emptyCategory: 'カテゴリ「{category}」のプロジェクトはまだありません。',
+      otherProjects: 'その他のプロジェクト',
+      categories: {
+        all: 'すべて',
+        it: 'IT & Web',
+        mfg: '製造 & エンジニアリング',
+        machine: '3D機械モデル',
+        est: '建築モデル & 見積もり',
+      },
+    },
+    modal: {
+      summary: 'プロジェクト概要',
+      noDescription: 'プロジェクト説明は現在利用できません。',
+      features: '主な特徴',
+      responsibilities: '主な役割・担当',
+      challenge: '課題',
+      solution: '解決策',
+      role: '役割',
+      status: 'ステータス',
+      tech: '使用技術・ツール',
+      links: 'リンク & アセット',
+      impact: '成果 & インパクト',
+      comingSoon: '近日公開',
+      close: 'プロジェクト詳細を閉じる',
+    },
+    about: {
+      loading: 'プロフィールデータを読み込み中...',
+      empty: 'プロフィールデータは現在利用できません。',
+      title: '私について',
+      summaryTitle: 'プロフェッショナルサマリー',
+      emptySummary: 'データは現在利用できません。',
+      birthPlace: '出生地',
+      birthDate: '生年月日',
+      nationality: '国籍',
+      indonesia: 'インドネシア',
+      status: 'ステータス',
+      activeFreelance: 'アクティブ / フリーランス',
+      downloadCv: 'CV / 履歴書をダウンロード',
+      educationTitle: '学歴 & 基礎分野',
+      emptyEducation: '学歴データは現在利用できません。',
+      valuesTitle: '価値観 & 強み',
+      experienceReframing: {
+        title: '8年以上のIT & デジタル化の基盤',
+        desc: '単なる過去の経験にとどまらず、ITシステム分野で8年間過ごしたことで、アプリケーション構築時の思考プロセスが形成されました。以下の分野で専門知識を提供します：',
+        items: [
+          { title: 'フルスタック実装', desc: 'データベース設計、REST API構築からレスポンシブなユーザーインターフェースまで、Webアプリケーションをエンドツーエンドで構築可能。' },
+          { title: '業務システム思考', desc: '現場の実際のワークフローを理解し、管理者とユーザーの双方にとって関連性が高く使いやすいデジタルシステムを設計。' },
+          { title: '確実なデリバリー', desc: '構造化されたプロジェクト完了、安定した機能性、および長期的なコードの保守性にフォーカス。' }
+        ]
+      },
+      credentialsSection: {
+        title: '資格 & プロフェッショナル認定',
+        desc: 'Web開発、製造、および建設管理における専門知識を証明する、様々な国家資格（BNSP）および技術研修の認定を保有しています。',
+        buttonText: 'すべての証明書を表示 →'
+      },
+      categories: {
+        frontend: 'フロントエンド',
+        backend: 'バックエンド',
+        database: 'データベース',
+        tools: 'ツール & デプロイ',
+        automation: '自動化 & 生産性',
+        others: 'デザイン & その他'
+      }
+    },
+    credentials: {
+      loading: '資格データを読み込み中...',
+      title: '資格 & 実績',
+      description: 'キャリアを通じて取得したプロフェッショナルな能力証明、研修、および受賞歴のコレクションです。',
+      emptyCategory: 'カテゴリ {category} の証明書はまだありません。',
+      noThumbnail: 'サムネイルはありません',
+      viewCertificate: '証明書を表示',
+      categories: {
+        all: 'すべて',
+        bnsp: 'BNSP',
+        it: 'IT & デジタル',
+        mfg: '技術 & 製造',
+        construction: '建設',
+        selfDev: '自己開発',
+        internship: 'インターンシップ & 参加',
+        supportDocs: 'サポートドキュメント'
+      },
+      modal: {
+        close: 'モーダルを閉じる',
+        noPreview: '証明書のプレビューは現在システムに登録されていません。',
+        descTitle: '資格説明',
+        noDesc: '詳細な説明はまだ追加されていません。',
+        openDrive: 'Google ドライブで開く',
+        noDriveLink: 'ドライブのリンクはありません',
+        back: '戻る'
+      }
+    },
+    learn: {
+      loading: '学習アイテムを読み込み中...',
+      title: '学習ライブラリ',
+      description: '学習進捗、技術メモ、および練習用リポジトリのアーカイブです。',
+      offlineFallback: '注：現在オフライン用代替データを表示しています。',
+      emptyCategory: 'カテゴリ {category} に学習アイテムは見つかりませんでした。',
+      level: 'レベル',
+      viewRepo: 'リポジトリを表示',
+      repoComingSoon: 'リポジトリ近日公開',
+      viewNotes: 'メモを表示',
+      categories: {
+        all: 'すべて',
+        programming: 'プログラミング言語',
+        frontend: 'フロントエンド',
+        backend: 'バックエンド',
+        database: 'データベース & データ',
+        devops: 'DevOps & デプロイ',
+        tools: 'ツール & ワークフロー'
+      },
+      status: {
+        unknown: '不明',
+        planned: '計画中',
+        learning: '学習中',
+        inProgress: '進行中',
+        completed: '完了',
+        archived: 'アーカイブ済み'
+      }
+    },
+    contact: {
+      loading: '連絡先データを読み込み中...',
+      title: 'お問い合わせ',
+      empty: '連絡先データは現在利用できません。',
+      description: 'アイデアや仕事の機会がありますか？お気軽にご相談ください。',
+      footer: '© 2026 Syah Putra N. Built with Precision.',
+      labels: {
+        email: 'メールアドレス',
+        whatsapp: '電話 / WhatsApp',
+        location: '住所・場所',
+        website: 'ウェブサイト',
+        linkedin: 'LinkedIn',
+        github: 'GitHub',
+        instagram: 'Instagram'
+      },
+      values: {
+        website: 'ポートフォリオサイト',
+        linkedin: 'LinkedInプロファイル',
+        github: 'GitHubプロファイル',
+        instagram: 'Instagramプロファイル'
+      }
+    }
+  }
 };

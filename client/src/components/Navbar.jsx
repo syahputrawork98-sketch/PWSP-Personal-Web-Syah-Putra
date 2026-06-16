@@ -57,6 +57,7 @@ const Navbar = ({ theme, toggleTheme }) => {
     >
       <option value="EN">EN</option>
       <option value="ID">ID</option>
+      <option value="JA">JA</option>
     </select>
   );
 
