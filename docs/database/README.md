@@ -103,10 +103,10 @@ erDiagram
   - `ProjectWorkStatus`: `COMPLETED`, `IN_PROGRESS`, `MAINTENANCE`, `ARCHIVED`.
 - **Constraint**: Kombinasi `projectId` dan `locale` bersifat unik (`@@unique([projectId, locale])`) untuk menjamin hanya ada satu terjemahan per bahasa untuk setiap proyek.
 
-## Multilingual Experience Schema (Batch F03S-SPEC Planned)
-Sebagai bagian dari rencana perluasan fitur multilingual CMS, model `Experience` akan diintegrasikan dengan model `ExperienceTranslation` relasional.
+## Multilingual Experience Schema (Batch F03S.1 Applied)
+Sebagai bagian dari perluasan fitur multilingual CMS, model `Experience` telah diintegrasikan dengan model `ExperienceTranslation` relasional.
 
-### Data Model & Relationship (Planned)
+### Data Model & Relationship (Applied)
 ```mermaid
 erDiagram
     Experience ||--o{ ExperienceTranslation : "has translations"

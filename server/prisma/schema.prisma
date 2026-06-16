@@ -129,6 +129,7 @@ model Experience {
   status         ExperienceStatus @default(DRAFT)
   experienceKind ExperienceKind   @default(FORMAL_WORK)
   order          Int              @default(0)
+  translations   ExperienceTranslation[]
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
 }
@@ -249,6 +250,21 @@ model ProjectTranslation {
   @@unique([projectId, locale])
   @@index([locale])
   @@index([projectId])
+}
+
+model ExperienceTranslation {
+  id           String     @id @default(cuid())
+  experienceId String
+  locale       Locale
+  role         String
+  description  String?
+  highlights   String[]
+  experience   Experience @relation(fields: [experienceId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@unique([experienceId, locale])
+  @@index([locale])
 }
 
 enum Locale {

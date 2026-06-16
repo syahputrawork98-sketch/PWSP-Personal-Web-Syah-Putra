@@ -55,6 +55,11 @@ Setelah rangkaian sub-batch lokalisasi publik dan antarmuka CMS admin multibahas
 | F03-CP2 | Multilingual Project System Checkpoint | Completed | Melakukan checkpoint dokumentasi setelah rangkaian F03M–F03Q selesai. | F03Q |
 | F03R | Multilingual CMS Expansion Planning | Completed | Analisa dan perencanaan perluasan sistem multilingual CMS manual EN/ID/JA ke area lain di luar Project. | F03-CP2 |
 | F03S-SPEC | Experience Multilingual CMS Technical Specification | Completed | Spesifikasi teknis detail integrasi multilingual CMS manual EN/ID/JA untuk area Experience. | F03R |
+| F03S.1 | Experience Translation Schema & Migration | Completed | Penambahan fondasi database multilingual untuk Experience dengan membuat model ExperienceTranslation dan relasinya. | F03S-SPEC |
+| F03S.2 | Backend Experience Locale Mapping | Planned | Adaptasi API & controller backend untuk penanganan multilingual data Experience. | F03S.1 |
+| F03S.3 | Admin Experience Translation Tabs | Planned | Pembuatan tab manajemen bahasa manual EN/ID/JA di CMS Admin untuk Experience. | F03S.2 |
+| F03S.4 | Public Experience Locale Integration | Planned | Integrasi locale aktif pada halaman publik Experience dan localized date display. | F03S.3 |
+| F03S-CP | Experience Multilingual Checkpoint | Planned | Checkpoint dokumentasi akhir dan validasi menyeluruh integrasi multilingual Experience. | F03S.4 |
 
 
 ## HOLD / Blocked Notes
@@ -99,6 +104,7 @@ Setelah rangkaian sub-batch lokalisasi publik dan antarmuka CMS admin multibahas
 - [F03Q] Memperkuat validasi input formulir Admin Project (`ProjectForm.jsx`) di sisi klien (client-side validation). Menambahkan validasi wajib isi untuk kolom `title` dan `shortDescription` pada tab terjemahan bahasa Inggris (EN). Jika data wajib tersebut kosong saat disubmit, form akan membatalkan pengiriman data, menampilkan pesan kesalahan visual yang jelas, dan otomatis mengarahkan fokus pengguna (active tab) kembali ke tab `EN` agar pengguna dapat melengkapi data tersebut. Menambahkan pula indikator visual label (Required/Optional) di tiap tombol tab navigasi serta tulisan bantuan/petunjuk di form admin untuk memperjelas alur pengisian.
 - [F03-CP2] Melakukan checkpoint dokumentasi fase sistem proyek multibahasa untuk sub-batch F03M sampai F03Q, menyelaraskan status aktif proyek dan indeks riwayat fitur.
 - [F03R] Melakukan audit dan analisa perluasan sistem multilingual CMS manual untuk area data lain (Experience, Credentials, About, Learn, Contact). Merekomendasikan Experience sebagai kandidat area berikutnya yang berdampak besar bagi rekruter.
+- [F03S.1] Penambahan model relasional `ExperienceTranslation` di Prisma schema dan pelaksanaan migrasi database (npx prisma migrate dev) secara additive tanpa memodifikasi data atau merusak kolom-kolom legacy pada tabel `Experience`.
 
 ## F03R — Multilingual CMS Expansion Planning
 
