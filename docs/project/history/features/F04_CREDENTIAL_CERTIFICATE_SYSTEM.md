@@ -26,14 +26,13 @@ Mencakup pengelolaan dan tampilan data sertifikasi/credential. Menunjukkan kuali
 | F04G | Safe Neon Credential Sync Preparation | Completed | Menyiapkan targeted script untuk sinkronisasi kredensial BNSP ke Neon tanpa mengganggu live data. | F04F |
 | F04I | Safe Full Public Content Sync Preparation | Completed | Menyiapkan script sync aman untuk seluruh data publik (Settings, Skills, Experiences, Projects, Credentials) ke Neon. | F04G |
 | F04J.1 | Credential Data Realignment | Completed | Merapikan dan menyinkronkan data sertifikat/kredensial terbaru dengan daftar inventori 23 sertifikat non-formal serta kategori tab frontend. | F04I |
+| F04K | Public Content Sync Dry-Run Verification | Completed | Melakukan verifikasi dry-run targeted BNSP sync dan full public content sync, mendokumentasikan hasil temuan & mismatch. | F04J.1 |
 
 ## HOLD / Blocked Notes
 - *Tidak ada*
 
 ## Next Step
-- F04H — Manual Execution of Targeted Sync to Neon (untuk eksekusi apply manual jika env dan backup sudah siap).
-- F04J — Manual Execution of Full Public Content Sync to Neon (untuk eksekusi sinkronisasi penuh data publik ke Neon).
-- F05 / F06 — Media Assets and Link integration.
+- F04L — BNSP Target Sync ID Alignment, sebelum apply Neon.
 
 ## Validation Checklist
 - Klik sertifikat dan cek apakah preview muncul dengan benar.
@@ -48,4 +47,5 @@ Mencakup pengelolaan dan tampilan data sertifikasi/credential. Menunjukkan kuali
 - [F04G] Menyusun script targeted sync khusus (`server/scripts/sync-credential-bnsp.js`) untuk melakukan upsert data BNSP yang terverifikasi ke Neon DB. Script menggunakan mode dry-run secara default untuk keamanan dan mencegah penggunaan query destruktif (tanpa deleteMany/data overwrite lainnya). Menambahkan command `npm run sync:credential:bnsp` pada `package.json` server.
 - [F04I] Menyusun script sinkronisasi penuh data publik (`server/scripts/sync-public-content.js`) untuk melakukan upsert data Settings, Skills, Experiences, Projects, Credentials, dan Featured Credentials ke database. Menggunakan mode dry-run secara default untuk keamanan serta mencegah penggunaan query destruktif `deleteMany` pada table penting. Menambahkan command `npm run sync:public-content` pada `package.json` server.
 - [F04J.1] Melakukan realignment data kredensial/sertifikat dengan menyelaraskan total 23 item non-formal terbaru ke dalam database (seeding/syncing) dan frontend fallback data. Menyesuaikan penamaan kategori agar tepat dengan tab navigasi frontend, memastikan link Google Drive tersemat dengan benar, dan membersihkan data lama/obsolit serta mengecualikan dokumen pendidikan formal (Ijazah SMK & Transkrip Nilai) dari daftar Credentials.
+- [F04K] Melakukan verifikasi dry-run untuk targeted BNSP sync dan full public content sync. Dry-run full public content sync sukses berjalan dalam mode read-only (3 Site Settings, 31 Technical Skills, 6 Experiences, 11 Projects, 20 Certificates, 3 Supporting Documents, 4 Featured Highlights). Dry-run targeted BNSP sync mengalami error/mismatch karena script sync-credential-bnsp.js menargetkan ID "bnsp-web-node-react-2025" sedangkan credentials.json berisi "bnsp-web-node-react". Hasil mismatch ini didokumentasikan untuk disejajarkan pada batch F04L.
 
