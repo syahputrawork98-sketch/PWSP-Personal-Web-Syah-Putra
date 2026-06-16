@@ -14,6 +14,7 @@ Mencakup sistem portfolio, kategori proyek, project card, modal detail, dan link
 - Modal memunculkan detail yang relevan.
 - Link tile diperbarui dengan link aman.
 - Curation data proyek dilakukan dengan berorientasi pada kebutuhan rekrutmen HRD Full Stack Developer (Batch F03D).
+- Restrukturisasi database Project untuk fondasi multibahasa berhasil diterapkan (Batch F03H) dengan model translations relasional.
 
 ## Sub-Batch Roadmap
 | Sub-Batch | Name | Status | Purpose | Dependency |
@@ -25,6 +26,7 @@ Mencakup sistem portfolio, kategori proyek, project card, modal detail, dan link
 | F03E | Public README Normalization Starter | Partial | Normalisasi README untuk 3 repositori publik kandidat agar tidak duplicate/template dari personal web. | F03D |
 | F03F | Public Project Content Cleanup | Completed | Merapikan data/keterangan proyek publik yang tampil di portofolio utama agar lebih rapi untuk HRD, menyesuaikan prioritas featured, dan menurunkan prioritas RumahKu Konstruksi. | F03E |
 | F03G | Add Public Project Live and Image Links | Completed | Menambahkan link live dan image yang valid untuk proyek utama (Tien's Catering, Personal Portfolio CMS, Kosuka Bali Trip). | F03F |
+| F03H | Project Database Restructure with Multilingual Foundation | Completed | Restrukturisasi skema database Project untuk fondasi konten multilingual & metadata (casing, locale EN/ID/JA) tanpa merusak UI/CMS lama. | F03G |
 
 ## HOLD / Blocked Notes
 - Asset finalization masuk ke lingkup F06. Sebagian project data belum komplit sepenuhnya.
@@ -32,13 +34,13 @@ Mencakup sistem portfolio, kategori proyek, project card, modal detail, dan link
 - Sinkronisasi remote GitHub: Berkas README.md untuk RumahKuKontruksi-Dev dan TC-Tien-s-Catering baru diperbarui di workspace lokal, dan belum di-commit/push ke remote oleh user.
 
 ## Next Step
-- F03H — Sync Public Project Links to Neon DB (sinkronisasi perubahan link ke database Neon production).
 - F06A — External Asset URL Inventory.
 - User sinkronisasi commit/push perubahan README.md lokal pada RumahKuKontruksi-Dev dan TC-Tien-s-Catering ke remote GitHub.
 - Clone dan normalisasi README.md untuk Web-API-Learning-Hub setelah repo tersebut tersedia secara lokal.
 
 ## Validation Checklist
 - Cek interaksi modal dan filter kategori.
+- Pastikan endpoint /api/projects tetap valid dan database local ter-migrate dan ter-seed dengan sukses.
 
 ## Notes
 - [F03C] Project fallback content (narasi, impact, challenge, solution) telah dipoles untuk menonjolkan identitas Web Developer sambil tetap menghargai nilai lintas disiplin. Aset dan link eksternal final tetap ditangani di F06.
@@ -49,4 +51,5 @@ Mencakup sistem portfolio, kategori proyek, project card, modal detail, dan link
   3. **Penting**: Tautan GitHub untuk ketiga repositori kandidat ini belum boleh diaktifkan pada data portofolio publik/seed utama sebelum berkas README di remote GitHub bersih dari template personal web utama.
 - [F03F] Melakukan penyelarasan narasi proyek publik di `seed.js`. Proyek utama dirapikan wording-nya agar HRD-friendly (Portfolio CMS, Tien's Catering, Web API Learning Hub, Kosuka Bali Trip). RumahKu Konstruksi dinonaktifkan dari featured list (featured set ke false, order diturunkan ke 7) sesuai instruksi pengguna. Proyek tambahan lainnya tetap dipertahankan dengan prioritas rendah tanpa menghapus data. Normalisasi README repositori luar tidak dilanjutkan.
 - [F03G] Menambahkan tautan publik yang valid untuk proyek portfolio utama: Live URL untuk Tien's Catering (https://tc-tien-s-catering.vercel.app), Image URL untuk Personal Portfolio CMS (https://res.cloudinary.com/dlgr9xicg/image/upload/v1781349587/Personal_Web_Syah_Putra_N_makvsf.png), dan Live URL untuk Kosuka Bali Trip (https://kbt-kosuka-bali-trip.vercel.app/). Tidak ada perubahan UI, schema, backend logic, atau database langsung.
+- [F03H] Pengalihan scope dari sinkronisasi link Neon menjadi restrukturisasi basis data untuk mendukung multibahasa (EN/ID/JA) dan tipe proyek (ProjectType/ProjectWorkStatus). Integrasi data multilingual ditambahkan sebagai ProjectTranslation yang terhubung relasional dengan Project. Field original (title, shortDescription, description) dipertahankan demi backward compatibility agar tidak memecah UI frontend dan backend controller. Seed dan sync script telah diupdate untuk membuat minimal translation EN untuk setiap project.
 

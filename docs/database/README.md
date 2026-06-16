@@ -52,3 +52,44 @@ Kami telah menyediakan opsi menggunakan Docker Compose agar lebih mudah.
 
 ## Catatan Penting
 - Database tidak boleh dikerjakan bersamaan dengan frontend UI besar tanpa scope yang jelas.
+
+## Multilingual Project Schema (Batch F03H)
+Sebagai fondasi dukungan konten multibahasa (multilingual) pada Project Portfolio System, skema basis data telah diperbarui untuk mendukung relasi one-to-many antara model `Project` dengan model `ProjectTranslation`.
+
+### Data Model & Relationship
+```mermaid
+erDiagram
+    Project ||--o{ ProjectTranslation : "has translations"
+    Project {
+        string id PK
+        string title "backward compatible"
+        string slug UK
+        string shortDescription "backward compatible"
+        string description "backward compatible"
+        ProjectType projectType "optional metadata"
+        string clientName "optional metadata"
+        ProjectWorkStatus projectStatus "optional metadata"
+    }
+    ProjectTranslation {
+        string id PK
+        string projectId FK
+        Locale locale "EN / ID / JA"
+        string title
+        string shortDescription
+        string description
+        string role
+        string projectContext
+        string problem
+        string solution
+        string[] keyFeatures
+        string[] responsibilities
+        string[] outcomes
+    }
+```
+
+- **Backward Compatibility**: Field `title`, `shortDescription`, dan `description` tetap dipertahankan pada model `Project` utama agar endpoint API `/api/projects` lama dan visualisasi frontend tidak rusak.
+- **Enums**:
+  - `Locale`: `EN` (English), `ID` (Indonesian), `JA` (Japanese).
+  - `ProjectType`: `CLIENT_WORK`, `FREELANCE`, `CASE_STUDY`, `LEARNING_PROJECT`, `INTERNAL`.
+  - `ProjectWorkStatus`: `COMPLETED`, `IN_PROGRESS`, `MAINTENANCE`, `ARCHIVED`.
+- **Constraint**: Kombinasi `projectId` dan `locale` bersifat unik (`@@unique([projectId, locale])`) untuk menjamin hanya ada satu terjemahan per bahasa untuk setiap proyek.

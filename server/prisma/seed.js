@@ -384,7 +384,22 @@ async function main() {
 
   await prisma.project.deleteMany({});
   for (const project of projects) {
-    await prisma.project.create({ data: project });
+    await prisma.project.create({
+      data: {
+        ...project,
+        translations: {
+          create: {
+            locale: 'EN',
+            title: project.title,
+            shortDescription: project.shortDescription,
+            description: project.description || null,
+            keyFeatures: [],
+            responsibilities: [],
+            outcomes: []
+          }
+        }
+      }
+    });
   }
   console.log('✅ Projects seeded.');
 

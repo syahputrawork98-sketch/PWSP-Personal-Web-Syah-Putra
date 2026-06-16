@@ -16,9 +16,9 @@ model AdminUser {
 }
 
 model Project {
-  id               String        @id @default(cuid())
+  id               String               @id @default(cuid())
   title            String
-  slug             String        @unique
+  slug             String               @unique
   shortDescription String
   description      String?
   imageUrl         String?
@@ -26,11 +26,15 @@ model Project {
   githubUrl        String?
   liveUrl          String?
   figmaUrl         String?
-  featured         Boolean       @default(false)
-  status           ProjectStatus @default(DRAFT)
-  order            Int           @default(0)
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
+  featured         Boolean              @default(false)
+  status           ProjectStatus        @default(DRAFT)
+  order            Int                  @default(0)
+  projectType      ProjectType?
+  clientName       String?
+  projectStatus    ProjectWorkStatus?
+  translations     ProjectTranslation[]
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
 }
 
 model Credential {
@@ -219,5 +223,51 @@ enum LearningStatus {
   LEARNING
   IN_PROGRESS
   COMPLETED
+  ARCHIVED
+}
+
+model ProjectTranslation {
+  id               String   @id @default(cuid())
+  projectId        String
+  locale           Locale
+  title            String
+  shortDescription String
+  description      String?
+  role             String?
+  projectContext   String?
+  problem          String?
+  solution         String?
+  keyFeatures      String[]
+  responsibilities String[]
+  outcomes         String[]
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([projectId, locale])
+  @@index([locale])
+  @@index([projectId])
+}
+
+enum Locale {
+  EN
+  ID
+  JA
+}
+
+enum ProjectType {
+  CLIENT_WORK
+  FREELANCE
+  CASE_STUDY
+  LEARNING_PROJECT
+  INTERNAL
+}
+
+enum ProjectWorkStatus {
+  COMPLETED
+  IN_PROGRESS
+  MAINTENANCE
   ARCHIVED
 }

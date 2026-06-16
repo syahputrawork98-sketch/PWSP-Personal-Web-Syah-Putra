@@ -458,10 +458,35 @@ async function main() {
       // D. Projects
       console.log('🚀 Syncing Projects...');
       for (const project of projects) {
-        await prisma.project.upsert({
+        const createdOrUpdatedProject = await prisma.project.upsert({
           where: { slug: project.slug },
           update: project,
           create: project
+        });
+
+        // Also sync the EN translation
+        await prisma.projectTranslation.upsert({
+          where: {
+            projectId_locale: {
+              projectId: createdOrUpdatedProject.id,
+              locale: 'EN'
+            }
+          },
+          update: {
+            title: project.title,
+            shortDescription: project.shortDescription,
+            description: project.description || null
+          },
+          create: {
+            projectId: createdOrUpdatedProject.id,
+            locale: 'EN',
+            title: project.title,
+            shortDescription: project.shortDescription,
+            description: project.description || null,
+            keyFeatures: [],
+            responsibilities: [],
+            outcomes: []
+          }
         });
       }
       console.log('✅ Projects synced.');
