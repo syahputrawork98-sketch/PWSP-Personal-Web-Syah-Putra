@@ -22,8 +22,16 @@ Meningkatkan keterbacaan website portfolio oleh crawler sederhana, recruiter too
 - Batch F15I menyelesaikan hotfix recruiter snapshot dengan memperbaiki GitHub link lama/404 dan mengganti featured work statis agar lebih selaras dengan project Full Stack utama seperti MTB, RumahKu, dan SIQAH.
 - Batch F15J menyelesaikan polish keamanan klaim project fallback dengan merapikan status project dan melunakkan wording teknis yang terlalu absolut agar tetap kuat untuk HRD tanpa overclaim.
 - Batch F15K menyelesaikan polish copy halaman Projects dengan menambahkan recruiter guidance untuk Featured Full Stack Case Studies dan deskripsi pembeda Other Projects.
+- Batch F15F menyelesaikan audit keamanan ringan dan kesiapan GitHub recruiter-facing untuk memastikan tidak ada credential jelas, file scratch, atau link GitHub lama yang mengganggu sebelum QA final.
 - Snapshot berisi professional summary, core stack, featured work, dan recruiter links.
 - Tampilan visual React Home saat JS aktif tidak terpengaruh sedikit pun.
+
+Audit Result:
+- Credential leak check: Clear
+- Scratch file check: Clear
+- GitHub old link check: Clear
+- README recruiter readiness: Clear
+- Notes: Tidak ditemukan adanya kebocoran credential sensitif. Folder `server/scratch` hanya berisi skrip pembantu pengembangan lokal tanpa kredensial keras. Link GitHub lama telah dibersihkan secara merata, dan README.md dinilai sangat profesional untuk rekrutmen.
 
 ## Sub-Batch Roadmap
 | Sub-Batch | Name | Status | Purpose | Dependency |
@@ -40,14 +48,14 @@ Meningkatkan keterbacaan website portfolio oleh crawler sederhana, recruiter too
 | F15I | Recruiter Snapshot GitHub Link & Featured Project Alignment Hotfix | Completed | Memperbaiki GitHub link recruiter-facing dan menyelaraskan featured work snapshot dengan project utama CV/HRD Full Stack. | F15H.2 |
 | F15J | Project Claim Safety & Status Truthfulness Polish | Completed | Melunakkan klaim teknis dan merapikan status project fallback agar lebih jujur, aman, dan recruiter-friendly. | F15I |
 | F15K | Projects Page Recruiter Copy & Case Study Guidance | Completed | Memperkuat copy halaman Projects agar recruiter langsung memahami featured projects sebagai studi kasus Full Stack utama dan other projects sebagai pendukung. | F15J |
-| F15F | Security and GitHub Recruiter Audit | Pending | Audit repositori dan profil GitHub untuk kebutuhan rekrutmen. | F15E |
+| F15F | Security and GitHub Recruiter Audit | Completed | Audit repositori dan profil GitHub untuk kebutuhan rekrutmen. | F15K |
 | F15G | Lighthouse and Final HRD Score QA | Pending | Pengukuran skor akhir dengan Lighthouse QA. | F15F |
 
 ## HOLD / Blocked Notes
 - Seluruh pengerjaan pada batch ini dirancang tanpa mengubah arsitektur SPA React atau menambahkan prerendering framework / SSR dependency baru.
 
 ## Next Step
-- Melanjutkan ke Batch F15F — Security and GitHub Recruiter Audit.
+- Melanjutkan ke Batch F15G — Lighthouse and Final HRD Score QA.
 
 ## Validation Checklist
 - Menjalankan build frontend (`npm run build`) dan memastikan kompilasi berjalan sukses.
