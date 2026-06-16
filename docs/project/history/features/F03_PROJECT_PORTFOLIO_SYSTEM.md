@@ -53,6 +53,7 @@ Setelah rangkaian sub-batch lokalisasi publik dan antarmuka CMS admin multibahas
 | F03P | Public JA Language Switcher Exposure | Completed | Ekspos bahasa Japanese (JA) di language switcher publik, perbarui i18n dictionary JA, dan dukung locale fallback ke EN. | F03O |
 | F03Q | Admin Project Translation Validation & UX Polish | Completed | Penambahan validasi sisi klien untuk wajib English, pengalihan tab aktif, indikator label visual, dan teks penolong. | F03P |
 | F03-CP2 | Multilingual Project System Checkpoint | Completed | Melakukan checkpoint dokumentasi setelah rangkaian F03M–F03Q selesai. | F03Q |
+| F03R | Multilingual CMS Expansion Planning | Completed | Analisa dan perencanaan perluasan sistem multilingual CMS manual EN/ID/JA ke area lain di luar Project. | F03-CP2 |
 
 
 ## HOLD / Blocked Notes
@@ -95,3 +96,62 @@ Setelah rangkaian sub-batch lokalisasi publik dan antarmuka CMS admin multibahas
 - [F03O] Menambahkan kemampuan edit & create portfolio project multibahasa (EN, ID, JA) secara manual di Admin CMS. Frontend menggunakan sistem tab di ProjectForm, mengelompokkan field global di atas dan field terjemahan di bawah tabs. Backend Controller memproses payload terjemahan secara kondisional: locale EN wajib, sementara ID/JA opsional. Jika tab ID/JA dikosongkan total, record `ProjectTranslation` terkait akan didelete (jika ada) untuk memulihkan fallback otomatis ke EN. Payload tanpa key `translations` (dari legacy API) tetap aman dan tidak menghapus terjemahan lama.
 - [F03P] Menambahkan bahasa Jepang (JA) sebagai didukung secara resmi (supported locale) pada context multibahasa publik dan antarmuka selektor bahasa (Navbar dropdown). Pilihan locale disimpan secara persisten di localStorage. Membuat file dictionary lokalisasi JA lengkap untuk semua elemen statis situs publik di i18n.js. Mengintegrasikan mekanisme fallback dinamis di mana jika ada kunci/konten static UI yang tidak diterjemahkan di kamus JA, sistem secara cerdas akan langsung menggunakan fallback dari kamus Inggris (EN) tanpa memunculkan error atau tampilan kosong.
 - [F03Q] Memperkuat validasi input formulir Admin Project (`ProjectForm.jsx`) di sisi klien (client-side validation). Menambahkan validasi wajib isi untuk kolom `title` dan `shortDescription` pada tab terjemahan bahasa Inggris (EN). Jika data wajib tersebut kosong saat disubmit, form akan membatalkan pengiriman data, menampilkan pesan kesalahan visual yang jelas, dan otomatis mengarahkan fokus pengguna (active tab) kembali ke tab `EN` agar pengguna dapat melengkapi data tersebut. Menambahkan pula indikator visual label (Required/Optional) di tiap tombol tab navigasi serta tulisan bantuan/petunjuk di form admin untuk memperjelas alur pengisian.
+- [F03-CP2] Melakukan checkpoint dokumentasi fase sistem proyek multibahasa untuk sub-batch F03M sampai F03Q, menyelaraskan status aktif proyek dan indeks riwayat fitur.
+- [F03R] Melakukan audit dan analisa perluasan sistem multilingual CMS manual untuk area data lain (Experience, Credentials, About, Learn, Contact). Merekomendasikan Experience sebagai kandidat area berikutnya yang berdampak besar bagi rekruter.
+
+## F03R — Multilingual CMS Expansion Planning
+
+### 1. Current Multilingual State
+Sistem multibahasa orisinal saat ini telah mencakup:
+- **Public Site**: language switcher dinamis di navbar untuk `EN` (default), `ID`, dan `JA` dengan lookup dictionary terpadu di `i18n.js` dan fallback otomatis ke `EN`.
+- **API Adaptations**: Endpoint `/api/projects` & `/api/projects/:slug` memetakan locale berdasarkan database relational translations secara flat dan backward-compatible.
+- **Admin CMS**: Form project memiliki editor tab `EN/ID/JA` manual dengan validasi client-side (EN required) dan server-side sync/delete logic untuk fallback locale.
+
+### 2. Candidate Areas
+Analisa area data/CMS lain untuk penambahan fungsionalitas multilingual manual:
+- **Experience (Pekerjaan & Pencapaian)**: Memiliki database model (`Experience`) dengan field deskriptif (`role`, `description`, `highlights` array). Sangat relevan karena rekruter global/lokal menilai profil kandidat dari detail poin pencapaian pekerjaan.
+- **Credentials / Certificates (Sertifikasi)**: Memiliki database model (`Credential`) dengan field deskriptif (`summary`, `portfolioRelevance`, `recruiterValue`). Namun, mayoritas sertifikat fisik diterbitkan dalam bahasa aslinya (misal, BNSP bahasa Indonesia) sehingga menerjemahkan judul/penerbit kurang relevan.
+- **About / Profile (Deskripsi Profil)**: Disimpan di JSON payload `SiteSetting` (key `'profile'`). Berisi data ringkas profil (`summary`) yang cocok ditampilkan bilingual, tetapi tidak memiliki model database relasional terpisah.
+- **Learn (Pustaka Belajar)**: Memiliki model `LearningItem`. Berorientasi teknis-kode (Tech Topics, Repo) dan deskripsi singkat, sehingga baseline bahasa Inggris (EN) sudah memadai.
+- **Contact (Kontak)**: Berupa tautan URL, email, dan telepon yang tidak memerlukan penerjemahan konten.
+
+### 3. Recommended Next Area
+**Experience (Sistem Pengalaman Kerja)**.
+
+### 4. Reasoning
+- **Dampak Rekruter Tinggi**: Pengalaman kerja formal dan freelance adalah informasi utama yang dicari oleh HRD/Recruiter. Membaca deskripsi pencapaian kerja (`highlights`) dalam bahasa Inggris profesional (EN) maupun bahasa Indonesia (ID) memberikan pemahaman yang instan dan optimal.
+- **Model Struktur yang Jelas**: Model `Experience` di database memiliki properti-properti deskripsi pekerjaan bertipe teks panjang yang analog dengan properti di model `Project`, sehingga pendekatan tabel terjemahan relasional (`ExperienceTranslation`) akan sangat konsisten secara arsitektur.
+
+### 5. Required Schema Changes
+Untuk mengimplementasikan Experience Multilingual CMS, kita membutuhkan penyesuaian skema Prisma berikut:
+- Menambahkan model relasional baru `ExperienceTranslation`:
+  ```prisma
+  model ExperienceTranslation {
+    id           String   @id @default(cuid())
+    experienceId String
+    locale       Locale
+    role         String
+    description  String?
+    highlights   String[]
+    experience   Experience @relation(fields: [experienceId], references: [id], onDelete: Cascade)
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+    @@unique([experienceId, locale])
+    @@index([locale])
+  }
+  ```
+- Menambahkan relasi `translations ExperienceTranslation[]` di dalam model `Experience`.
+- Menjadikan kolom orisinal (`role`, `description`, `highlights`) di model `Experience` bersifat opsional/fallback demi menjaga backward-compatibility.
+- *Catatan*: Ini memerlukan migrasi database baru (`prisma migrate dev`).
+
+*(Alternatif Tanpa Migrasi)*: Jika prioritasnya adalah menghindari migrasi database, area **About/Profile (SiteSetting)** direkomendasikan karena terjemahan summary profil dapat langsung disimpan sebagai pasangan locale di objek JSON `'profile'` (misal, `summary: { EN: "...", ID: "..." }`) murni di tingkat aplikasi.
+
+### 6. Risk Level
+- **Medium**: Memerlukan migrasi database untuk tabel `ExperienceTranslation` relasional. Risiko terhadap data orisinal dapat dikurangi dengan mempertahankan kolom legacy di model `Experience` sebagai fallback jika relasi terjemahan kosong, persis seperti arsitektur `ProjectTranslation`.
+
+### 7. Suggested Next Batch Name
+**Batch F03S — Experience Multilingual CMS Integration**.
+
+### 8. Suggested Model Executor
+**Gemini 3.5 Flash High**.
+*Alasan*: Memerlukan sinkronisasi API admin, penulisan parser array multiline highlights di controller, tab switcher di form admin Experience, dan update mapper data publik di server.
