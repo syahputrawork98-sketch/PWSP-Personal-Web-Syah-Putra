@@ -20,6 +20,7 @@ Meningkatkan keterbacaan website portfolio oleh crawler sederhana, recruiter too
 - Merapikan tombol CTA utama (Demo, GitHub, Figma) pada Detail Proyek serta mengintegrasikan pengelolaan Figma URL di admin project form & database (Batch F15H.1) agar link Figma bisa dikelola langsung dari CMS.
 - Menyinkronkan tombol CTA utama (Demo, GitHub, Figma) pada Project Card (Batch F15H.2) agar konsisten dengan modal detail proyek, menampilkan status "Soon" secara visual jika link kosong/tidak valid.
 - Batch F15I menyelesaikan hotfix recruiter snapshot dengan memperbaiki GitHub link lama/404 dan mengganti featured work statis agar lebih selaras dengan project Full Stack utama seperti MTB, RumahKu, dan SIQAH.
+- Batch F15J menyelesaikan polish keamanan klaim project fallback dengan merapikan status project dan melunakkan wording teknis yang terlalu absolut agar tetap kuat untuk HRD tanpa overclaim.
 - Snapshot berisi professional summary, core stack, featured work, dan recruiter links.
 - Tampilan visual React Home saat JS aktif tidak terpengaruh sedikit pun.
 
@@ -36,6 +37,7 @@ Meningkatkan keterbacaan website portfolio oleh crawler sederhana, recruiter too
 | F15H.1 | Project CTA Buttons + Admin Figma URL | Completed | Merapikan tombol utama (Demo, GitHub, Figma) pada detail project modal dengan status Coming Soon jika kosong serta menambahkan field figmaUrl di Project form & db. | F15E |
 | F15H.2 | Project Card CTA Buttons | Completed | Merapikan tombol utama (Demo, GitHub, Figma) pada Project Card dengan status Soon jika kosong. | F15H.1 |
 | F15I | Recruiter Snapshot GitHub Link & Featured Project Alignment Hotfix | Completed | Memperbaiki GitHub link recruiter-facing dan menyelaraskan featured work snapshot dengan project utama CV/HRD Full Stack. | F15H.2 |
+| F15J | Project Claim Safety & Status Truthfulness Polish | Completed | Melunakkan klaim teknis dan merapikan status project fallback agar lebih jujur, aman, dan recruiter-friendly. | F15I |
 | F15F | Security and GitHub Recruiter Audit | Pending | Audit repositori dan profil GitHub untuk kebutuhan rekrutmen. | F15E |
 | F15G | Lighthouse and Final HRD Score QA | Pending | Pengukuran skor akhir dengan Lighthouse QA. | F15F |
 
