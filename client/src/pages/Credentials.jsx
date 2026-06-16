@@ -103,46 +103,56 @@ const Credentials = () => {
           </p>
         </motion.div>
 
-        {/* Credential Summary Grid */}
+        {/* Credential Summary Section */}
         <motion.div 
-          className="credential-summary-grid"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
+          style={{ marginBottom: 'var(--space-10)' }}
         >
-          <div className="credential-summary-card">
-            <div className="credential-summary-number">
-              {rawCredentials.length || 0}
+          <h3 style={{ marginBottom: 'var(--space-2)', fontSize: '1.4rem', fontWeight: '700' }}>
+            {t('credentials.summaryTitle')}
+          </h3>
+          <p style={{ opacity: 0.8, marginBottom: 'var(--space-6)', fontSize: '1rem', lineHeight: '1.5' }}>
+            {t('credentials.summaryDescription')}
+          </p>
+
+          <div className="credential-summary-grid">
+            <div className="credential-summary-card">
+              <div className="credential-summary-number">
+                {rawCredentials.length || 0}
+              </div>
+              <div className="credential-summary-label">
+                {t('credentials.summary.totalCredentials')}
+              </div>
             </div>
-            <div className="credential-summary-label">
-              {t('credentials.summaryTitle')}
+            <div className="credential-summary-card">
+              <div className="credential-summary-number">
+                {rawCredentials.filter(c => c.featured).length || 0}
+              </div>
+              <div className="credential-summary-label">
+                {t('credentials.summary.featuredCredentials')}
+              </div>
             </div>
-          </div>
-          <div className="credential-summary-card">
-            <div className="credential-summary-number">
-              {rawCredentials.filter(c => c.featured).length || 0}
+            <div className="credential-summary-card">
+              <div className="credential-summary-number">
+                {rawCredentials.filter(c => c.category === 'BNSP').length || 0}
+              </div>
+              <div className="credential-summary-label">
+                {t('credentials.summary.professionalCertification')}
+              </div>
             </div>
-            <div className="credential-summary-label">
-              {t('credentials.summary.featuredCredentials')}
-            </div>
-          </div>
-          <div className="credential-summary-card">
-            <div className="credential-summary-number">
-              {rawCredentials.filter(c => c.category === 'BNSP').length || 0}
-            </div>
-            <div className="credential-summary-label">
-              {t('credentials.summary.professionalCertification')}
-            </div>
-          </div>
-          <div className="credential-summary-card">
-            <div className="credential-summary-number">
-              {rawCredentials.filter(c => c.category === 'IT & Digital').length || 0}
-            </div>
-            <div className="credential-summary-label">
-              {t('credentials.summary.technicalTraining')}
+            <div className="credential-summary-card">
+              <div className="credential-summary-number">
+                {rawCredentials.filter(c => c.category === 'IT & Digital').length || 0}
+              </div>
+              <div className="credential-summary-label">
+                {t('credentials.summary.technicalTraining')}
+              </div>
             </div>
           </div>
         </motion.div>
+
 
         {/* Featured Credential Spotlight */}
         {featuredSpotlight && (
