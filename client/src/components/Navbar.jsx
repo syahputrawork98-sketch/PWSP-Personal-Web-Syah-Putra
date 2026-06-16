@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import BrandLogo from './BrandLogo';
+import { useLanguage } from '../context/LanguageContext';
 import '../styles/navbar.css';
 
 const Navbar = ({ theme, toggleTheme }) => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { locale, changeLanguage, t } = useLanguage();
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
@@ -27,13 +29,13 @@ const Navbar = ({ theme, toggleTheme }) => {
   }, [location.pathname]);
 
   const navLinks = [
-    { path: '/', label: 'Beranda' },
-    { path: '/about', label: 'Tentang' },
-    { path: '/experience', label: 'Pengalaman' },
-    { path: '/credentials', label: 'Sertifikat' },
-    { path: '/projects', label: 'Proyek' },
-    { path: '/learn', label: 'Learn' },
-    { path: '/contact', label: 'Kontak' },
+    { path: '/', label: t('nav.home') },
+    { path: '/about', label: t('nav.about') },
+    { path: '/experience', label: t('nav.experience') },
+    { path: '/credentials', label: t('nav.credentials') },
+    { path: '/projects', label: t('nav.projects') },
+    { path: '/learn', label: t('nav.learn') },
+    { path: '/contact', label: t('nav.contact') },
   ];
 
   const menuVariants = {
@@ -45,6 +47,18 @@ const Navbar = ({ theme, toggleTheme }) => {
     closed: { opacity: 0, x: 20 },
     open: { opacity: 1, x: 0 }
   };
+
+  const languageSelector = (
+    <select 
+      value={locale} 
+      onChange={(e) => changeLanguage(e.target.value)} 
+      className="lang-select"
+      aria-label="Change language"
+    >
+      <option value="EN">EN</option>
+      <option value="ID">ID</option>
+    </select>
+  );
 
   return (
     <nav className="navbar">
@@ -80,6 +94,7 @@ const Navbar = ({ theme, toggleTheme }) => {
             ))}
           </div>
           <div className="nav-actions">
+            {languageSelector}
             <button onClick={toggleTheme} className="theme-toggle" type="button" aria-label="Toggle theme">
               {theme === 'dark' ? '🌙' : '☀️'}
             </button>
@@ -105,7 +120,7 @@ const Navbar = ({ theme, toggleTheme }) => {
                 exit="closed"
               >
                 <div className="mobile-menu-header">
-                  <div className="mobile-brand">Menu</div>
+                  <div className="mobile-brand">{t('nav.menu')}</div>
                   <button className="mobile-menu-close" onClick={closeMenu} aria-label="Close menu">
                     &times;
                   </button>
@@ -124,6 +139,7 @@ const Navbar = ({ theme, toggleTheme }) => {
                   ))}
                 </div>
                 <motion.div className="nav-actions" variants={linkVariants}>
+                  {languageSelector}
                   <button onClick={toggleTheme} className="theme-toggle" type="button" aria-label="Toggle theme">
                     {theme === 'dark' ? '🌙' : '☀️'}
                   </button>

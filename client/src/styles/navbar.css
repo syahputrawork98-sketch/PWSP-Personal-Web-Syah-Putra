@@ -86,7 +86,18 @@
   border: 1px solid var(--border-color);
   color: var(--text-primary);
   font-size: 0.85rem;
+  transition: all var(--transition-fast);
 }
+
+.lang-select:hover {
+  border-color: var(--primary-color);
+}
+
+.lang-select option {
+  background: var(--surface-color);
+  color: var(--text-primary);
+}
+
 
 .theme-toggle {
   background: var(--surface-color);

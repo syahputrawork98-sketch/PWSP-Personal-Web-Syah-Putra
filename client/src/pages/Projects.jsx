@@ -2,22 +2,32 @@ import React, { useState } from 'react';
 import ProjectCard from '../components/ProjectCard';
 import ProjectDetailModal from '../components/ProjectDetailModal';
 import { motion } from 'framer-motion';
-import { getPublicProjects } from '../lib/api';
 import EmptyState from '../components/EmptyState';
 import { useFetch } from '../hooks/useFetch';
-
-
-
-const projectCategories = [
-  "Semua",
-  "IT & Web",
-  "Manufaktur & Teknik",
-  "Model Mesin 3D",
-  "Model Bangunan & RAB"
-];
+import { useLanguage } from '../context/LanguageContext';
 
 const Projects = () => {
-  const { data, loading, error } = useFetch(getPublicProjects);
+  const { locale, t } = useLanguage();
+
+  const categoriesMap = [
+    { key: 'Semua', label: t('projects.categories.all') },
+    { key: 'IT & Web', label: t('projects.categories.it') },
+    { key: 'Manufaktur & Teknik', label: t('projects.categories.mfg') },
+    { key: 'Model Mesin 3D', label: t('projects.categories.machine') },
+    { key: 'Model Bangunan & RAB', label: t('projects.categories.est') }
+  ];
+
+  const fetchProjectsWithLocale = React.useCallback(async () => {
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    const res = await fetch(`${API_URL}/api/projects?locale=${locale}`);
+    const json = await res.json();
+    if (!res.ok || json.success === false) {
+      throw new Error(json.message || 'Something went wrong');
+    }
+    return json.data !== undefined ? json.data : json;
+  }, [locale]);
+
+  const { data, loading, error } = useFetch(fetchProjectsWithLocale);
   const [activeCategory, setActiveCategory] = useState("Semua");
   const [selectedProject, setSelectedProject] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -65,7 +75,7 @@ const Projects = () => {
     return (
       <section id="projects" className="section-padding flex-center">
         <div className="container">
-          <p style={{ opacity: 0.6, fontSize: '1rem', textAlign: 'center' }}>Memuat data proyek...</p>
+          <p style={{ opacity: 0.6, fontSize: '1rem', textAlign: 'center' }}>{t('projects.loading')}</p>
         </div>
       </section>
     );
@@ -75,11 +85,13 @@ const Projects = () => {
     return (
       <section id="projects" className="section-padding flex-center">
         <div className="container">
-          <EmptyState message="Data proyek belum tersedia." />
+          <EmptyState message={t('projects.empty')} />
         </div>
       </section>
     );
   }
+
+  const activeCategoryLabel = categoriesMap.find(c => c.key === activeCategory)?.label || activeCategory;
 
   return (
     <section id="projects" className="section-padding">
@@ -91,23 +103,23 @@ const Projects = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-center" style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>
-            Portfolio Proyek
+            {t('projects.title')}
           </h2>
           <div style={{ width: '60px', height: '4px', background: 'var(--primary-color)', margin: 'var(--space-4) auto', borderRadius: 'var(--radius-full)' }} />
           <p style={{ maxWidth: '650px', margin: '0 auto', opacity: 0.8, fontSize: '1.1rem', lineHeight: 1.6 }}>
-            Eksplorasi karya saya di berbagai bidang, mulai dari pengembangan perangkat lunak hingga desain teknis manufaktur dan estimasi konstruksi.
+            {t('projects.description')}
           </p>
         </motion.div>
 
         {/* Category Tabs */}
         <div className="filter-container">
-          {projectCategories.map(cat => (
+          {categoriesMap.map(cat => (
             <button
-              key={cat}
-              className={`filter-btn ${activeCategory === cat ? 'active' : ''}`}
-              onClick={() => setActiveCategory(cat)}
+              key={cat.key}
+              className={`filter-btn ${activeCategory === cat.key ? 'active' : ''}`}
+              onClick={() => setActiveCategory(cat.key)}
             >
-              {cat}
+              {cat.label}
             </button>
           ))}
         </div>
@@ -143,7 +155,7 @@ const Projects = () => {
                 viewport={{ once: true }}
               >
                 <h3 style={{ opacity: 0.6, fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '2px', borderBottom: '1px solid var(--border-color)', paddingBottom: 'var(--space-4)' }}>
-                  Proyek Lainnya
+                  {t('projects.otherProjects')}
                 </h3>
               </motion.div>
             )}
@@ -169,7 +181,7 @@ const Projects = () => {
 
             {filteredProjects.length === 0 && (
               <div style={{ padding: 'var(--space-12) 0' }}>
-                <EmptyState message={`Belum ada proyek di kategori ${activeCategory}.`} />
+                <EmptyState message={t('projects.emptyCategory').replace('{category}', activeCategoryLabel)} />
               </div>
             )}
           </>
@@ -183,5 +195,6 @@ const Projects = () => {
     </section>
   );
 };
+
 
 export default Projects;

@@ -35,59 +35,62 @@ import AdminLearningEdit from './pages/admin/AdminLearningEdit';
 import ProtectedRoute from './components/admin/ProtectedRoute';
 
 import AdminLayout from './layouts/AdminLayout';
+import { LanguageProvider } from './context/LanguageContext';
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<MainLayout><Home /></MainLayout>} />
-        <Route path="/about" element={<MainLayout><About /></MainLayout>} />
-        <Route path="/projects" element={<MainLayout><Projects /></MainLayout>} />
-        <Route path="/learn" element={<MainLayout><Learn /></MainLayout>} />
-        <Route path="/experience" element={<MainLayout><Experience /></MainLayout>} />
-        <Route path="/contact" element={<MainLayout><Contact /></MainLayout>} />
-        <Route path="/credentials" element={<MainLayout><Credentials /></MainLayout>} />
+    <LanguageProvider>
+      <Router>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<MainLayout><Home /></MainLayout>} />
+          <Route path="/about" element={<MainLayout><About /></MainLayout>} />
+          <Route path="/projects" element={<MainLayout><Projects /></MainLayout>} />
+          <Route path="/learn" element={<MainLayout><Learn /></MainLayout>} />
+          <Route path="/experience" element={<MainLayout><Experience /></MainLayout>} />
+          <Route path="/contact" element={<MainLayout><Contact /></MainLayout>} />
+          <Route path="/credentials" element={<MainLayout><Credentials /></MainLayout>} />
 
-        {/* Admin Login - No Layout */}
-        <Route path="/admin/login" element={<AdminLogin />} />
+          {/* Admin Login - No Layout */}
+          <Route path="/admin/login" element={<AdminLogin />} />
 
-        {/* Admin Dashboard Routes - Protected */}
-        <Route 
-          path="/admin" 
-          element={
-            <ProtectedRoute>
-              <AdminLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route index element={<AdminDashboard />} />
-          <Route path="projects" element={<AdminProjects />} />
-          <Route path="projects/new" element={<AdminProjectCreate />} />
-          <Route path="projects/:id/edit" element={<AdminProjectEdit />} />
-          <Route path="account" element={<AdminAccount />} />
-          <Route path="contact" element={<AdminContact />} />
-          <Route path="settings/hero" element={<AdminHeroSettings />} />
-          <Route path="settings/profile" element={<AdminProfileSettings />} />
-          <Route path="skills" element={<AdminSkills />} />
-          <Route path="skills/new" element={<AdminSkillCreate />} />
-          <Route path="skills/:id/edit" element={<AdminSkillEdit />} />
-          <Route path="experience" element={<AdminExperiences />} />
-          <Route path="experience/new" element={<AdminExperienceCreate />} />
-          <Route path="experience/:id/edit" element={<AdminExperienceEdit />} />
-          <Route path="certifications" element={<AdminCertifications />} />
-          <Route path="certifications/new" element={<AdminCertificationCreate />} />
-          <Route path="certifications/:id/edit" element={<AdminCertificationEdit />} />
-          <Route path="education" element={<AdminEducation />} />
-          <Route path="cv-builder" element={<AdminCvBuilder />} />
-          <Route path="learning" element={<AdminLearning />} />
-          <Route path="learning/new" element={<AdminLearningCreate />} />
-          <Route path="learning/:id/edit" element={<AdminLearningEdit />} />
-        </Route>
+          {/* Admin Dashboard Routes - Protected */}
+          <Route 
+            path="/admin" 
+            element={
+              <ProtectedRoute>
+                <AdminLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<AdminDashboard />} />
+            <Route path="projects" element={<AdminProjects />} />
+            <Route path="projects/new" element={<AdminProjectCreate />} />
+            <Route path="projects/:id/edit" element={<AdminProjectEdit />} />
+            <Route path="account" element={<AdminAccount />} />
+            <Route path="contact" element={<AdminContact />} />
+            <Route path="settings/hero" element={<AdminHeroSettings />} />
+            <Route path="settings/profile" element={<AdminProfileSettings />} />
+            <Route path="skills" element={<AdminSkills />} />
+            <Route path="skills/new" element={<AdminSkillCreate />} />
+            <Route path="skills/:id/edit" element={<AdminSkillEdit />} />
+            <Route path="experience" element={<AdminExperiences />} />
+            <Route path="experience/new" element={<AdminExperienceCreate />} />
+            <Route path="experience/:id/edit" element={<AdminExperienceEdit />} />
+            <Route path="certifications" element={<AdminCertifications />} />
+            <Route path="certifications/new" element={<AdminCertificationCreate />} />
+            <Route path="certifications/:id/edit" element={<AdminCertificationEdit />} />
+            <Route path="education" element={<AdminEducation />} />
+            <Route path="cv-builder" element={<AdminCvBuilder />} />
+            <Route path="learning" element={<AdminLearning />} />
+            <Route path="learning/new" element={<AdminLearningCreate />} />
+            <Route path="learning/:id/edit" element={<AdminLearningEdit />} />
+          </Route>
 
 
-      </Routes>
-    </Router>
+        </Routes>
+      </Router>
+    </LanguageProvider>
   );
 }
 

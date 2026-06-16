@@ -1,8 +1,11 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLanguage } from '../context/LanguageContext';
 
 const ProjectDetailModal = ({ isOpen, onClose, project }) => {
+  const { t } = useLanguage();
   if (!project) return null;
+
 
   const links = project.links || {};
   const techStack = project.techStack || project.technologies || [];
@@ -57,7 +60,7 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
             <button 
               className="project-modal-close"
               onClick={onClose}
-              aria-label="Tutup detail proyek"
+              aria-label={t('modal.close')}
             >
               &times;
             </button>
@@ -128,10 +131,10 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
                   <div>
                     <h4 style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1.5px', color: 'var(--primary-color)', marginBottom: 'var(--space-3)', fontWeight: 700 }}>
-                      Ringkasan Proyek
+                      {t('modal.summary')}
                     </h4>
                     <p style={{ lineHeight: 1.75, opacity: 0.95, fontSize: '1rem', color: 'var(--text-primary)', margin: 0 }}>
-                      {project.description || 'Detail deskripsi proyek belum tersedia.'}
+                      {project.description || t('modal.noDescription')}
                     </p>
                   </div>
 
@@ -171,7 +174,7 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
                   {project.features && project.features.length > 0 && (
                     <div>
                       <h4 style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1.5px', color: 'var(--primary-color)', marginBottom: 'var(--space-3)', fontWeight: 700 }}>
-                        Fitur Utama
+                        {t('modal.features')}
                       </h4>
                       <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
                         {project.features.map((feature, i) => (
@@ -187,7 +190,7 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
                   {project.keyFeatures && Array.isArray(project.keyFeatures) && project.keyFeatures.length > 0 && (
                     <div>
                       <h4 style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1.5px', color: 'var(--primary-color)', marginBottom: 'var(--space-3)', fontWeight: 700 }}>
-                        Key Features
+                        {t('modal.features')}
                       </h4>
                       <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
                         {project.keyFeatures.map((feature, i) => (
@@ -203,7 +206,7 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
                   {project.responsibilities && Array.isArray(project.responsibilities) && project.responsibilities.length > 0 && (
                     <div>
                       <h4 style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1.5px', color: 'var(--primary-color)', marginBottom: 'var(--space-3)', fontWeight: 700 }}>
-                        Key Responsibilities
+                        {t('modal.responsibilities')}
                       </h4>
                       <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
                         {project.responsibilities.map((resp, i) => (
@@ -219,7 +222,7 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
                   {project.outcomes && Array.isArray(project.outcomes) && project.outcomes.length > 0 && (
                     <div>
                       <h4 style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1.5px', color: 'var(--primary-color)', marginBottom: 'var(--space-3)', fontWeight: 700 }}>
-                        Outcomes & Impact
+                        {t('modal.impact')}
                       </h4>
                       <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
                         {project.outcomes.map((outcome, i) => (
@@ -244,13 +247,13 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
                     }}>
                       {project.challenge && (
                         <div>
-                          <h5 style={{ fontSize: '0.85rem', fontWeight: 700, margin: '0 0 var(--space-1)', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Tantangan</h5>
+                          <h5 style={{ fontSize: '0.85rem', fontWeight: 700, margin: '0 0 var(--space-1)', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{t('modal.challenge')}</h5>
                           <p style={{ fontSize: '0.9rem', lineHeight: 1.6, opacity: 0.85, margin: 0, color: 'var(--text-primary)' }}>{project.challenge}</p>
                         </div>
                       )}
                       {project.solution && !project.problem && (
                         <div>
-                          <h5 style={{ fontSize: '0.85rem', fontWeight: 700, margin: '0 0 var(--space-1)', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Solusi</h5>
+                          <h5 style={{ fontSize: '0.85rem', fontWeight: 700, margin: '0 0 var(--space-1)', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{t('modal.solution')}</h5>
                           <p style={{ fontSize: '0.9rem', lineHeight: 1.6, opacity: 0.85, margin: 0, color: 'var(--text-primary)' }}>{project.solution}</p>
                         </div>
                       )}
@@ -265,11 +268,11 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
                   <div style={{ background: 'var(--surface-color)', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-5)', backdropFilter: 'var(--glass-blur)' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
                       <div>
-                        <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px' }}>Peran</span>
+                        <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px' }}>{t('modal.role')}</span>
                         <span style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-primary)' }}>{project.role || 'Contributor'}</span>
                       </div>
                       <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: 'var(--space-3)' }}>
-                        <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px' }}>Status</span>
+                        <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px' }}>{t('modal.status')}</span>
                         <span style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--primary-color)' }}>{project.status || 'Completed'}</span>
                       </div>
                     </div>
@@ -278,7 +281,7 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
                   {/* Tech stack */}
                   <div>
                     <h4 style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1.5px', color: 'var(--text-secondary)', marginBottom: 'var(--space-3)', fontWeight: 700 }}>
-                      Teknologi & Tools
+                      {t('modal.tech')}
                     </h4>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                       {techStack.map((tech, i) => (
@@ -292,7 +295,7 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
                   {/* Related Links */}
                   <div>
                     <h4 style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1.5px', color: 'var(--text-secondary)', marginBottom: 'var(--space-3)', fontWeight: 700 }}>
-                      Tautan & Aset
+                      {t('modal.links')}
                     </h4>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                       {/* Primary CTAs */}
@@ -344,7 +347,7 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
                             >
                               <span style={{ fontSize: '1.25rem' }}>{tile.icon}</span>
                               <span style={{ fontSize: '0.88rem', fontWeight: 600, flex: 1, opacity: 0.7 }}>{tile.label}</span>
-                              <span style={{ fontSize: '0.75rem', fontWeight: 600, opacity: 0.6, letterSpacing: '0.5px', textTransform: 'uppercase' }}>Coming Soon</span>
+                              <span style={{ fontSize: '0.75rem', fontWeight: 600, opacity: 0.6, letterSpacing: '0.5px', textTransform: 'uppercase' }}>{t('modal.comingSoon')}</span>
                             </div>
                           );
                         }
@@ -404,7 +407,7 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
                     alignItems: 'center', 
                     gap: '6px' 
                   }}>
-                    ✨ Dampak & Hasil
+                    ✨ {t('modal.impact')}
                   </h4>
                   <p style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-primary)', margin: 0 }}>{project.impact}</p>
                 </div>

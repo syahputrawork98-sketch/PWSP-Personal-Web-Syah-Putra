@@ -8,18 +8,21 @@ import { services } from '../data/homeData';
 import ServiceCard from '../components/home/ServiceCard';
 import { getSkillIcon } from '../utils/skillIcons';
 import { contactFallback } from '../fallback/contactFallback';
+import { useLanguage } from '../context/LanguageContext';
 
 import '../styles/home.css';
 
 
+
 const Home = () => {
+  const { t } = useLanguage();
   const [highlightSkills, setHighlightSkills] = useState([]);
   const [heroData, setHeroData] = useState(null);
   const [contactData, setContactData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const [error, setError] = useState(false);
-
+  
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -84,7 +87,7 @@ const Home = () => {
     return (
       <section id="home" className="section-padding flex-center hero-section">
         <div className="container">
-          <p style={{ opacity: 0.6, fontSize: '1rem', textAlign: 'center' }}>Memuat data beranda...</p>
+          <p style={{ opacity: 0.6, fontSize: '1rem', textAlign: 'center' }}>{t('home.loading')}</p>
         </div>
       </section>
     );
@@ -166,7 +169,8 @@ const Home = () => {
               {currentHero.secondaryCtaLabel}
             </a>
           )}
-          <Link to="/contact" className="btn btn-secondary">Hubungi Saya</Link>
+          <Link to="/contact" className="btn btn-secondary">{t('home.contactMe')}</Link>
+
           {githubUrl && (
             <a href={githubUrl} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-social">
               GitHub

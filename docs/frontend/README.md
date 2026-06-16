@@ -49,3 +49,10 @@ Admin Panel CMS telah berstatus *fully-mapped* dan mematuhi pilar CRUD:
 
 ## Catatan Penting
 - Jangan mencampur frontend dengan backend/auth/deployment dalam batch yang sama tanpa alasan jelas.
+
+## Public Language Switcher System (Batch F03M)
+- **LanguageContext (`client/src/context/LanguageContext.jsx`)**: Menyediakan state global untuk pilihan bahasa aktif (`locale`) serta fungsi `changeLanguage(newLocale)` dan `t(path)`. Locale disimpan di `localStorage` dengan key `pw_locale` dan default ke `'EN'`.
+- **Dictionary `client/src/i18n.js`**: Menyimpan pemetaan data statis lokal untuk label navigasi, teks loading, tombol CTA, serta judul/konten statis di halaman Home, Experience, Projects, dan detail modal proyek.
+- **Navbar Switcher**: Menyediakan dropdown pemilih bahasa `<select>` dengan class `.lang-select` di pojok kanan navbar desktop dan mobile untuk memudahkan pergantian bahasa secara instan.
+- **Projects Integration**: Halaman Projects disesuaikan agar menyuntikkan query parameter `?locale=${locale}` secara dinamis ke REST API backend sehingga deskripsi dan detail kasus proyek yang disajikan oleh database sudah tersaji dalam bahasa pilihan pengguna secara otomatis.
+

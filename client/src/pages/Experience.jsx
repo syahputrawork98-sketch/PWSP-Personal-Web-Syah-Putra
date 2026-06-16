@@ -6,6 +6,7 @@ import EmptyState from '../components/EmptyState';
 import { useFetch } from '../hooks/useFetch';
 import ExperienceCard from '../components/experience/ExperienceCard';
 import { getExperienceDisplayDate } from '../lib/dateUtils';
+import { useLanguage } from '../context/LanguageContext';
 
 import '../styles/experience.css';
 
@@ -25,25 +26,27 @@ const itemVariants = {
   visible: { opacity: 1, x: 0, transition: { duration: 0.4 } }
 };
 
-const SECTIONS = [
-  {
-    key: 'IT_FREELANCE',
-    title: '💻 Freelance Full Stack & IT Work',
-    subtitle: 'Pengalaman client-based di pengembangan web, sistem digital, dashboard, API, dan implementasi teknis.',
-  },
-  {
-    key: 'FORMAL_WORK',
-    title: '🏢 Formal Work Experience',
-    subtitle: 'Pengalaman kerja resmi yang membentuk disiplin operasional, komunikasi profesional, dan tanggung jawab delivery.',
-  },
-  {
-    key: 'GENERAL_FREELANCE',
-    title: '🛠️ Other Freelance / Technical Support Work',
-    subtitle: 'Pengalaman freelance non-IT yang mendukung pemahaman proses bisnis, dokumentasi teknis, dan kebutuhan client.',
-  },
-];
-
 const Experience = () => {
+  const { t } = useLanguage();
+
+  const SECTIONS = [
+    {
+      key: 'IT_FREELANCE',
+      title: t('experience.sections.IT_FREELANCE.title'),
+      subtitle: t('experience.sections.IT_FREELANCE.subtitle'),
+    },
+    {
+      key: 'FORMAL_WORK',
+      title: t('experience.sections.FORMAL_WORK.title'),
+      subtitle: t('experience.sections.FORMAL_WORK.subtitle'),
+    },
+    {
+      key: 'GENERAL_FREELANCE',
+      title: t('experience.sections.GENERAL_FREELANCE.title'),
+      subtitle: t('experience.sections.GENERAL_FREELANCE.subtitle'),
+    },
+  ];
+
   const { data: response, loading, error } = useFetch(getPublicExperiences);
   const experiences = (Array.isArray(response)
     ? response
@@ -70,18 +73,22 @@ const Experience = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-center" style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>
-            Pengalaman Kerja
+            {t('experience.title')}
           </h2>
           <div style={{ width: '60px', height: '4px', background: 'var(--primary-color)', margin: 'var(--space-4) auto', borderRadius: 'var(--radius-full)' }} />
           <p style={{ maxWidth: '750px', margin: '0 auto', opacity: 0.8, fontSize: '1.05rem', lineHeight: 1.6 }}>
-            Ringkasan pengalaman profesional, freelance IT, dan pekerjaan lintas bidang yang mendukung fokus saya sebagai Full Stack Developer. Hubungan kerja profesional dicatat di bawah ini, sedangkan bukti teknis, implementasi kode, dan studi kasus proyek yang mendalam dapat dilihat di halaman <Link to="/projects" style={{ color: 'var(--primary-color)', fontWeight: 600, textDecoration: 'underline' }}>Portfolio Proyek</Link>.
+            {t('experience.p1')}
+            <Link to="/projects" style={{ color: 'var(--primary-color)', fontWeight: 600, textDecoration: 'underline' }}>
+              {t('experience.portfolioLinkText')}
+            </Link>
+            {t('experience.p2')}
           </p>
         </motion.div>
 
-        {loading && <p style={{ opacity: 0.6, fontSize: '1rem', textAlign: 'center' }}>Memuat data pengalaman...</p>}
+        {loading && <p style={{ opacity: 0.6, fontSize: '1rem', textAlign: 'center' }}>{t('experience.loading')}</p>}
 
         {!loading && !error && experiences.length === 0 && (
-          <EmptyState message="Data pengalaman belum tersedia." />
+          <EmptyState message={t('experience.empty')} />
         )}
 
         {!loading && !error && experiences.length > 0 && (
@@ -150,5 +157,6 @@ const Experience = () => {
     </section>
   );
 };
+
 
 export default Experience;
