@@ -281,7 +281,8 @@ Namun untuk rancangan jangka panjang, skema JSON berikut disepakati untuk Contac
 | F03T.1 | SiteSetting Locale Shape & Backend Fallback Helper | Completed | Implementasi fungsi helper normalisasi bahasa, pendeteksi skema, resolusi fallback publik, dan perbaikan API PUT admin. | F03T-SPEC |
 | F03T.2 | Admin Hero Translation Tabs EN/ID/JA | Completed | Pembuatan antarmuka tab bahasa pada Admin Hero, input roles dinamis, dan penyelarasan payload simpan. | F03T.1 |
 | F03T.3 | Admin Profile Translation Tabs EN/ID/JA | Completed | Pembuatan antarmuka tab bahasa pada Admin Profile, editor rich-text, dan penyelarasan payload simpan. | F03T.1 |
-| F03T.4 | Public Hero/Profile Locale Integration | Pending | Integrasi dynamic locale fetch di Home.jsx & About.jsx berdasarkan state locale aktif. | F03T.2, F03T.3 |
+| F03T-CP1 | Admin Site Settings Translation Tabs Checkpoint | Completed | Checkpoint sementara setelah backend fallback, Admin Hero tabs, dan Admin Profile tabs selesai; public integration masih HOLD. | F03T.3 |
+| F03T.4 | Public Hero/Profile Locale Integration | Pending/HOLD | Integrasi dynamic locale fetch di Home.jsx & About.jsx berdasarkan state locale aktif. | F03T.2, F03T.3 |
 | F03T.5 | Contact/Website Settings Locale Review | Pending | Tinjauan keamanan PUT Contact Admin agar bidang deskripsi tidak hilang, serta opsi multilingual ringan. | F03T.4 |
 | F03T.6 | Manual Translation UX Polish | Pending | Pemasangan lencana indikator status kelengkapan bahasa (Missing translation badge) dan visual draft helper. | F03T.5 |
 | F03T-AUTO-SPEC | Auto Translation Draft Helper Specification | Pending | Penyusunan spesifikasi integrasi aman modul auto-translate draft di server-side jika dibutuhkan di masa mendatang. | F03T.6 |
@@ -334,5 +335,38 @@ Namun untuk rancangan jangka panjang, skema JSON berikut disepakati untuk Contac
 
 ---
 
+## F03T-CP1 Checkpoint Summary
+- **Overall status**: Active / HOLD
+- **Completed scope**:
+  1. **F03T-SPEC** — Site Settings Multilingual CMS Technical Specification
+  2. **F03T.1** — SiteSetting Locale Shape & Backend Fallback Helper
+  3. **F03T.2** — Admin Hero Translation Tabs EN/ID/JA
+  4. **F03T.3** — Admin Profile Translation Tabs EN/ID/JA
+  5. **F03T-CP1** — Admin Site Settings Translation Tabs Checkpoint
+
+- **Current capability**:
+  - Backend Site Settings sudah mendukung locale helper dan fallback.
+  - Public settings endpoint sudah siap menerima `?locale=EN/ID/JA`.
+  - Admin Hero Settings sudah punya tabs EN/ID/JA.
+  - Admin Profile Settings sudah punya tabs EN/ID/JA.
+  - Global fields dipisahkan dari locale-aware fields.
+  - Save All Locales sudah digunakan untuk Hero dan Profile.
+  - Legacy flat data bisa dinormalisasi ke EN.
+
+- **HOLD / Not Yet Implemented**:
+  - Public Home belum fetch Hero berdasarkan active locale dari language switcher.
+  - Public About belum fetch Profile berdasarkan active locale dari language switcher.
+  - Contact multilingual review belum dikerjakan.
+  - Missing translation UX polish belum dikerjakan.
+  - Auto-translate API belum dikerjakan dan tetap tidak direkomendasikan sebelum credential-safe spec.
+
+- **Reason for HOLD**:
+  - User memilih checkpoint dulu dan ingin fokus ke hal lain sebelum lanjut ke public locale integration.
+
+- **Next Recommended Batch when resumed**:
+  - **Batch F03T.4** — Public Hero/Profile Locale Integration
+
+---
+
 ## Next Step
-- Melanjutkan ke **Batch F03T-CP1 — Admin Site Settings Translation Tabs Checkpoint**.
+- HOLD untuk keputusan user. Jika dilanjutkan: **Batch F03T.4 — Public Hero/Profile Locale Integration**.

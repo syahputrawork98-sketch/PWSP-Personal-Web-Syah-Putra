@@ -9,6 +9,13 @@
 - Default model eksekutor: Gemini 3.5 Flash Low / Medium / High
 - Alternative acceleration model: N/A (Gemini 3.5 Flash adalah model standar project)
 
+## Latest Status Checkpoint
+- **Latest Active Feature Batch**: Batch F03T — Site Settings Multilingual CMS Expansion
+- **Latest Execution Batch**: Batch F03T-CP1 — Admin Site Settings Translation Tabs Checkpoint
+- **Status**: Active / HOLD
+- **Summary**: F03T sudah menyelesaikan spesifikasi, backend locale fallback, Admin Hero Translation Tabs EN/ID/JA, dan Admin Profile Translation Tabs EN/ID/JA. Fitur ditahan sementara sesuai keputusan user sebelum melanjutkan public Hero/Profile locale integration.
+- **Next Recommended Batch**: HOLD for user decision. When resumed: Batch F03T.4 — Public Hero/Profile Locale Integration.
+
 ## Active Feature Tracker
 
 | Feature Batch | Feature Name | Area | Status | Reason / HOLD Notes | Next Step | Detail File |
@@ -29,7 +36,7 @@
 | F13 | Mobile Responsive UI Improvement | frontend | Completed | Penyesuaian layout CSS murni untuk public mobile screen (navbar, hero, projects). | Final QA mobile view | [F13_MOBILE_RESPONSIVE_UI_IMPROVEMENT.md](features/F13_MOBILE_RESPONSIVE_UI_IMPROVEMENT.md) |
 | F14 | Repository Normalization and Documentation Sync | docs/status | Partial / Backend Audit Ready | Docs sync, repository inventory, frontend audit, and backend/API audit completed. | F14E — Database/Prisma Audit atau F14F — Cleanup Candidates Validation | [F14_REPOSITORY_NORMALIZATION_DOCUMENTATION_SYNC.md](features/F14_REPOSITORY_NORMALIZATION_DOCUMENTATION_SYNC.md) |
 | F15 | HRD Portfolio Score Improvement | frontend/content | Completed | SEO static snapshot and recruiter readability baseline completed. | F15F — Security and GitHub Recruiter Audit | [F15_HRD_PORTFOLIO_SCORE_IMPROVEMENT.md](features/F15_HRD_PORTFOLIO_SCORE_IMPROVEMENT.md) |
-| F03T | Site Settings Multilingual CMS Expansion | server/client | Active | F03T-SPEC completed; memperluas multilingual CMS ke Site Settings (Hero/Profile). | F03T.1 — SiteSetting Locale Shape & Backend Fallback Helper | [F03T_SITE_SETTINGS_MULTILINGUAL_CMS.md](features/F03T_SITE_SETTINGS_MULTILINGUAL_CMS.md) |
+| F03T | Site Settings Multilingual CMS Expansion | server/client | Active / HOLD | F03T-CP1 Completed. Spesifikasi, backend fallback, Admin Hero, dan Admin Profile multilingual tabs selesai. | HOLD for user decision. When resumed: Batch F03T.4 — Public Hero/Profile Locale Integration. | [F03T_SITE_SETTINGS_MULTILINGUAL_CMS.md](features/F03T_SITE_SETTINGS_MULTILINGUAL_CMS.md) |
 
 ## Deployment Status
 - **Status Deployment**: Aktif / Live
