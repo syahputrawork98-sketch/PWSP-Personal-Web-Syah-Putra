@@ -115,6 +115,26 @@ export const translations = {
       emptyCategory: 'No certificates in category {category} yet.',
       noThumbnail: 'Thumbnail not available',
       viewCertificate: 'View Certificate',
+      summaryTitle: 'Credentials Overview',
+      summaryDescription: 'A structured summary of certifications, technical training, and practical learning experiences that validate my readiness as a Junior Full Stack Developer.',
+      summary: {
+        totalCredentials: 'Total Credentials',
+        featuredCredentials: 'Featured Spotlight',
+        professionalCertification: 'Professional Certifications (BNSP)',
+        technicalTraining: 'Technical & Digital Training'
+      },
+      featuredTitle: 'Featured Credential Spotlight',
+      featuredDescription: 'High-priority certification validating core capabilities in modern web development technologies and standard industry practices.',
+      featuredLabel: 'Featured Credential',
+      skillsMapTitle: 'Full Stack Skill Mapping',
+      skillsMapDescription: 'Mapping of how my credentials support core competencies required for a Junior Full Stack Developer role.',
+      skillsMap: {
+        react: 'Frontend UI (React.js)',
+        node: 'Backend Logic & Runtime (Node.js)',
+        api: 'RESTful APIs & Data Integration',
+        softwareEngineering: 'Software Engineering Foundations',
+        cloud: 'Cloud Computing & Infrastructure'
+      },
       categories: {
         all: 'All',
         bnsp: 'BNSP',
@@ -302,6 +322,26 @@ export const translations = {
       emptyCategory: 'Belum ada sertifikat di kategori {category}.',
       noThumbnail: 'Thumbnail tidak tersedia',
       viewCertificate: 'Lihat Sertifikat',
+      summaryTitle: 'Ikhtisar Kredensial',
+      summaryDescription: 'Ringkasan terstruktur dari sertifikasi, pelatihan teknis, dan pengalaman belajar praktis yang memvalidasi kesiapan saya sebagai Junior Full Stack Developer.',
+      summary: {
+        totalCredentials: 'Total Kredensial',
+        featuredCredentials: 'Kredensial Utama',
+        professionalCertification: 'Sertifikasi Kompetensi Profesional (BNSP)',
+        technicalTraining: 'Pelatihan Teknis & Digital'
+      },
+      featuredTitle: 'Kredensial Sorotan Utama',
+      featuredDescription: 'Sertifikasi prioritas tinggi yang memvalidasi kemampuan inti dalam teknologi pengembangan web modern dan standar praktik industri.',
+      featuredLabel: 'Kredensial Pilihan',
+      skillsMapTitle: 'Pemetaan Skill Full Stack',
+      skillsMapDescription: 'Pemetaan bagaimana kredensial saya mendukung kompetensi inti yang diperlukan untuk peran Junior Full Stack Developer.',
+      skillsMap: {
+        react: 'Antarmuka Frontend (React.js)',
+        node: 'Logika Backend & Runtime (Node.js)',
+        api: 'RESTful API & Integrasi Data',
+        softwareEngineering: 'Fondasi Rekayasa Perangkat Lunak',
+        cloud: 'Komputasi Awan & Infrastruktur'
+      },
       categories: {
         all: 'Semua',
         bnsp: 'BNSP',
@@ -489,6 +529,26 @@ export const translations = {
       emptyCategory: 'カテゴリ {category} の証明書はまだありません。',
       noThumbnail: 'サムネイルはありません',
       viewCertificate: '証明書を表示',
+      summaryTitle: '資格・実績の概要',
+      summaryDescription: 'ジュニアフルスタックデベロッパーとしての適性を証明する、認定資格、技術トレーニング、および実践的な学習プロセスの構造化された要約。',
+      summary: {
+        totalCredentials: '総資格数',
+        featuredCredentials: '主要な資格',
+        professionalCertification: '国家資格・プロフェッショナル認定 (BNSP)',
+        technicalTraining: '技術・デジタル研修'
+      },
+      featuredTitle: '注目の主要資格',
+      featuredDescription: 'モダンなWeb開発テクノロジーと業界の標準的な手法におけるコア能力を証明する高優先度の認定資格。',
+      featuredLabel: '注目の資格',
+      skillsMapTitle: 'フルスタックのスキルマッピング',
+      skillsMapDescription: '保有する資格がジュニアフルスタックデベロッパー職に必要とされるコアコンピテンシーをどのように補完しているかを示します。',
+      skillsMap: {
+        react: 'フロントエンドUI (React.js)',
+        node: 'バックエンドロジック (Node.js)',
+        api: 'REST APIとデータ連携',
+        softwareEngineering: 'ソフトウェアエンジニアリングの基礎',
+        cloud: 'クラウドコンピューティングとインフラ'
+      },
       categories: {
         all: 'すべて',
         bnsp: 'BNSP',

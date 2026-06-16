@@ -64,6 +64,10 @@ const Credentials = () => {
     return 0;
   });
 
+  const featuredSpotlight = rawCredentials.find(c => c.id === 'bnsp-web-node-react') ||
+                            rawCredentials.find(c => c.category === 'BNSP' && (c.title?.toLowerCase().includes('node') || c.title?.toLowerCase().includes('react') || c.title?.toLowerCase().includes('web'))) ||
+                            rawCredentials.find(c => c.featured);
+
   const handleOpenModal = (credential) => {
     setSelectedCredential(credential);
     setIsModalOpen(true);
@@ -98,6 +102,180 @@ const Credentials = () => {
             {t('credentials.description')}
           </p>
         </motion.div>
+
+        {/* Credential Summary Grid */}
+        <motion.div 
+          className="credential-summary-grid"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+        >
+          <div className="credential-summary-card">
+            <div className="credential-summary-number">
+              {rawCredentials.length || 0}
+            </div>
+            <div className="credential-summary-label">
+              {t('credentials.summaryTitle')}
+            </div>
+          </div>
+          <div className="credential-summary-card">
+            <div className="credential-summary-number">
+              {rawCredentials.filter(c => c.featured).length || 0}
+            </div>
+            <div className="credential-summary-label">
+              {t('credentials.summary.featuredCredentials')}
+            </div>
+          </div>
+          <div className="credential-summary-card">
+            <div className="credential-summary-number">
+              {rawCredentials.filter(c => c.category === 'BNSP').length || 0}
+            </div>
+            <div className="credential-summary-label">
+              {t('credentials.summary.professionalCertification')}
+            </div>
+          </div>
+          <div className="credential-summary-card">
+            <div className="credential-summary-number">
+              {rawCredentials.filter(c => c.category === 'IT & Digital').length || 0}
+            </div>
+            <div className="credential-summary-label">
+              {t('credentials.summary.technicalTraining')}
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Featured Credential Spotlight */}
+        {featuredSpotlight && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            style={{ marginBottom: 'var(--space-12)' }}
+          >
+            <h3 style={{ marginBottom: 'var(--space-2)' }}>{t('credentials.featuredTitle')}</h3>
+            <p style={{ opacity: 0.8, marginBottom: 'var(--space-6)', fontSize: '1rem' }}>
+              {t('credentials.featuredDescription')}
+            </p>
+            
+            <div className="featured-credential-panel">
+              <div className="featured-credential-content">
+                <div className="featured-image-wrapper" onClick={() => handleOpenModal(featuredSpotlight)}>
+                  <img 
+                    src={featuredSpotlight.thumbnailUrl} 
+                    alt={featuredSpotlight.title || 'Featured'} 
+                    className="featured-image"
+                    onError={(e) => { e.target.src = 'https://placehold.co/600x400/1e293b/334155?text=Sertifikat'; }}
+                  />
+                </div>
+                <div className="featured-credential-details">
+                  <span className="featured-badge-tag">{t('credentials.featuredLabel')}</span>
+                  <h4 className="featured-title-text">{featuredSpotlight.title || ''}</h4>
+                  <div className="featured-issuer-text">{featuredSpotlight.issuer || ''}</div>
+                  <div className="featured-date-text">{featuredSpotlight.date || ''}</div>
+                  <p className="featured-summary-text">
+                    {featuredSpotlight.summary || ''}
+                  </p>
+                  
+                  {featuredSpotlight.skills && featuredSpotlight.skills.length > 0 && (
+                    <div className="featured-credential-badges">
+                      {featuredSpotlight.skills.map((skill, index) => (
+                        <span key={index} className="featured-skill-tag">{skill}</span>
+                      ))}
+                    </div>
+                  )}
+                  
+                  <button 
+                    className="featured-action-btn"
+                    onClick={() => handleOpenModal(featuredSpotlight)}
+                  >
+                    {t('credentials.viewCertificate')}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Full Stack Skill Mapping */}
+        {rawCredentials.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="credential-skill-map"
+          >
+            <h3 style={{ marginBottom: 'var(--space-2)' }}>{t('credentials.skillsMapTitle')}</h3>
+            <p style={{ opacity: 0.8, marginBottom: 'var(--space-6)', fontSize: '1.05rem' }}>
+              {t('credentials.skillsMapDescription')}
+            </p>
+            
+            <div className="credential-skill-map-grid">
+              {[
+                {
+                  key: 'react',
+                  label: t('credentials.skillsMap.react'),
+                  keywords: ['react'],
+                  desc: 'React.js, component architecture, state management, and interactive frontend development.'
+                },
+                {
+                  key: 'node',
+                  label: t('credentials.skillsMap.node'),
+                  keywords: ['node'],
+                  desc: 'Node.js runtime, asynchronous event-driven backend logic, and server configuration.'
+                },
+                {
+                  key: 'api',
+                  label: t('credentials.skillsMap.api'),
+                  keywords: ['api', 'data integration', 'rest'],
+                  desc: 'REST API design, data workflows, CRUD integration, and database connectivity.'
+                },
+                {
+                  key: 'softwareEngineering',
+                  label: t('credentials.skillsMap.softwareEngineering'),
+                  keywords: ['software engineering', 'programming', 'javascript', 'git'],
+                  desc: 'Core development logic, version control, reusability, and software architecture foundations.'
+                },
+                {
+                  key: 'cloud',
+                  label: t('credentials.skillsMap.cloud'),
+                  keywords: ['cloud', 'azure'],
+                  desc: 'Cloud deployment, computing resources configuration, and infrastructure awareness.'
+                }
+              ].map(skillItem => {
+                const associatedCerts = rawCredentials.filter(c => 
+                  c.skills && c.skills.some(skill => 
+                    skillItem.keywords.some(kw => skill.toLowerCase().includes(kw.toLowerCase()))
+                  )
+                );
+                
+                return (
+                  <div key={skillItem.key} className="credential-skill-map-item">
+                    <div className="credential-skill-map-header">
+                      <span>{skillItem.key === 'react' ? '⚛️' : skillItem.key === 'node' ? '🟢' : skillItem.key === 'api' ? '🔌' : skillItem.key === 'softwareEngineering' ? '💻' : '☁️'}</span>
+                      {skillItem.label}
+                    </div>
+                    <p className="credential-skill-map-desc">{skillItem.desc}</p>
+                    <div className="credential-skill-map-certificates">
+                      {associatedCerts.length > 0 ? (
+                        associatedCerts.slice(0, 3).map(cert => (
+                          <span 
+                            key={cert.id} 
+                            className="credential-skill-map-cert-link"
+                            onClick={() => handleOpenModal(cert)}
+                          >
+                            🔗 {cert.title?.split('—')?.[1] || cert.title?.split('–')?.[1] || cert.title}
+                          </span>
+                        ))
+                      ) : (
+                        <span style={{ fontSize: '0.8rem', opacity: 0.5, fontStyle: 'italic' }}>—</span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
 
         {/* Filter Categories */}
         <div className="filter-container">
