@@ -24,6 +24,7 @@ Meningkatkan keterbacaan website portfolio oleh crawler sederhana, recruiter too
 - Batch F15K menyelesaikan polish copy halaman Projects dengan menambahkan recruiter guidance untuk Featured Full Stack Case Studies dan deskripsi pembeda Other Projects.
 - Batch F15F menyelesaikan audit keamanan ringan dan kesiapan GitHub recruiter-facing untuk memastikan tidak ada credential jelas, file scratch, atau link GitHub lama yang mengganggu sebelum QA final.
 - Batch F15G menyelesaikan QA akhir F15 dengan build frontend, audit recruiter-facing, pemeriksaan link penting, dan penilaian akhir terhadap kesiapan portfolio untuk HRD Full Stack Developer.
+- Batch F15G.1 menyelesaikan rekonsiliasi asset CV PDF yang masuk pada commit F15G, memastikan file tersebut dipakai sebagai asset recruiter-facing dan mencatat rekomendasi follow-up jika diperlukan.
 - Snapshot berisi professional summary, core stack, featured work, dan recruiter links.
 - Tampilan visual React Home saat JS aktif tidak terpengaruh sedikit pun.
 
@@ -51,6 +52,7 @@ Audit Result:
 | F15K | Projects Page Recruiter Copy & Case Study Guidance | Completed | Memperkuat copy halaman Projects agar recruiter langsung memahami featured projects sebagai studi kasus Full Stack utama dan other projects sebagai pendukung. | F15J |
 | F15F | Security and GitHub Recruiter Audit | Completed | Audit repositori dan profil GitHub untuk kebutuhan rekrutmen. | F15K |
 | F15G | Lighthouse and Final HRD Score QA | Completed | Pengukuran skor akhir dengan Lighthouse/manual QA dan review akhir kesiapan HRD Full Stack. | F15F |
+| F15G.1 | CV PDF Scope Reconciliation Before Checkpoint | Completed | Memverifikasi asset CV PDF yang masuk pada commit F15G dan mencatat statusnya sebelum checkpoint F15. | F15G |
 
 ## F15G Final QA Result
 - Frontend build: Passed
@@ -66,11 +68,20 @@ Audit Result:
 - Estimated HRD Full Stack score: 85–90/100
 - Final recommendation: Ready for checkpoint
 
+## F15G.1 CV PDF Reconciliation
+- CV PDF detected: Yes
+- CV PDF path: client/public/cv/cv. Syah Putra N.pdf
+- Referenced by website: Yes (Through public download path, although code refers to '/cv/cv-syah-putra-nugraha-web-developer.pdf' creating a path mismatch)
+- File size check: Clear (108 KB)
+- Filename professionalism: Needs Follow-up (Contains spaces and capital letters)
+- Scope reconciliation: Accepted as recruiter-facing asset (needs rename to resolve URL mismatch)
+- Notes: File `cv. Syah Putra N.pdf` adalah asset CV PDF yang diupload, namun tautan pada frontend (`Home.jsx` dan `About.jsx`) merujuk ke `/cv/cv-syah-putra-nugraha-web-developer.pdf` sehingga terjadi mismatch (404). Perlu rename file dan penyesuaian tautan pada batch kecil berikutnya.
+
 ## HOLD / Blocked Notes
 - Seluruh pengerjaan pada batch ini dirancang tanpa mengubah arsitektur SPA React atau menambahkan prerendering framework / SSR dependency baru.
 
 ## Next Step
-- Melanjutkan ke Batch F15-CP — HRD Portfolio Score Improvement Checkpoint.
+- Melanjutkan ke Batch F15G.2 — CV Filename and Download Link Polish.
 
 ## Validation Checklist
 - Menjalankan build frontend (`npm run build`) dan memastikan kompilasi berjalan sukses.
