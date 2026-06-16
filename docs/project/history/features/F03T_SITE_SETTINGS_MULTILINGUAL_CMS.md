@@ -278,7 +278,7 @@ Namun untuk rancangan jangka panjang, skema JSON berikut disepakati untuk Contac
 | Sub-Batch | Name | Status | Purpose | Dependency |
 |---|---|---|---|---|
 | F03T-SPEC | Site Settings Multilingual CMS Technical Specification | Completed | Mengunci spesifikasi teknis data shape, kebijakan fallback bahasa, alur API admin/publik, dan kebijakan translatabilitas. | - |
-| F03T.1 | SiteSetting Locale Shape & Backend Fallback Helper | Pending | Implementasi fungsi helper normalisasi bahasa, pendeteksi skema, resolusi fallback publik, dan perbaikan API PUT admin. | F03T-SPEC |
+| F03T.1 | SiteSetting Locale Shape & Backend Fallback Helper | Completed | Implementasi fungsi helper normalisasi bahasa, pendeteksi skema, resolusi fallback publik, dan perbaikan API PUT admin. | F03T-SPEC |
 | F03T.2 | Admin Hero Translation Tabs EN/ID/JA | Pending | Pembuatan antarmuka tab bahasa pada Admin Hero, input roles dinamis, dan penyelarasan payload simpan. | F03T.1 |
 | F03T.3 | Admin Profile Translation Tabs EN/ID/JA | Pending | Pembuatan antarmuka tab bahasa pada Admin Profile, editor rich-text, dan penyelarasan payload simpan. | F03T.1 |
 | F03T.4 | Public Hero/Profile Locale Integration | Pending | Integrasi dynamic locale fetch di Home.jsx & About.jsx berdasarkan state locale aktif. | F03T.2, F03T.3 |
@@ -313,5 +313,12 @@ Namun untuk rancangan jangka panjang, skema JSON berikut disepakati untuk Contac
 
 ---
 
+## F03T.1 Progress & Implementation Notes
+- **F03T.1 Completed**: Menambahkan fungsi helper normalisasi bahasa, deteksi skema terjemahan, resolusi fallback field-level publik, serta merge update admin ke dalam `settings.controller.js`.
+- **Public API Resolution**: `/api/settings/hero` dan `/api/settings/profile` kini mendukung query parameter `?locale=`. Payload respons publik disajikan dalam bentuk flat (tidak bersarang) demi kemudahan integrasi di sisi client.
+- **Merge & Compatibility**: Payload update dari panel admin di-merge secara aman dengan struktur data yang ada untuk mencegah kehilangan terjemahan bahasa lain. Data flat lama tetap terbaca dengan normal tanpa merusak fungsionalitas aplikasi yang sudah berjalan.
+
+---
+
 ## Next Step
-- Melanjutkan ke **Batch F03T.1 — SiteSetting Locale Shape & Backend Fallback Helper**.
+- Melanjutkan ke **Batch F03T.2 — Admin Hero Translation Tabs EN/ID/JA**.
