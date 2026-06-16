@@ -58,7 +58,7 @@ Setelah rangkaian sub-batch lokalisasi publik dan antarmuka CMS admin multibahas
 | F03S.1 | Experience Translation Schema & Migration | Completed | Penambahan fondasi database multilingual untuk Experience dengan membuat model ExperienceTranslation dan relasinya. | F03S-SPEC |
 | F03S.2 | Backend Experience Locale Mapping | Completed | Adaptasi API & controller backend untuk penanganan multilingual data Experience. | F03S.1 |
 | F03S.3 | Admin Experience Translation Tabs | Completed | Pembuatan tab manajemen bahasa manual EN/ID/JA di CMS Admin untuk Experience. | F03S.2 |
-| F03S.4 | Public Experience Locale Integration | Planned | Integrasi locale aktif pada halaman publik Experience dan localized date display. | F03S.3 |
+| F03S.4 | Public Experience Locale Integration | Completed | Integrasi locale aktif pada halaman publik Experience dan localized date display. | F03S.3 |
 | F03S-CP | Experience Multilingual Checkpoint | Planned | Checkpoint dokumentasi akhir dan validasi menyeluruh integrasi multilingual Experience. | F03S.4 |
 
 
@@ -107,6 +107,7 @@ Setelah rangkaian sub-batch lokalisasi publik dan antarmuka CMS admin multibahas
 - [F03S.1] Penambahan model relasional `ExperienceTranslation` di Prisma schema dan pelaksanaan migrasi database (npx prisma migrate dev) secara additive tanpa memodifikasi data atau merusak kolom-kolom legacy pada tabel `Experience`.
 - [F03S.2] Mengadaptasi backend controller dan membuat helper `experienceTranslationMapper.js` agar endpoint publik `/api/experiences` mendukung query parameter `?locale=` dengan fallback dinamis (Requested locale -> EN -> legacy fields) serta menyajikan payload flat backward-compatible. API admin get/list diupdate untuk mengembalikan relasi terjemahan.
 - [F03S.3] Integrasi tab navigasi trilingual (EN, ID, JA) manual di formulir Admin CMS Experience (`ExperienceForm.jsx`), pemisahan input global (shared) dan lokal (translatable), validasi role Inggris wajib pada sisi client & server, sinkronisasi otomatis EN ke field legacy, dan penanganan auto-delete/fallback jika data opsional dikosongkan.
+- [F03S.4] Integrasi locale aktif pada halaman publik Experience (`Experience.jsx`) dengan menambahkan query parameter `?locale=` pada API call, melakukan re-fetch secara otomatis pada saat preferensi bahasa di-switch oleh pengguna, dan melokalisasikan data tanggal serta label 'Present/Sekarang/現在' secara lokal.
 
 ## F03R — Multilingual CMS Expansion Planning
 

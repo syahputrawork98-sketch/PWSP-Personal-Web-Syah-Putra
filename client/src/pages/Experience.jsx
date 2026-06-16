@@ -10,6 +10,39 @@ import { useLanguage } from '../context/LanguageContext';
 
 import '../styles/experience.css';
 
+const getLocalDisplayDate = (exp, locale) => {
+  if (!exp) return '';
+  if (exp.isLocal) return exp.displayDate || '';
+
+  const formatDateLocal = (dateString, loc) => {
+    if (!dateString) return '';
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return '';
+      
+      const jsLocale = loc === 'JA' ? 'ja-JP' : loc === 'ID' ? 'id-ID' : 'en-US';
+      return date.toLocaleDateString(jsLocale, {
+        month: 'short',
+        year: 'numeric'
+      });
+    } catch (e) {
+      return '';
+    }
+  };
+
+  const start = formatDateLocal(exp.startDate, locale);
+  
+  let endText = '';
+  if (exp.isCurrent) {
+    endText = locale === 'ID' ? 'Sekarang' : locale === 'JA' ? '現在' : 'Present';
+  } else {
+    endText = formatDateLocal(exp.endDate, locale);
+  }
+
+  if (!start) return endText || '';
+  return `${start} ${endText ? '– ' + endText : ''}`;
+};
+
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -27,7 +60,7 @@ const itemVariants = {
 };
 
 const Experience = () => {
-  const { t } = useLanguage();
+  const { locale, t } = useLanguage();
 
   const SECTIONS = [
     {
@@ -47,7 +80,11 @@ const Experience = () => {
     },
   ];
 
-  const { data: response, loading, error } = useFetch(getPublicExperiences);
+  const fetchExperiencesWithLocale = React.useCallback(() => {
+    return getPublicExperiences(locale);
+  }, [locale]);
+
+  const { data: response, loading, error } = useFetch(fetchExperiencesWithLocale);
   const experiences = (Array.isArray(response)
     ? response
     : (response?.experiences || response?.data?.experiences)) || [];
@@ -144,7 +181,7 @@ const Experience = () => {
                     <ExperienceCard
                       key={exp.id}
                       exp={exp}
-                      displayDate={getExperienceDisplayDate(exp)}
+                      displayDate={getLocalDisplayDate(exp, locale)}
                       variants={itemVariants}
                     />
                   ))}

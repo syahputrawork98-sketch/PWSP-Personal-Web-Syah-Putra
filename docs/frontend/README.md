@@ -84,8 +84,8 @@ Admin Panel CMS telah berstatus *fully-mapped* dan mematuhi pilar CRUD:
   - Jika form di-submit dengan field `role` EN kosong, proses submit dibatalkan, pesan kesalahan ditampilkan, dan tab aktif otomatis diarahkan ke `EN`.
   - Tab `ID` dan `JA` ditandai sebagai `Optional`.
 
-### 2. Public Experience Page Locale Integration
-- **Locale Fetching**: Mengubah `client/src/pages/Experience.jsx` agar memanggil backend API dengan query parameter `?locale=${locale}` menggunakan state `locale` dari `useLanguage()`.
-- **Date Localization**: Memperbarui fungsi `getExperienceDisplayDate` di `client/src/lib/dateUtils.js` agar menerima parameter `locale` tambahan:
-  - Text `isCurrent` diterjemahkan berdasarkan bahasa terpilih: `'Present'` (EN), `'Sekarang'` (ID), dan `'現在'` (JA).
-  - Memformat tampilan bulan dan tahun agar sesuai dengan lokalisasi standar masing-masing bahasa.
+### 2. Public Experience Page Locale Integration (Applied)
+- **Locale Fetching**: Mengubah `client/src/pages/Experience.jsx` agar memanggil backend API dengan query parameter `?locale=${locale}` menggunakan state `locale` dari `useLanguage()` (Applied).
+- **Date & Text Localization**: Implementasi fungsi `getLocalDisplayDate` secara lokal di dalam `Experience.jsx` agar memformat string tanggal sesuai locale aktif (`EN` -> `en-US`, `ID` -> `id-ID`, `JA` -> `ja-JP`) tanpa memodifikasi `dateUtils.js` (Applied):
+  - Teks status kerja aktif `isCurrent` dialihkan dinamis berdasarkan bahasa terpilih: `'Present'` (EN), `'Sekarang'` (ID), dan `'現在'` (JA).
+  - Melakukan re-fetch data secara otomatis pada saat preferensi bahasa (`locale`) di-switch oleh pengguna.

@@ -44,7 +44,10 @@ export const getPublicSkills = (type) => {
   const url = type ? `/api/skills?type=${type}` : '/api/skills';
   return fetcher(url);
 };
-export const getPublicExperiences = () => fetcher('/api/experiences');
+export const getPublicExperiences = (locale) => {
+  const url = locale ? `/api/experiences?locale=${locale}` : '/api/experiences';
+  return fetcher(url);
+};
 export const getPublicLearningItems = () => fetcher('/api/learning');
 
 // Auth
