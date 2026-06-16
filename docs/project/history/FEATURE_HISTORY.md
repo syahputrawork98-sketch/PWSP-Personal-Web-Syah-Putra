@@ -22,3 +22,14 @@ Dokumen ini adalah index history aktif berbasis fitur. Detail setiap fitur disim
 | F13 | Mobile Responsive UI Improvement | Completed | features/F13_MOBILE_RESPONSIVE_UI_IMPROVEMENT.md |
 | F14 | Repository Normalization and Documentation Sync | Partial / Backend Audit Ready | features/F14_REPOSITORY_NORMALIZATION_DOCUMENTATION_SYNC.md |
 | F15 | HRD Portfolio Score Improvement | Completed | features/F15_HRD_PORTFOLIO_SCORE_IMPROVEMENT.md |
+
+## Major Checkpoints & Phase Updates
+
+### F03 — Project Portfolio System (Multilingual Phase F03M - F03Q)
+Rangkaian fase multibahasa (Multilingual Project System) telah diselesaikan secara penuh:
+- **F03M**: Fondasi language switcher EN/ID di public site, dictionary lokalisasi, dan request API locale.
+- **F03N**: Ekspansi static UI bilingual EN/ID ke About, Credentials, Learn, dan Contact.
+- **F03O**: Admin CMS Project tabs manual EN/ID/JA, legacy field synchronization, dan automated fallback.
+- **F03P**: Integrasi bahasa Jepang (JA) di context publik, i18n dictionary JA, dan fallback bertingkat.
+- **F03Q**: Validasi sisi klien di Admin Project (wajib EN title & short description), auto redirect tab aktif, dan petunjuk visual.
+- **F03-CP2**: Checkpoint dokumentasi fase multibahasa sistem proyek.

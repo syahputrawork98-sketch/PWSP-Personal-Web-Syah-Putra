@@ -24,6 +24,13 @@ Setelah rangkaian sub-batch database relasional dan lokalisasi selesai (F03H–F
 - **Public Case Study UI Foundation** (`F03K`): Modal detail proyek di frontend (`ProjectDetailModal.jsx`) siap menampilkan data case study (Context, Problem, Solution, Key Features, Responsibilities, Outcomes) secara kondisional dengan label bahasa Inggris sebagai baseline, tanpa merusak render detail proyek legacy.
 - **Admin Case Study Content Editor** (`F03L`): Halaman edit admin dilengkapi section editor studi kasus Inggris (EN) dengan form textareas multiline untuk `keyFeatures`, `responsibilities`, dan `outcomes` (satu baris per item) yang secara dinamis dikonversi ke array di backend.
 
+### F03-CP2 Checkpoint Summary
+Setelah rangkaian sub-batch lokalisasi publik dan antarmuka CMS admin multibahasa selesai (F03M–F03Q), Project Portfolio System memiliki kemampuan operasional multibahasa yang matang secara end-to-end:
+- **Public EN/ID Switcher & Static Coverage Expansion** (`F03M` & `F03N`): Language switcher EN/ID diintegrasikan di navbar desktop/mobile dengan persistensi `localStorage`. Teks statis publik (About, Credentials, Learn, Contact, dll.) diselaraskan menggunakan context helper `t()`.
+- **Admin Manual Translation Tabs** (`F03O`): CMS Admin dilengkapi form input terjemahan dengan tabs manual (English, Indonesia, Japanese), menyinkronkan data legacy dari EN, serta menghapus/mengabaikan record ID/JA kosong agar fallback berjalan sempurna tanpa merusak record lain.
+- **Public JA Language Switcher Exposure** (`F03P`): Bahasa Jepang (JA) didukung penuh sebagai pilihan di navbar switcher publik. Kamus i18n JA lengkap ditambahkan untuk semua elemen halaman statis publik dengan mekanisme fallback otomatis ke EN jika suatu kunci/elemen kosong.
+- **Admin Translation Validation & UX Polish** (`F03Q`): Form admin dibekali validasi sisi klien yang melarang penyimpanan jika judul/deskripsi pendek bahasa Inggris (EN) kosong, otomatis memindahkan tab aktif ke `EN` saat error terjadi, serta menambahkan petunjuk pengisian visual.
+
 ## Sub-Batch Roadmap
 | Sub-Batch | Name | Status | Purpose | Dependency |
 |---|---|---|---|---|
@@ -45,6 +52,7 @@ Setelah rangkaian sub-batch database relasional dan lokalisasi selesai (F03H–F
 | F03O | Admin Project Translation Tabs EN/ID/JA | Completed | Integrasi tab manajemen terjemahan manual EN/ID/JA di CMS admin tanpa migration & otomatis kelola fallback. | F03N |
 | F03P | Public JA Language Switcher Exposure | Completed | Ekspos bahasa Japanese (JA) di language switcher publik, perbarui i18n dictionary JA, dan dukung locale fallback ke EN. | F03O |
 | F03Q | Admin Project Translation Validation & UX Polish | Completed | Penambahan validasi sisi klien untuk wajib English, pengalihan tab aktif, indikator label visual, dan teks penolong. | F03P |
+| F03-CP2 | Multilingual Project System Checkpoint | Completed | Melakukan checkpoint dokumentasi setelah rangkaian F03M–F03Q selesai. | F03Q |
 
 
 ## HOLD / Blocked Notes
