@@ -72,10 +72,10 @@ Admin Panel CMS telah berstatus *fully-mapped* dan mematuhi pilar CRUD:
 - **Active Tab Redirect**: Jika kolom wajib EN tidak lengkap, form membatalkan submit, memicu pesan error visual, dan otomatis memindahkan tab aktif kembali ke `EN` agar memudahkan admin melengkapinya.
 - **Visual Indicators & Guide**: Tombol tab navigasi diperjelas dengan keterangan `Required` pada `English` dan `Optional` pada `Indonesia` & `Japanese`. Ditambahkan pula baris petunjuk (helper text) di bawah switcher untuk memberikan kepastian alur pengisian translasi.
 
-## Planned UI Extensions - Experience Multilingual CMS (F03S-SPEC)
+## Experience Multilingual CMS UI (Batch F03S.3 Applied)
 
-### 1. Admin Experience Form Tab Switcher
-- **Tab Layout**: `ExperienceForm.jsx` akan ditambahkan tab navigasi untuk bahasa English (EN), Indonesia (ID), dan Japanese (JA).
+### 1. Admin Experience Form Tab Switcher (Applied)
+- **Tab Layout**: `ExperienceForm.jsx` telah ditambahkan tab navigasi untuk bahasa English (EN), Indonesia (ID), dan Japanese (JA) (Applied).
 - **Shared vs Translatable Separation**:
   - Kolom **Shared** diletakkan di bagian atas form (Company, Location, Employment Type, Start Date, End Date, Currently Working, Tech Stack, Experience Kind, Status, Display Order).
   - Kolom **Translatable** dikelompokkan dalam tab konten di bagian bawah (Role/Title, Short Description, Highlights).

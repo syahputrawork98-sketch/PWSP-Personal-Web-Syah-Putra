@@ -86,7 +86,11 @@ Sangat berkaitan dengan **F07 Backend API System** dan **F08 Admin Login and Aut
 
 ### Admin Experience Controller Updates
 - **`GET /api/admin/experiences` & `GET /api/admin/experiences/:id`**: Diperbarui (Applied) agar menyertakan relasi `translations` array.
-- **`POST /api/admin/experiences`** & **`PUT /api/admin/experiences/:id`**: Diperbarui (Applied) agar menyertakan relasi `translations` pada respons objek pasca pembuatan/pembaruan (upsert logic akan ditangani penuh pada Batch F03S.3).
+- **`POST /api/admin/experiences`** & **`PUT /api/admin/experiences/:id`**: Diperbarui (Applied) agar menerima objek `translations` di dalam body request:
+  - English (`EN`) wajib terisi minimal `role`.
+  - Terjemahan `EN` secara otomatis menyinkronkan data legacy (`role`, `description`, `highlights`).
+  - Terjemahan `ID` & `JA` bersifat opsional; jika dikirim kosong total, record terjemahan terkait dihapus untuk fallback ke `EN`. Jika tidak dikirim sama sekali, data lama dipertahankan.
+  - Respons mengembalikan objek Experience lengkap dengan `translations` array yang di-include.
 
 ### Public Experience API Updates
 - **`GET /api/experiences`**: Mendukung query parameter `?locale=EN/ID/JA` (Applied).

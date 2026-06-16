@@ -69,13 +69,37 @@ const getExperienceById = async (req, res, next) => {
   }
 };
 
-const createExperience = async (req, res, next) => {
-  const { role, company, location, type, startDate, endDate, isCurrent, description, highlights, techStack, status, order, experienceKind } = req.body;
+const isExperienceTranslationValid = (trans) => {
+  return !!(trans && trans.role && trans.role.trim());
+};
 
-  if (!role || !company) {
+const createExperience = async (req, res, next) => {
+  const { role, company, location, type, startDate, endDate, isCurrent, description, highlights, techStack, status, order, experienceKind, translations } = req.body;
+
+  if (!company) {
     return res.status(400).json({
       status: 'error',
-      message: 'Role and company are required',
+      message: 'Company is required',
+    });
+  }
+
+  // Fallback to flat fields if translations is not sent
+  let activeTranslations = translations;
+  if (!activeTranslations) {
+    activeTranslations = {
+      EN: {
+        role: role || '',
+        description: description || null,
+        highlights: highlights || []
+      }
+    };
+  }
+
+  // EN is mandatory
+  if (!activeTranslations.EN || !activeTranslations.EN.role || !activeTranslations.EN.role.trim()) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'English Role is required',
     });
   }
 
@@ -83,21 +107,54 @@ const createExperience = async (req, res, next) => {
   const resolvedKind = validKinds.includes(experienceKind) ? experienceKind : 'FORMAL_WORK';
 
   try {
+    const enRole = activeTranslations.EN.role.trim();
+    const enDescription = activeTranslations.EN.description || null;
+    const enHighlights = activeTranslations.EN.highlights || [];
+
+    const translationCreates = [];
+    translationCreates.push({
+      locale: 'EN',
+      role: enRole,
+      description: enDescription,
+      highlights: enHighlights
+    });
+
+    if (isExperienceTranslationValid(activeTranslations.ID)) {
+      translationCreates.push({
+        locale: 'ID',
+        role: activeTranslations.ID.role.trim(),
+        description: activeTranslations.ID.description || null,
+        highlights: activeTranslations.ID.highlights || []
+      });
+    }
+
+    if (isExperienceTranslationValid(activeTranslations.JA)) {
+      translationCreates.push({
+        locale: 'JA',
+        role: activeTranslations.JA.role.trim(),
+        description: activeTranslations.JA.description || null,
+        highlights: activeTranslations.JA.highlights || []
+      });
+    }
+
     const experience = await prisma.experience.create({
       data: {
-        role,
+        role: enRole,
         company,
         location,
         type,
         startDate: startDate ? new Date(startDate) : null,
         endDate: isCurrent ? null : (endDate ? new Date(endDate) : null),
         isCurrent: isCurrent || false,
-        description,
-        highlights: highlights || [],
+        description: enDescription,
+        highlights: enHighlights,
         techStack: techStack || [],
         status: status || 'DRAFT',
         experienceKind: resolvedKind,
         order: parseInt(order) || 0,
+        translations: {
+          create: translationCreates
+        }
       },
       include: {
         translations: true,
@@ -112,13 +169,14 @@ const createExperience = async (req, res, next) => {
 
 const updateExperience = async (req, res, next) => {
   const { id } = req.params;
-  const { role, company, location, type, startDate, endDate, isCurrent, description, highlights, techStack, status, order, experienceKind } = req.body;
+  const { role, company, location, type, startDate, endDate, isCurrent, description, highlights, techStack, status, order, experienceKind, translations } = req.body;
 
   const validKinds = ['FORMAL_WORK', 'IT_FREELANCE', 'GENERAL_FREELANCE'];
 
   try {
     const existingExperience = await prisma.experience.findUnique({
       where: { id },
+      include: { translations: true }
     });
 
     if (!existingExperience) {
@@ -128,27 +186,140 @@ const updateExperience = async (req, res, next) => {
       });
     }
 
+    // Fallback if translations not sent
+    let activeTranslations = translations;
+    if (!activeTranslations) {
+      const existingEN = existingExperience.translations?.find(t => t.locale === 'EN');
+      activeTranslations = {
+        EN: {
+          role: role !== undefined ? role : (existingEN?.role || existingExperience.role),
+          description: description !== undefined ? description : (existingEN?.description || existingExperience.description),
+          highlights: highlights !== undefined ? highlights : (existingEN?.highlights || existingExperience.highlights || [])
+        }
+      };
+    }
+
+    // EN validation
+    if (activeTranslations.EN) {
+      if (!activeTranslations.EN.role || !activeTranslations.EN.role.trim()) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'English Role is required',
+        });
+      }
+    }
+
     const resolvedKind = experienceKind !== undefined
       ? (validKinds.includes(experienceKind) ? experienceKind : 'FORMAL_WORK')
       : existingExperience.experienceKind;
 
-    const updatedExperience = await prisma.experience.update({
+    const experienceUpdateData = {
+      company: company !== undefined ? company : existingExperience.company,
+      location: location !== undefined ? location : existingExperience.location,
+      type: type !== undefined ? type : existingExperience.type,
+      startDate: startDate !== undefined ? (startDate ? new Date(startDate) : null) : existingExperience.startDate,
+      endDate: isCurrent ? null : (endDate !== undefined ? (endDate ? new Date(endDate) : null) : existingExperience.endDate),
+      isCurrent: isCurrent !== undefined ? isCurrent : existingExperience.isCurrent,
+      techStack: techStack !== undefined ? techStack : existingExperience.techStack,
+      status: status !== undefined ? status : existingExperience.status,
+      experienceKind: resolvedKind,
+      order: order !== undefined ? parseInt(order) : existingExperience.order,
+    };
+
+    if (activeTranslations.EN) {
+      experienceUpdateData.role = activeTranslations.EN.role.trim();
+      experienceUpdateData.description = activeTranslations.EN.description || null;
+      experienceUpdateData.highlights = activeTranslations.EN.highlights || [];
+    }
+
+    await prisma.experience.update({
       where: { id },
-      data: {
-        role: role !== undefined ? role : existingExperience.role,
-        company: company !== undefined ? company : existingExperience.company,
-        location: location !== undefined ? location : existingExperience.location,
-        type: type !== undefined ? type : existingExperience.type,
-        startDate: startDate !== undefined ? (startDate ? new Date(startDate) : null) : existingExperience.startDate,
-        endDate: isCurrent ? null : (endDate !== undefined ? (endDate ? new Date(endDate) : null) : existingExperience.endDate),
-        isCurrent: isCurrent !== undefined ? isCurrent : existingExperience.isCurrent,
-        description: description !== undefined ? description : existingExperience.description,
-        highlights: highlights !== undefined ? highlights : existingExperience.highlights,
-        techStack: techStack !== undefined ? techStack : existingExperience.techStack,
-        status: status !== undefined ? status : existingExperience.status,
-        experienceKind: resolvedKind,
-        order: order !== undefined ? parseInt(order) : existingExperience.order,
-      },
+      data: experienceUpdateData
+    });
+
+    // 1. EN translation upsert
+    if (activeTranslations.EN) {
+      await prisma.experienceTranslation.upsert({
+        where: { experienceId_locale: { experienceId: id, locale: 'EN' } },
+        update: {
+          role: activeTranslations.EN.role.trim(),
+          description: activeTranslations.EN.description || null,
+          highlights: activeTranslations.EN.highlights || []
+        },
+        create: {
+          experienceId: id,
+          locale: 'EN',
+          role: activeTranslations.EN.role.trim(),
+          description: activeTranslations.EN.description || null,
+          highlights: activeTranslations.EN.highlights || []
+        }
+      });
+    }
+
+    // 2. ID translation
+    if (activeTranslations.ID !== undefined) {
+      const idTrans = activeTranslations.ID;
+      if (isExperienceTranslationValid(idTrans)) {
+        await prisma.experienceTranslation.upsert({
+          where: { experienceId_locale: { experienceId: id, locale: 'ID' } },
+          update: {
+            role: idTrans.role.trim(),
+            description: idTrans.description || null,
+            highlights: idTrans.highlights || []
+          },
+          create: {
+            experienceId: id,
+            locale: 'ID',
+            role: idTrans.role.trim(),
+            description: idTrans.description || null,
+            highlights: idTrans.highlights || []
+          }
+        });
+      } else {
+        const exists = await prisma.experienceTranslation.findUnique({
+          where: { experienceId_locale: { experienceId: id, locale: 'ID' } }
+        });
+        if (exists) {
+          await prisma.experienceTranslation.delete({
+            where: { experienceId_locale: { experienceId: id, locale: 'ID' } }
+          });
+        }
+      }
+    }
+
+    // 3. JA translation
+    if (activeTranslations.JA !== undefined) {
+      const jaTrans = activeTranslations.JA;
+      if (isExperienceTranslationValid(jaTrans)) {
+        await prisma.experienceTranslation.upsert({
+          where: { experienceId_locale: { experienceId: id, locale: 'JA' } },
+          update: {
+            role: jaTrans.role.trim(),
+            description: jaTrans.description || null,
+            highlights: jaTrans.highlights || []
+          },
+          create: {
+            experienceId: id,
+            locale: 'JA',
+            role: jaTrans.role.trim(),
+            description: jaTrans.description || null,
+            highlights: jaTrans.highlights || []
+          }
+        });
+      } else {
+        const exists = await prisma.experienceTranslation.findUnique({
+          where: { experienceId_locale: { experienceId: id, locale: 'JA' } }
+        });
+        if (exists) {
+          await prisma.experienceTranslation.delete({
+            where: { experienceId_locale: { experienceId: id, locale: 'JA' } }
+          });
+        }
+      }
+    }
+
+    const updatedExperience = await prisma.experience.findUnique({
+      where: { id },
       include: {
         translations: true,
       },
