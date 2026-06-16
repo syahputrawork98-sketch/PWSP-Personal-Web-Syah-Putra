@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const ExperienceCard = ({ exp, displayDate, variants }) => {
+const ExperienceCard = ({ exp, displayDate, variants, locale }) => {
   const getBorderColor = () => {
     switch (exp.experienceKind) {
       case 'IT_FREELANCE':
@@ -12,6 +12,27 @@ const ExperienceCard = ({ exp, displayDate, variants }) => {
       default:
         return '#22c55e';
     }
+  };
+
+  const getRelevanceValue = (role, loc) => {
+    const roleLower = (role || '').toLowerCase();
+    
+    if (roleLower.includes('developer') || roleLower.includes('web') || roleLower.includes('full stack')) {
+      if (loc === 'ID') return 'Mengembangkan aplikasi web secara end-to-end dengan integrasi database & REST API.';
+      if (loc === 'JA') return 'データベースとREST APIを統合した、エンドツーエンドのWebアプリ開発実績。';
+      return 'End-to-end web application development with database and REST API integration.';
+    }
+    
+    if (roleLower.includes('support') || roleLower.includes('it') || roleLower.includes('administrator')) {
+      if (loc === 'ID') return 'Menunjukkan pemeliharaan server database, konfigurasi jaringan, dan administrasi sistem internal.';
+      if (loc === 'JA') return 'データベースサーバー保守、ネットワーク設定、および内部システム管理の実績。';
+      return 'Database server maintenance, network configuration, and internal system administration.';
+    }
+    
+    // Fallback for business/operational roles (General Staff, Assistant, Estimator, GA)
+    if (loc === 'ID') return 'Memberikan pemahaman alur bisnis operasional (RAB, logistik, pelaporan) untuk merancang dashboard.';
+    if (loc === 'JA') return 'ダッシュボード設計のためのビジネス業務フロー（予算、物流、レポート）の深い理解。';
+    return 'Understanding operational workflows (RAB, logistics, reporting) to design admin dashboards.';
   };
 
   return (
@@ -40,6 +61,16 @@ const ExperienceCard = ({ exp, displayDate, variants }) => {
         </ul>
       )}
 
+      {/* Dynamic Full Stack Relevance Box */}
+      <div className="experience-relevance-box">
+        <span className="experience-relevance-tag">
+          💡 {locale === 'ID' ? 'Relevansi Full Stack' : locale === 'JA' ? 'フルスタックの関連性' : 'Full Stack Relevance'}:
+        </span>{' '}
+        <span className="experience-relevance-text">
+          {getRelevanceValue(exp.role, locale)}
+        </span>
+      </div>
+
       {exp.techStack && exp.techStack.length > 0 && (
         <div className="tech-badges" style={{ marginTop: 'auto' }}>
           {exp.techStack.map((tech, idx) => (
@@ -52,3 +83,4 @@ const ExperienceCard = ({ exp, displayDate, variants }) => {
 };
 
 export default ExperienceCard;
+

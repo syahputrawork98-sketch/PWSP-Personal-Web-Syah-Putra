@@ -130,6 +130,99 @@ const Experience = () => {
 
         {!loading && !error && experiences.length > 0 && (
           <>
+            {/* Experience Overview Summary Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              style={{ marginBottom: 'var(--space-12)' }}
+            >
+              <h3 style={{ marginBottom: 'var(--space-2)', fontSize: '1.4rem', fontWeight: '700', color: 'var(--text-primary)' }}>
+                {t('experience.overviewTitle')}
+              </h3>
+              <p style={{ opacity: 0.8, marginBottom: 'var(--space-6)', fontSize: '1rem', lineHeight: '1.6', color: 'var(--text-secondary)' }}>
+                {t('experience.overviewDescription')}
+              </p>
+
+              <div className="experience-summary-grid">
+                <div className="experience-summary-card">
+                  <div className="experience-summary-icon">⚛️</div>
+                  <h4 className="experience-summary-card-title">{t('experience.summary.fullStack')}</h4>
+                  <p className="experience-summary-card-desc">React.js, Node.js, Express, REST APIs, and database design.</p>
+                </div>
+                <div className="experience-summary-card">
+                  <div className="experience-summary-icon">🔧</div>
+                  <h4 className="experience-summary-card-title">{t('experience.summary.itSupport')}</h4>
+                  <p className="experience-summary-card-desc">Local servers, networks, cPanel hosting, and tech support.</p>
+                </div>
+                <div className="experience-summary-card">
+                  <div className="experience-summary-icon">📲</div>
+                  <h4 className="experience-summary-card-title">{t('experience.summary.digitalization')}</h4>
+                  <p className="experience-summary-card-desc">Migrating spreadsheets and paper workflows to web apps.</p>
+                </div>
+                <div className="experience-summary-card">
+                  <div className="experience-summary-icon">📊</div>
+                  <h4 className="experience-summary-card-title">{t('experience.summary.businessOps')}</h4>
+                  <p className="experience-summary-card-desc">Budget calculation (RAB/RAP), documentation, and reporting.</p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* How My Experience Supports Full Stack Developer Roles Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="experience-hrd-value-panel"
+              style={{ marginBottom: 'var(--space-12)' }}
+            >
+              <h3 style={{ marginBottom: 'var(--space-2)', fontSize: '1.4rem', fontWeight: '700', color: 'var(--text-primary)' }}>
+                {t('experience.hrdValueTitle')}
+              </h3>
+              <p style={{ opacity: 0.8, marginBottom: 'var(--space-6)', fontSize: '1rem', lineHeight: '1.5', color: 'var(--text-secondary)' }}>
+                {t('experience.hrdValueDescription')}
+              </p>
+
+              <div className="experience-hrd-value-grid">
+                <div className="experience-hrd-value-item">
+                  <span className="experience-hrd-value-bullet">💼</span>
+                  <div>
+                    <h4 className="experience-hrd-value-item-title">{t('experience.hrdValue.workflow')}</h4>
+                    <p className="experience-hrd-value-item-desc">
+                      Real-world business process understanding allows for designing relevant, problem-solving database structures and user flows.
+                    </p>
+                  </div>
+                </div>
+                <div className="experience-hrd-value-item">
+                  <span className="experience-hrd-value-bullet">🖥️</span>
+                  <div>
+                    <h4 className="experience-hrd-value-item-title">{t('experience.hrdValue.systemSupport')}</h4>
+                    <p className="experience-hrd-value-item-desc">
+                      Troubleshooting local database servers, web hosting systems, networks, and handling user technical support.
+                    </p>
+                  </div>
+                </div>
+                <div className="experience-hrd-value-item">
+                  <span className="experience-hrd-value-bullet">📝</span>
+                  <div>
+                    <h4 className="experience-hrd-value-item-title">{t('experience.hrdValue.reporting')}</h4>
+                    <p className="experience-hrd-value-item-desc">
+                      Strong grasp of inventory tracking, cost calculations (RAB), and digital reporting to build precise administrative tools.
+                    </p>
+                  </div>
+                </div>
+                <div className="experience-hrd-value-item">
+                  <span className="experience-hrd-value-bullet">🚀</span>
+                  <div>
+                    <h4 className="experience-hrd-value-item-title">{t('experience.hrdValue.webApplication')}</h4>
+                    <p className="experience-hrd-value-item-desc">
+                      End-to-end practical application development using modern frameworks (React.js, Node.js, Express, databases) and version control.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
             {visibleSections.map((section, sIdx) => (
               <div key={section.key} style={{ marginBottom: sIdx < visibleSections.length - 1 ? 'var(--space-10, 2.5rem)' : 0 }}>
                 {/* Section Header */}
@@ -183,6 +276,7 @@ const Experience = () => {
                       exp={exp}
                       displayDate={getLocalDisplayDate(exp, locale)}
                       variants={itemVariants}
+                      locale={locale}
                     />
                   ))}
                 </motion.div>
