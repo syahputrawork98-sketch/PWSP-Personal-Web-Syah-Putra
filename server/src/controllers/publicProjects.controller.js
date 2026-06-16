@@ -1,10 +1,16 @@
 const prisma = require('../lib/prisma');
+const { mapProjectWithTranslation } = require('../utils/projectTranslationMapper');
 
 const getAllProjects = async (req, res, next) => {
   try {
+    const { locale } = req.query;
+
     const projects = await prisma.project.findMany({
       where: {
         status: 'PUBLISHED',
+      },
+      include: {
+        translations: true,
       },
       orderBy: [
         { order: 'asc' },
@@ -12,9 +18,13 @@ const getAllProjects = async (req, res, next) => {
       ],
     });
 
+    const mappedProjects = projects.map(project =>
+      mapProjectWithTranslation(project, locale)
+    );
+
     res.json({
       success: true,
-      data: { projects },
+      data: { projects: mappedProjects },
     });
   } catch (error) {
     next(error);
@@ -23,12 +33,16 @@ const getAllProjects = async (req, res, next) => {
 
 const getProjectBySlug = async (req, res, next) => {
   const { slug } = req.params;
+  const { locale } = req.query;
 
   try {
     const project = await prisma.project.findFirst({
       where: {
         slug,
         status: 'PUBLISHED',
+      },
+      include: {
+        translations: true,
       },
     });
 
@@ -39,9 +53,11 @@ const getProjectBySlug = async (req, res, next) => {
       });
     }
 
+    const mappedProject = mapProjectWithTranslation(project, locale);
+
     res.json({
       success: true,
-      data: { project },
+      data: { project: mappedProject },
     });
   } catch (error) {
     next(error);
@@ -52,3 +68,4 @@ module.exports = {
   getAllProjects,
   getProjectBySlug,
 };
+

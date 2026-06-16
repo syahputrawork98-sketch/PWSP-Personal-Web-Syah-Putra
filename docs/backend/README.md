@@ -68,8 +68,8 @@ Sangat berkaitan dengan **F07 Backend API System** dan **F08 Admin Login and Aut
 | Area | Endpoint Pattern | Status | Source File | Catatan |
 |---|---|---|---|---|
 | Public | `GET /api/health` | Boleh Audit F07 | `server/src/app.js` | Endpoint sederhana untuk health check. |
-| Public | `GET /api/projects` | Boleh Audit F07 | `server/src/routes/public/projects.routes.js` | Daftar semua proyek portfolio. |
-| Public | `GET /api/projects/:slug` | Boleh Audit F07 | `server/src/routes/public/projects.routes.js` | Detail proyek spesifik. |
+| Public | `GET /api/projects` | Boleh Audit F07 | `server/src/routes/public/projects.routes.js` | Daftar semua proyek portfolio. Mendukung kueri parameter `?locale=EN/ID/JA` dengan fallback otomatis ke `EN` dan mengembalikan respons flat (non-breaking) berisi data terjemahan, `locale`, dan `availableLocales`. |
+| Public | `GET /api/projects/:slug` | Boleh Audit F07 | `server/src/routes/public/projects.routes.js` | Detail proyek spesifik. Mendukung kueri parameter `?locale=EN/ID/JA` dengan fallback otomatis ke `EN` dan mengembalikan respons flat berisi data terjemahan, `locale`, dan `availableLocales`. |
 | Public | `GET /api/settings/contact` | Boleh Audit F07 | `server/src/routes/settings.routes.js` | Info kontak publik. |
 | Public | `GET /api/settings/hero` | Boleh Audit F07 | `server/src/routes/settings.routes.js` | Info hero section. |
 | Public | `GET /api/settings/profile` | Boleh Audit F07 | `server/src/routes/settings.routes.js` | Info profil utama. |
