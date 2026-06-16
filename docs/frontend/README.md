@@ -20,7 +20,7 @@ Dokumentasi teknis di sini berfungsi sebagai panduan teknis yang mendukung eksek
 
 ## Admin CRUD Audit Summary (Batch F09M)
 Admin Panel CMS telah berstatus *fully-mapped* dan mematuhi pilar CRUD:
-- **Projects**: Read, Create, Update, Delete tersedia. Save ke database sukses. Public sync sukses. Safe delete (`window.confirm`) dengan feedback peringatan yang menyebutkan nama judul berhasil.
+- **Projects**: Read, Create, Update, Delete tersedia. Save ke database sukses. Public sync sukses. Safe delete (`window.confirm`) dengan feedback peringatan yang menyebutkan nama judul berhasil. *Batch F03L menambahkan form editor konten studi kasus bahasa Inggris (EN) dengan input Role dan textarea multiline untuk Key Features, Responsibilities, serta Outcomes.*
 - **Credentials/Certifications**: Read, Create, Update, Delete tersedia. UI edit sudah merangkum tautan eksternal Drive. Safe delete dan public sync berhasil terpasang.
 - **Skills**: Read, Create, Update, Delete tersedia. UI list merangkum filter tabs (Keahlian, dsb.). Safe delete sukses mencatat nama *skill*.
 - **Experience**: Read, Create, Update, Delete tersedia. Public sync berhasil. Safe delete sudah menampilkan posisi pekerjaan dan institusi/perusahaan secara jelas.

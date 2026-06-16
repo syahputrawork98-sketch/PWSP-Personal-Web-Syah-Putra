@@ -47,7 +47,7 @@ const createProject = async (req, res, next) => {
   const {
     title, slug, shortDescription, description, imageUrl,
     techStack, githubUrl, liveUrl, figmaUrl, featured, status, order,
-    role
+    role, projectContext, problem, solution, keyFeatures, responsibilities, outcomes
   } = req.body || {};
 
   // Basic Validation
@@ -69,6 +69,27 @@ const createProject = async (req, res, next) => {
     return res.status(400).json({
       status: 'error',
       message: 'Tech stack must be an array of strings',
+    });
+  }
+
+  if (keyFeatures && !Array.isArray(keyFeatures)) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Key features must be an array of strings',
+    });
+  }
+
+  if (responsibilities && !Array.isArray(responsibilities)) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Responsibilities must be an array of strings',
+    });
+  }
+
+  if (outcomes && !Array.isArray(outcomes)) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Outcomes must be an array of strings',
     });
   }
 
@@ -106,9 +127,12 @@ const createProject = async (req, res, next) => {
             shortDescription,
             description: description || null,
             role: role || null,
-            keyFeatures: [],
-            responsibilities: [],
-            outcomes: []
+            projectContext: projectContext || null,
+            problem: problem || null,
+            solution: solution || null,
+            keyFeatures: keyFeatures || [],
+            responsibilities: responsibilities || [],
+            outcomes: outcomes || []
           }
         }
       },
@@ -130,7 +154,7 @@ const updateProject = async (req, res, next) => {
   const {
     title, slug, shortDescription, description, imageUrl,
     techStack, githubUrl, liveUrl, figmaUrl, featured, status, order,
-    role
+    role, projectContext, problem, solution, keyFeatures, responsibilities, outcomes
   } = req.body || {};
 
   // Partial Validation
@@ -145,6 +169,27 @@ const updateProject = async (req, res, next) => {
     return res.status(400).json({
       status: 'error',
       message: 'Tech stack must be an array of strings',
+    });
+  }
+
+  if (keyFeatures && !Array.isArray(keyFeatures)) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Key features must be an array of strings',
+    });
+  }
+
+  if (responsibilities && !Array.isArray(responsibilities)) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Responsibilities must be an array of strings',
+    });
+  }
+
+  if (outcomes && !Array.isArray(outcomes)) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Outcomes must be an array of strings',
     });
   }
 
@@ -196,19 +241,19 @@ const updateProject = async (req, res, next) => {
     });
 
     // Synchronize English (EN) translation record
+    const existingTranslation = updatedProject.translations.find(t => t.locale === 'EN');
+
     const transTitle = title !== undefined ? title : updatedProject.title;
     const transShortDesc = shortDescription !== undefined ? shortDescription : updatedProject.shortDescription;
     const transDesc = description !== undefined ? description : updatedProject.description;
-
-    let transRole = null;
-    if (role !== undefined) {
-      transRole = role;
-    } else {
-      const existingTranslation = updatedProject.translations.find(t => t.locale === 'EN');
-      if (existingTranslation) {
-        transRole = existingTranslation.role;
-      }
-    }
+    
+    const transRole = role !== undefined ? role : (existingTranslation ? existingTranslation.role : null);
+    const transProjectContext = projectContext !== undefined ? projectContext : (existingTranslation ? existingTranslation.projectContext : null);
+    const transProblem = problem !== undefined ? problem : (existingTranslation ? existingTranslation.problem : null);
+    const transSolution = solution !== undefined ? solution : (existingTranslation ? existingTranslation.solution : null);
+    const transKeyFeatures = keyFeatures !== undefined ? keyFeatures : (existingTranslation ? existingTranslation.keyFeatures : []);
+    const transResponsibilities = responsibilities !== undefined ? responsibilities : (existingTranslation ? existingTranslation.responsibilities : []);
+    const transOutcomes = outcomes !== undefined ? outcomes : (existingTranslation ? existingTranslation.outcomes : []);
 
     await prisma.projectTranslation.upsert({
       where: {
@@ -221,7 +266,13 @@ const updateProject = async (req, res, next) => {
         title: transTitle,
         shortDescription: transShortDesc,
         description: transDesc || null,
-        role: transRole
+        role: transRole,
+        projectContext: transProjectContext,
+        problem: transProblem,
+        solution: transSolution,
+        keyFeatures: transKeyFeatures,
+        responsibilities: transResponsibilities,
+        outcomes: transOutcomes
       },
       create: {
         projectId: id,
@@ -230,9 +281,12 @@ const updateProject = async (req, res, next) => {
         shortDescription: transShortDesc,
         description: transDesc || null,
         role: transRole,
-        keyFeatures: [],
-        responsibilities: [],
-        outcomes: []
+        projectContext: transProjectContext,
+        problem: transProblem,
+        solution: transSolution,
+        keyFeatures: transKeyFeatures,
+        responsibilities: transResponsibilities,
+        outcomes: transOutcomes
       }
     });
 

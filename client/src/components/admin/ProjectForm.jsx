@@ -14,6 +14,13 @@ const ProjectForm = ({ initialData, onSubmit, onCancel, loading }) => {
     featured: false,
     status: 'DRAFT',
     order: 0,
+    role: '',
+    projectContext: '',
+    problem: '',
+    solution: '',
+    keyFeatures: '',
+    responsibilities: '',
+    outcomes: '',
   });
 
   useEffect(() => {
@@ -26,6 +33,13 @@ const ProjectForm = ({ initialData, onSubmit, onCancel, loading }) => {
         githubUrl: initialData.githubUrl || '',
         liveUrl: initialData.liveUrl || '',
         figmaUrl: initialData.figmaUrl || '',
+        role: initialData.role || '',
+        projectContext: initialData.projectContext || '',
+        problem: initialData.problem || '',
+        solution: initialData.solution || '',
+        keyFeatures: Array.isArray(initialData.keyFeatures) ? initialData.keyFeatures.join('\n') : (initialData.keyFeatures || ''),
+        responsibilities: Array.isArray(initialData.responsibilities) ? initialData.responsibilities.join('\n') : (initialData.responsibilities || ''),
+        outcomes: Array.isArray(initialData.outcomes) ? initialData.outcomes.join('\n') : (initialData.outcomes || ''),
       });
     }
   }, [initialData]);
@@ -56,10 +70,21 @@ const ProjectForm = ({ initialData, onSubmit, onCancel, loading }) => {
       ? formData.techStack.split(',').map(item => item.trim()).filter(item => item !== '')
       : [];
 
+    const parseMultiline = (text) => {
+      if (!text || typeof text !== 'string') return [];
+      return text
+        .split('\n')
+        .map(line => line.trim())
+        .filter(line => line !== '');
+    };
+
     const submissionData = {
       ...formData,
       techStack: techArray,
-      order: parseInt(formData.order) || 0
+      order: parseInt(formData.order) || 0,
+      keyFeatures: parseMultiline(formData.keyFeatures),
+      responsibilities: parseMultiline(formData.responsibilities),
+      outcomes: parseMultiline(formData.outcomes),
     };
 
     onSubmit(submissionData);
@@ -198,6 +223,95 @@ const ProjectForm = ({ initialData, onSubmit, onCancel, loading }) => {
           />
           <label htmlFor="featured">Featured Project</label>
         </div>
+      </div>
+
+      <hr style={{ border: 'none', borderTop: '1px solid var(--border-color)', margin: 'var(--space-6) 0' }} />
+      
+      <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-color)', marginBottom: 'var(--space-2)' }}>
+        Case Study Content (English)
+      </h3>
+      
+      <div className="form-group">
+        <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>Role / Role Title</label>
+        <input 
+          name="role"
+          value={formData.role}
+          onChange={handleChange}
+          placeholder="e.g. Lead Architect, Full Stack Developer"
+          style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
+        />
+      </div>
+
+      <div className="form-group">
+        <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>Project Context</label>
+        <textarea 
+          name="projectContext"
+          value={formData.projectContext}
+          onChange={handleChange}
+          placeholder="Context, background, and overview of the project"
+          rows="3"
+          style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
+        />
+      </div>
+
+      <div className="form-group">
+        <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>The Problem</label>
+        <textarea 
+          name="problem"
+          value={formData.problem}
+          onChange={handleChange}
+          placeholder="Challenges, pain points, or problems to solve"
+          rows="3"
+          style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
+        />
+      </div>
+
+      <div className="form-group">
+        <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>The Solution</label>
+        <textarea 
+          name="solution"
+          value={formData.solution}
+          onChange={handleChange}
+          placeholder="How the problems were solved and technical decisions"
+          rows="3"
+          style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
+        />
+      </div>
+
+      <div className="form-group">
+        <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>Key Features (one per line)</label>
+        <textarea 
+          name="keyFeatures"
+          value={formData.keyFeatures}
+          onChange={handleChange}
+          placeholder="Feature 1&#10;Feature 2&#10;Feature 3"
+          rows="4"
+          style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
+        />
+      </div>
+
+      <div className="form-group">
+        <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>Key Responsibilities (one per line)</label>
+        <textarea 
+          name="responsibilities"
+          value={formData.responsibilities}
+          onChange={handleChange}
+          placeholder="Responsibility 1&#10;Responsibility 2"
+          rows="4"
+          style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
+        />
+      </div>
+
+      <div className="form-group">
+        <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>Outcomes & Impact (one per line)</label>
+        <textarea 
+          name="outcomes"
+          value={formData.outcomes}
+          onChange={handleChange}
+          placeholder="Outcome 1&#10;Outcome 2"
+          rows="4"
+          style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
+        />
       </div>
 
       <div style={{ display: 'flex', gap: 'var(--space-4)', marginTop: 'var(--space-6)' }}>
