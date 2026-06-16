@@ -29,6 +29,7 @@
 | F13 | Mobile Responsive UI Improvement | frontend | Completed | Penyesuaian layout CSS murni untuk public mobile screen (navbar, hero, projects). | Final QA mobile view | [F13_MOBILE_RESPONSIVE_UI_IMPROVEMENT.md](features/F13_MOBILE_RESPONSIVE_UI_IMPROVEMENT.md) |
 | F14 | Repository Normalization and Documentation Sync | docs/status | Partial / Backend Audit Ready | Docs sync, repository inventory, frontend audit, and backend/API audit completed. | F14E — Database/Prisma Audit atau F14F — Cleanup Candidates Validation | [F14_REPOSITORY_NORMALIZATION_DOCUMENTATION_SYNC.md](features/F14_REPOSITORY_NORMALIZATION_DOCUMENTATION_SYNC.md) |
 | F15 | HRD Portfolio Score Improvement | frontend/content | Completed | SEO static snapshot and recruiter readability baseline completed. | F15F — Security and GitHub Recruiter Audit | [F15_HRD_PORTFOLIO_SCORE_IMPROVEMENT.md](features/F15_HRD_PORTFOLIO_SCORE_IMPROVEMENT.md) |
+| F03T | Site Settings Multilingual CMS Expansion | server/client | Active | F03T-SPEC completed; memperluas multilingual CMS ke Site Settings (Hero/Profile). | F03T.1 — SiteSetting Locale Shape & Backend Fallback Helper | [F03T_SITE_SETTINGS_MULTILINGUAL_CMS.md](features/F03T_SITE_SETTINGS_MULTILINGUAL_CMS.md) |
 
 ## Deployment Status
 - **Status Deployment**: Aktif / Live
