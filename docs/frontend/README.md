@@ -23,7 +23,7 @@ Admin Panel CMS telah berstatus *fully-mapped* dan mematuhi pilar CRUD:
 - **Projects**: Read, Create, Update, Delete tersedia. Save ke database sukses. Public sync sukses. Safe delete (`window.confirm`) dengan feedback peringatan yang menyebutkan nama judul berhasil. *Batch F03L menambahkan form editor konten studi kasus bahasa Inggris (EN) dengan input Role dan textarea multiline untuk Key Features, Responsibilities, serta Outcomes.*
 - **Credentials/Certifications**: Read, Create, Update, Delete tersedia. UI edit sudah merangkum tautan eksternal Drive. Safe delete dan public sync berhasil terpasang.
 - **Skills**: Read, Create, Update, Delete tersedia. UI list merangkum filter tabs (Keahlian, dsb.). Safe delete sukses mencatat nama *skill*.
-- **Experience**: Read, Create, Update, Delete tersedia. Public sync berhasil. Safe delete sudah menampilkan posisi pekerjaan dan institusi/perusahaan secara jelas.
+- **Experience**: Read, Create, Update, Delete tersedia. Public sync berhasil. Safe delete sudah menampilkan posisi pekerjaan dan institusi/perusahaan secara jelas. *Batch F02E menyelaraskan tampilan halaman publik dengan menambahkan cross-linking ke portofolio proyek dan pewarnaan border kiri kartu secara dinamis berdasarkan jenis pengalaman.*
 - **Education**: Read, Create, Update, Delete berjalan. Form di-reuse untuk edit. Safe delete sudah dilengkapi dengan nama gelar & sekolah.
 - **Settings (Hero, Profile, Contact, Account)**: Read (GET param global) & Update bekerja baik, tak ada Delete. Form UI validasinya sudah tertangani dengan aman dan menyokong *public interface*.
 

@@ -22,6 +22,7 @@ Mencakup halaman profil, pengalaman, edukasi, skill, dan narasi personal brandin
 | F02C | Skill and Education Review | Completed | Memperbarui list skill dan edukasi. | - |
 | F02D | HRD Recruitment Content Alignment | Completed | Menyelaraskan konten profil, hero, experience, dan framing skill untuk kebutuhan rekrutmen Full Stack Web Developer. | F02C |
 | F02D.1 | Fix Seed Syntax Regression | Completed | Memperbaiki syntax error di seed.js pasca Batch F02D. | F02D |
+| F02E | Experience Cleanup & Recruiter Polish | Completed | Merapikan segmentasi, wording, dan cross-navigation antara Experience dan Project Portfolio. | F02D.1 |
 
 ## HOLD / Blocked Notes
 - Tidak ada blocker aktif.
@@ -39,3 +40,4 @@ Mencakup halaman profil, pengalaman, edukasi, skill, dan narasi personal brandin
 - [F02C] Skill fallback diubah ke struktur array dengan penambahan skill teknis dan soft skill lengkap; education fallback dipoles narasi akademisnya.
 - [F02D] Narasi profil, hero, dan detail pengalaman freelance diperkuat secara teknis (React/Node/Express/Postgres/MySQL) dengan framing profesional (Full-Stack Implementation, Operational System Thinking, Reliable Delivery) dan pemisahan yang jelas antara pengalaman web dev aktif dengan latar belakang operasional lintas bidang.
 - [F02D.1] Memperbaiki syntax error/regression pada `server/prisma/seed.js` akibat baris pemanggilan `console.log` yang terputus saat integrasi sub-batch F02D.
+- [F02E] Merapikan halaman pengalaman kerja (`Experience.jsx`) dengan menambahkan visual header terpusat yang menjelaskan perbedaan peran halaman Pengalaman (kerja/profesional) dengan halaman Portfolio (bukti teknis/studi kasus) serta menyematkan tautan langsung ke halaman Portfolio. Melakukan segmentasi warna indikator dan garis tepi card secara dinamis (`ExperienceCard.jsx`) berdasarkan jenis pengalaman (IT, formal, non-IT) untuk kenyamanan recruiter.

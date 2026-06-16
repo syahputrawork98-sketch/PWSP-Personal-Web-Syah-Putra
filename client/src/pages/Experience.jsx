@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { getPublicExperiences } from '../lib/api';
 import EmptyState from '../components/EmptyState';
@@ -27,18 +28,18 @@ const itemVariants = {
 const SECTIONS = [
   {
     key: 'IT_FREELANCE',
-    title: '💻 Freelance Full Stack / IT Work',
-    subtitle: 'Proyek dan klien di bidang pengembangan web & teknologi',
+    title: '💻 Freelance Full Stack & IT Work',
+    subtitle: 'Pengalaman client-based di pengembangan web, sistem digital, dashboard, API, dan implementasi teknis.',
   },
   {
     key: 'FORMAL_WORK',
     title: '🏢 Formal Work Experience',
-    subtitle: 'Pengalaman kerja tetap dan kontrak resmi',
+    subtitle: 'Pengalaman kerja resmi yang membentuk disiplin operasional, komunikasi profesional, dan tanggung jawab delivery.',
   },
   {
     key: 'GENERAL_FREELANCE',
-    title: '🛠️ Other Freelance Experience',
-    subtitle: 'Pengalaman freelance di luar bidang IT',
+    title: '🛠️ Other Freelance / Technical Support Work',
+    subtitle: 'Pengalaman freelance non-IT yang mendukung pemahaman proses bisnis, dokumentasi teknis, dan kebutuhan client.',
   },
 ];
 
@@ -62,14 +63,19 @@ const Experience = () => {
   return (
     <section id="experience" className="section-padding">
       <div className="container">
-        <motion.div className="experience-section-header">
-          <motion.h2
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-          >
+        <motion.div 
+          style={{ textAlign: 'center', marginBottom: 'var(--space-12)' }}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <h2 className="text-center" style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>
             Pengalaman Kerja
-          </motion.h2>
-          {loading && <span style={{ opacity: 0.6, fontSize: '0.9rem' }}>Memuat data...</span>}
+          </h2>
+          <div style={{ width: '60px', height: '4px', background: 'var(--primary-color)', margin: 'var(--space-4) auto', borderRadius: 'var(--radius-full)' }} />
+          <p style={{ maxWidth: '750px', margin: '0 auto', opacity: 0.8, fontSize: '1.05rem', lineHeight: 1.6 }}>
+            Ringkasan pengalaman profesional, freelance IT, dan pekerjaan lintas bidang yang mendukung fokus saya sebagai Full Stack Developer. Hubungan kerja profesional dicatat di bawah ini, sedangkan bukti teknis, implementasi kode, dan studi kasus proyek yang mendalam dapat dilihat di halaman <Link to="/projects" style={{ color: 'var(--primary-color)', fontWeight: 600, textDecoration: 'underline' }}>Portfolio Proyek</Link>.
+          </p>
         </motion.div>
 
         {loading && <p style={{ opacity: 0.6, fontSize: '1rem', textAlign: 'center' }}>Memuat data pengalaman...</p>}

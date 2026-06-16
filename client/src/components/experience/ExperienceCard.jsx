@@ -2,11 +2,24 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const ExperienceCard = ({ exp, displayDate, variants }) => {
+  const getBorderColor = () => {
+    switch (exp.experienceKind) {
+      case 'IT_FREELANCE':
+        return '#6366f1';
+      case 'GENERAL_FREELANCE':
+        return '#f59e0b';
+      case 'FORMAL_WORK':
+      default:
+        return '#22c55e';
+    }
+  };
+
   return (
     <motion.div 
       className="card experience-card"
       variants={variants}
       whileHover={{ x: 10, transition: { duration: 0.2 } }}
+      style={{ borderLeftColor: getBorderColor() }}
     >
       <div className="experience-header">
         <h3 style={{ marginBottom: 0 }}>{exp.role}</h3>

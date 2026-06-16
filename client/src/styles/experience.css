@@ -21,7 +21,7 @@
 }
 
 .experience-card {
-  border-left: 4px solid var(--primary-color) !important;
+  border-left: 4px solid var(--primary-color);
 }
 
 .experience-header {
