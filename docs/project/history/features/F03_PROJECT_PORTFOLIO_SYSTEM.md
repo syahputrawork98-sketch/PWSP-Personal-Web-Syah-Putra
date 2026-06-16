@@ -28,6 +28,7 @@ Mencakup sistem portfolio, kategori proyek, project card, modal detail, dan link
 | F03G | Add Public Project Live and Image Links | Completed | Menambahkan link live dan image yang valid untuk proyek utama (Tien's Catering, Personal Portfolio CMS, Kosuka Bali Trip). | F03F |
 | F03H | Project Database Restructure with Multilingual Foundation | Completed | Restrukturisasi skema database Project untuk fondasi konten multilingual & metadata (casing, locale EN/ID/JA) tanpa merusak UI/CMS lama. | F03G |
 | F03I | Backend API Adaptation for Project Translation | Completed | Adaptasi REST API publik agar mendukung query parameter locale (?locale=) dengan fallback EN, mengembalikan payload flat dan backward-compatible. | F03H |
+| F03J | Admin Project EN Translation Sync / Adaptation | Completed | Adaptasi Admin API agar otomatis membuat/upsert ProjectTranslation locale EN ketika admin melakukan create/update project. | F03I |
 
 ## HOLD / Blocked Notes
 - Asset finalization masuk ke lingkup F06. Sebagian project data belum komplit sepenuhnya.
@@ -43,6 +44,7 @@ Mencakup sistem portfolio, kategori proyek, project card, modal detail, dan link
 - Cek interaksi modal dan filter kategori.
 - Pastikan endpoint /api/projects tetap valid dan database local ter-migrate dan ter-seed dengan sukses.
 - Cek /api/projects?locale=ID dan /api/projects/:slug?locale=JA mengembalikan response flat yang valid dan aman.
+- Cek pembuatan dan pembaruan project dari Admin/API berhasil mensinkronkan data translation EN secara otomatis.
 
 ## Notes
 - [F03C] Project fallback content (narasi, impact, challenge, solution) telah dipoles untuk menonjolkan identitas Web Developer sambil tetap menghargai nilai lintas disiplin. Aset dan link eksternal final tetap ditangani di F06.
@@ -55,4 +57,5 @@ Mencakup sistem portfolio, kategori proyek, project card, modal detail, dan link
 - [F03G] Menambahkan tautan publik yang valid untuk proyek portfolio utama: Live URL untuk Tien's Catering (https://tc-tien-s-catering.vercel.app), Image URL untuk Personal Portfolio CMS (https://res.cloudinary.com/dlgr9xicg/image/upload/v1781349587/Personal_Web_Syah_Putra_N_makvsf.png), dan Live URL untuk Kosuka Bali Trip (https://kbt-kosuka-bali-trip.vercel.app/). Tidak ada perubahan UI, schema, backend logic, atau database langsung.
 - [F03H] Pengalihan scope dari sinkronisasi link Neon menjadi restrukturisasi basis data untuk mendukung multibahasa (EN/ID/JA) dan tipe proyek (ProjectType/ProjectWorkStatus). Integrasi data multilingual ditambahkan sebagai ProjectTranslation yang terhubung relasional dengan Project. Field original (title, shortDescription, description) dipertahankan demi backward compatibility agar tidak memecah UI frontend dan backend controller. Seed dan sync script telah diupdate untuk membuat minimal translation EN untuk setiap project.
 - [F03I] Mengadaptasi REST API publik (/api/projects dan /api/projects/:slug) untuk mendukung parameter kueri ?locale= (EN/ID/JA). Mapper helper dibuat di src/utils/projectTranslationMapper.js untuk menangani normalisasi locale case-insensitive dan fallback bertingkat (Requested locale -> EN -> Legacy Project fields) secara aman. Response yang dikembalikan tetap dalam bentuk objek flat non-breaking untuk menjaga backward compatibility penuh dengan UI frontend dan library HTTP client lama. Raw translations array tidak diekspos demi keamanan, dan informasi pendukung berupa locale efektif serta availableLocales ditambahkan pada payload utama.
+- [F03J] Mengadaptasi Admin Project API (create, update, getById) agar sinkronisasi `ProjectTranslation` locale `EN` otomatis dikelola backend tanpa memecah form admin lama (backward compatible payload). Project detail by ID sekarang mengembalikan object lengkap include `translations`. Pembuatan project baru otomatis membuat record translations EN, dan update project otomatis meng-upsert translations EN (menyinkronkan legacy fields dan optional `role` jika disertakan).
 

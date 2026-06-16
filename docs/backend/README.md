@@ -79,5 +79,5 @@ Sangat berkaitan dengan **F07 Backend API System** dan **F08 Admin Login and Aut
 | Public | `GET /api/certifications` | Boleh Audit F07 | `server/src/routes/certification.routes.js` | Data sertifikasi/credentials. |
 | Auth | `/api/auth/*` | Completed (Restricted to Admin) | `server/src/routes/auth.routes.js` | Endpoint autentikasi admin. |
 | Admin | `/api/admin/cv-builder/*` | Completed (Restricted to Admin) | `server/src/routes/admin/cv-builder.routes.js` | Endpoint tata letak & JSON Config CV Builder. |
-| Admin | `/api/admin/*` | Completed (Restricted to Admin) | `server/src/routes/admin/*.routes.js` | Endpoint proteksi admin (CMS). |
+| Admin | `/api/admin/*` | Completed (Restricted to Admin) | `server/src/routes/admin/*.routes.js` | Endpoint proteksi admin (CMS). Khusus untuk API Project, getById mengembalikan relasi `translations` dan create/update otomatis melakukan pembuatan/upsert `ProjectTranslation` locale `EN`. |
 | Public | `GET /api/cv/active` | F11 Config Contract | `server/src/routes/cv.routes.js` | Menyajikan URL berkas statis PDF CV final. |

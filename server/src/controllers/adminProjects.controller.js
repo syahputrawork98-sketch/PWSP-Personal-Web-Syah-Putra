@@ -23,6 +23,9 @@ const getProjectById = async (req, res, next) => {
   try {
     const project = await prisma.project.findUnique({
       where: { id },
+      include: {
+        translations: true,
+      },
     });
 
     if (!project) {
@@ -43,7 +46,8 @@ const getProjectById = async (req, res, next) => {
 const createProject = async (req, res, next) => {
   const {
     title, slug, shortDescription, description, imageUrl,
-    techStack, githubUrl, liveUrl, figmaUrl, featured, status, order
+    techStack, githubUrl, liveUrl, figmaUrl, featured, status, order,
+    role
   } = req.body || {};
 
   // Basic Validation
@@ -95,7 +99,22 @@ const createProject = async (req, res, next) => {
         featured: featured || false,
         status: status || 'DRAFT',
         order: order || 0,
+        translations: {
+          create: {
+            locale: 'EN',
+            title,
+            shortDescription,
+            description: description || null,
+            role: role || null,
+            keyFeatures: [],
+            responsibilities: [],
+            outcomes: []
+          }
+        }
       },
+      include: {
+        translations: true
+      }
     });
 
     res.status(201).json({
@@ -110,7 +129,8 @@ const updateProject = async (req, res, next) => {
   const { id } = req.params;
   const {
     title, slug, shortDescription, description, imageUrl,
-    techStack, githubUrl, liveUrl, figmaUrl, featured, status, order
+    techStack, githubUrl, liveUrl, figmaUrl, featured, status, order,
+    role
   } = req.body || {};
 
   // Partial Validation
@@ -170,6 +190,50 @@ const updateProject = async (req, res, next) => {
         status: status !== undefined ? status : existingProject.status,
         order: order !== undefined ? order : existingProject.order,
       },
+      include: {
+        translations: true
+      }
+    });
+
+    // Synchronize English (EN) translation record
+    const transTitle = title !== undefined ? title : updatedProject.title;
+    const transShortDesc = shortDescription !== undefined ? shortDescription : updatedProject.shortDescription;
+    const transDesc = description !== undefined ? description : updatedProject.description;
+
+    let transRole = null;
+    if (role !== undefined) {
+      transRole = role;
+    } else {
+      const existingTranslation = updatedProject.translations.find(t => t.locale === 'EN');
+      if (existingTranslation) {
+        transRole = existingTranslation.role;
+      }
+    }
+
+    await prisma.projectTranslation.upsert({
+      where: {
+        projectId_locale: {
+          projectId: id,
+          locale: 'EN'
+        }
+      },
+      update: {
+        title: transTitle,
+        shortDescription: transShortDesc,
+        description: transDesc || null,
+        role: transRole
+      },
+      create: {
+        projectId: id,
+        locale: 'EN',
+        title: transTitle,
+        shortDescription: transShortDesc,
+        description: transDesc || null,
+        role: transRole,
+        keyFeatures: [],
+        responsibilities: [],
+        outcomes: []
+      }
     });
 
     res.json({
