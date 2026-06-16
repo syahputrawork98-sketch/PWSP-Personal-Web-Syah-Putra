@@ -5,11 +5,13 @@ import { FaLinkedin, FaGithub, FaInstagram, FaWhatsapp } from 'react-icons/fa';
 import { getPublicContact } from '../lib/api';
 import EmptyState from '../components/EmptyState';
 import { useFetch } from '../hooks/useFetch';
+import { useLanguage } from '../context/LanguageContext';
 
 import '../styles/contact.css';
 
 
 const Contact = () => {
+  const { t } = useLanguage();
   const { data, loading, error } = useFetch(getPublicContact);
   const contactData = data?.contact || data?.data?.contact || (data && !data.success && data.email ? data : null) || null;
 
@@ -17,7 +19,7 @@ const Contact = () => {
     return (
       <section id="contact" className="section-padding flex-center" style={{ minHeight: '70vh' }}>
         <div className="container" style={{ maxWidth: '600px' }}>
-          <p style={{ opacity: 0.6, fontSize: '1rem', textAlign: 'center' }}>Memuat data kontak...</p>
+          <p style={{ opacity: 0.6, fontSize: '1rem', textAlign: 'center' }}>{t('contact.loading')}</p>
         </div>
       </section>
     );
@@ -28,8 +30,8 @@ const Contact = () => {
     return (
       <section id="contact" className="section-padding flex-center" style={{ minHeight: '70vh' }}>
         <div className="container" style={{ maxWidth: '600px' }}>
-          <h2 className="text-center">Hubungi Saya</h2>
-          <EmptyState message="Data kontak belum tersedia." />
+          <h2 className="text-center">{t('contact.title')}</h2>
+          <EmptyState message={t('contact.empty')} />
         </div>
       </section>
     );
@@ -41,14 +43,14 @@ const Contact = () => {
     {
       id: 'email',
       icon: <FiMail />,
-      label: 'Email',
+      label: t('contact.labels.email'),
       value: currentContact.email,
       url: currentContact.email ? `mailto:${currentContact.email}` : null
     },
     {
       id: 'phone',
       icon: <FiPhone />,
-      label: 'Telepon / WhatsApp',
+      label: t('contact.labels.whatsapp'),
       value: currentContact.whatsapp || currentContact.phone || (loading ? '...' : null),
       url: currentContact.whatsapp && typeof currentContact.whatsapp === 'string' 
         ? `https://wa.me/${currentContact.whatsapp.replace(/\D/g, '')}` 
@@ -57,36 +59,36 @@ const Contact = () => {
     {
       id: 'location',
       icon: <FiMapPin />,
-      label: 'Lokasi',
+      label: t('contact.labels.location'),
       value: currentContact.location,
       url: null
     },
     {
       id: 'website',
       icon: <FiGlobe />,
-      label: 'Website',
-      value: currentContact.website ? 'Website Portfolio' : null,
+      label: t('contact.labels.website'),
+      value: currentContact.website ? t('contact.values.website') : null,
       url: currentContact.website
     },
     {
       id: 'linkedin',
       icon: <FaLinkedin />,
-      label: 'LinkedIn',
-      value: currentContact.linkedin ? 'Profil LinkedIn' : null,
+      label: t('contact.labels.linkedin'),
+      value: currentContact.linkedin ? t('contact.values.linkedin') : null,
       url: currentContact.linkedin
     },
     {
       id: 'github',
       icon: <FaGithub />,
-      label: 'GitHub',
-      value: currentContact.github ? 'Profil GitHub' : null,
+      label: t('contact.labels.github'),
+      value: currentContact.github ? t('contact.values.github') : null,
       url: currentContact.github
     },
     {
       id: 'instagram',
       icon: <FaInstagram />,
-      label: 'Instagram',
-      value: currentContact.instagram ? 'Profil Instagram' : null,
+      label: t('contact.labels.instagram'),
+      value: currentContact.instagram ? t('contact.values.instagram') : null,
       url: currentContact.instagram
     }
   ].filter(item => item.value);
@@ -117,9 +119,9 @@ const Contact = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-center">{currentContact.title || 'Hubungi Saya'}</h2>
-          <p style={{ fontSize: '1.1rem', opacity: 0.8 }}>{currentContact.description || 'Punya ide atau peluang kerja? Saya siap mendiskusikannya dengan Anda.'}</p>
-          {loading && <p style={{ opacity: 0.6, marginTop: 'var(--space-2)' }}>Memuat data...</p>}
+          <h2 className="text-center">{currentContact.title || t('contact.title')}</h2>
+          <p style={{ fontSize: '1.1rem', opacity: 0.8 }}>{currentContact.description || t('contact.description')}</p>
+          {loading && <p style={{ opacity: 0.6, marginTop: 'var(--space-2)' }}>{t('contact.loading')}</p>}
         </motion.div>
 
         {contactItems.length > 0 && (
@@ -174,7 +176,7 @@ const Contact = () => {
           viewport={{ once: true }}
         >
           <p style={{ fontSize: '0.9rem', opacity: 0.6 }}>
-            &copy; 2026 Syah Putra N. Dibangun dengan Presisi.
+            {t('contact.footer')}
           </p>
         </motion.div>
       </div>

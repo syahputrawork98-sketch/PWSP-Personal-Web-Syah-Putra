@@ -6,13 +6,29 @@ import { credentialCategories } from '../data/credentialsData';
 import CredentialCard from '../components/credentials/CredentialCard';
 import CredentialModal from '../components/credentials/CredentialModal';
 import EmptyState from '../components/EmptyState';
+import { useLanguage } from '../context/LanguageContext';
 import '../styles/credentials.css';
 
 const Credentials = () => {
+  const { t } = useLanguage();
   const { data: response, loading, error } = useFetch(getPublicCertifications);
   const [activeCategory, setActiveCategory] = useState("Semua");
   const [selectedCredential, setSelectedCredential] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const getCategoryLabel = (cat) => {
+    switch (cat) {
+      case 'Semua': return t('credentials.categories.all');
+      case 'BNSP': return t('credentials.categories.bnsp');
+      case 'IT & Digital': return t('credentials.categories.it');
+      case 'Teknik & Manufaktur': return t('credentials.categories.mfg');
+      case 'Konstruksi': return t('credentials.categories.construction');
+      case 'Pengembangan Diri': return t('credentials.categories.selfDev');
+      case 'Magang & Partisipasi': return t('credentials.categories.internship');
+      case 'Dokumen Pendukung': return t('credentials.categories.supportDocs');
+      default: return cat;
+    }
+  };
 
   const getGoogleDriveUrls = (driveUrl) => {
     if (!driveUrl) return { previewUrl: '', viewUrl: '', thumbnailUrl: '' };
@@ -62,7 +78,7 @@ const Credentials = () => {
     return (
       <section id="credentials" className="section-padding flex-center">
         <div className="container">
-          <p style={{ opacity: 0.6, fontSize: '1rem', textAlign: 'center' }}>Memuat data sertifikat...</p>
+          <p style={{ opacity: 0.6, fontSize: '1rem', textAlign: 'center' }}>{t('credentials.loading')}</p>
         </div>
       </section>
     );
@@ -77,9 +93,9 @@ const Credentials = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-center">Sertifikat & Kredensial</h2>
+          <h2 className="text-center">{t('credentials.title')}</h2>
           <p style={{ maxWidth: '700px', margin: '0 auto', opacity: 0.8, fontSize: '1.1rem' }}>
-            Kumpulan sertifikasi kompetensi, pelatihan, dan penghargaan profesional yang saya peroleh selama perjalanan karir saya.
+            {t('credentials.description')}
           </p>
         </motion.div>
 
@@ -91,7 +107,7 @@ const Credentials = () => {
               className={`filter-btn ${activeCategory === cat ? 'active' : ''}`}
               onClick={() => setActiveCategory(cat)}
             >
-              {cat}
+              {getCategoryLabel(cat)}
             </button>
           ))}
         </div>
@@ -114,7 +130,7 @@ const Credentials = () => {
             ))}
           </motion.div>
         ) : (
-          <EmptyState message={`Belum ada sertifikat di kategori ${activeCategory}.`} />
+          <EmptyState message={t('credentials.emptyCategory').replace('{category}', getCategoryLabel(activeCategory))} />
         )}
 
         <CredentialModal 

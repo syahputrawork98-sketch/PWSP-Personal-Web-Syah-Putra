@@ -1,7 +1,24 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLanguage } from '../../context/LanguageContext';
 
 const CredentialModal = ({ isOpen, onClose, credential }) => {
+  const { t } = useLanguage();
+
+  const getCategoryLabel = (cat) => {
+    switch (cat) {
+      case 'Semua': return t('credentials.categories.all');
+      case 'BNSP': return t('credentials.categories.bnsp');
+      case 'IT & Digital': return t('credentials.categories.it');
+      case 'Teknik & Manufaktur': return t('credentials.categories.mfg');
+      case 'Konstruksi': return t('credentials.categories.construction');
+      case 'Pengembangan Diri': return t('credentials.categories.selfDev');
+      case 'Magang & Partisipasi': return t('credentials.categories.internship');
+      case 'Dokumen Pendukung': return t('credentials.categories.supportDocs');
+      default: return cat;
+    }
+  };
+
   if (!credential) return null;
 
   return (
@@ -43,7 +60,7 @@ const CredentialModal = ({ isOpen, onClose, credential }) => {
             <button 
               className="modal-close"
               onClick={onClose}
-              aria-label="Tutup modal"
+              aria-label={t('credentials.modal.close')}
               style={{
                 position: 'absolute',
                 top: 'var(--space-4)',
@@ -66,7 +83,7 @@ const CredentialModal = ({ isOpen, onClose, credential }) => {
             </button>
 
             <div style={{ marginBottom: 'var(--space-6)' }}>
-              <p className="credential-category">{credential.category}</p>
+              <p className="credential-category">{getCategoryLabel(credential.category)}</p>
               <h2 className="credential-title" style={{ fontSize: '1.75rem' }}>{credential.title}</h2>
               <p className="credential-issuer" style={{ fontSize: '1.1rem' }}>{credential.issuer} • {credential.date}</p>
             </div>
@@ -84,13 +101,13 @@ const CredentialModal = ({ isOpen, onClose, credential }) => {
             ) : (
               <div className="drive-preview-container flex-center" style={{ background: 'rgba(var(--primary-color-rgb), 0.03)', flexDirection: 'column', gap: 'var(--space-2)' }}>
                 <span style={{ fontSize: '2rem', opacity: 0.2 }}>📄</span>
-                <p style={{ opacity: 0.5, fontSize: '0.9rem', fontWeight: 500 }}>Pratinjau sertifikat belum tersedia di sistem.</p>
+                <p style={{ opacity: 0.5, fontSize: '0.9rem', fontWeight: 500 }}>{t('credentials.modal.noPreview')}</p>
               </div>
             )}
 
             <div style={{ marginBottom: 'var(--space-8)' }}>
-              <h4 style={{ marginBottom: 'var(--space-2)', color: 'var(--text-primary)' }}>Deskripsi Kredensial</h4>
-              <p style={{ fontSize: '1rem', lineHeight: 1.7, opacity: 0.8 }}>{credential.summary || 'Detail deskripsi belum ditambahkan.'}</p>
+              <h4 style={{ marginBottom: 'var(--space-2)', color: 'var(--text-primary)' }}>{t('credentials.modal.descTitle')}</h4>
+              <p style={{ fontSize: '1rem', lineHeight: 1.7, opacity: 0.8 }}>{credential.summary || t('credentials.modal.noDesc')}</p>
             </div>
 
             <div className="modal-actions" style={{ display: 'flex', gap: 'var(--space-4)', marginTop: 'var(--space-4)' }}>
@@ -102,14 +119,14 @@ const CredentialModal = ({ isOpen, onClose, credential }) => {
                   className="btn btn-primary"
                   style={{ flex: 1, textAlign: 'center' }}
                 >
-                  Buka di Google Drive
+                  {t('credentials.modal.openDrive')}
                 </a>
               ) : (
                 <div 
                   className="btn btn-secondary" 
                   style={{ flex: 1, textAlign: 'center', opacity: 0.5, cursor: 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
                 >
-                  <span>🔒</span> Link Drive belum tersedia
+                  <span>🔒</span> {t('credentials.modal.noDriveLink')}
                 </div>
               )}
               <button 
@@ -117,7 +134,7 @@ const CredentialModal = ({ isOpen, onClose, credential }) => {
                 className="btn btn-secondary"
                 style={{ flex: 1 }}
               >
-                Kembali
+                {t('credentials.modal.back')}
               </button>
             </div>
           </motion.div>

@@ -41,6 +41,8 @@ Setelah rangkaian sub-batch database relasional dan lokalisasi selesai (F03H–F
 | F03L | Admin Project Case Study Content Editor | Completed | Menambahkan kemampuan Admin Project Form untuk mengelola konten case study default English/EN. | F03K |
 | F03-CP | Project Portfolio Checkpoint | Completed | Melakukan checkpoint dokumentasi setelah rangkaian F03H–F03L selesai. | F03L |
 | F03M | Public EN/ID Language Switcher Foundation | Completed | Membuat foundation language switcher EN/ID di public site, dictionary lokalisasi, dan request API locale. | F03L |
+| F03N | Public Static UI EN/ID Coverage Expansion | Completed | Perluas cakupan bilingual EN/ID ke halaman About, Credentials, Learn, Contact, dan komponen public terkait. | F03M |
+
 
 
 ## HOLD / Blocked Notes
@@ -79,3 +81,4 @@ Setelah rangkaian sub-batch database relasional dan lokalisasi selesai (F03H–F
 - [F03L] Mengintegrasikan form editor studi kasus Inggris (EN) ke Admin Project Form (`ProjectForm.jsx`) dengan menambahkan input `role`, textarea `projectContext`, `problem`, `solution`, serta multiline textareas untuk `keyFeatures`, `responsibilities`, dan `outcomes` (satu baris per item). Admin CRUD API (`adminProjects.controller.js`) diperbarui untuk memvalidasi parameter array ini dan menyimpannya langsung pada record `ProjectTranslation` locale `EN`. `AdminProjectEdit.jsx` memflaten data EN ke dalam form `initialData` agar edit ulang berjalan dengan benar.
 - [F03-CP] Melakukan checkpoint dokumentasi setelah seluruh rangkaian implementasi multilingual case study selesai. Menyelaraskan status pada index utama history dan status aktif di berkas status global, serta memastikan integritas logic database dan visual page stabil.
 - [F03M] Membuat fondasi lokalisasi multibahasa di public site. Mengimplementasikan `LanguageProvider` dan context hook untuk mengelola state bahasa aktif (default: `EN`), menyimpan preferensi di `localStorage` (`pw_locale`), serta menyediakan dictionary map lokal (`client/src/i18n.js`) untuk element statis web (Navbar, Home, Experience, Projects, detail modal). Halaman Projects disesuaikan untuk menyuntikkan parameter kueri `?locale=${locale}` secara otomatis dalam request data proyek ke backend API.
+- [F03N] Memperluas cakupan bilingual EN/ID ke halaman publik yang belum tersentuh (About, Credentials, Learn, Contact) beserta komponen pendukung publik (CredentialCard, CredentialModal). Melakukan inlining komponen `ExperienceReframing` dan `CredentialsSection` agar dapat diterjemahkan secara bersih tanpa merusak batas modifikasi berkas.

@@ -1,7 +1,23 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../../context/LanguageContext';
 
 const CredentialCard = ({ credential, onClick }) => {
+  const { t } = useLanguage();
+
+  const getCategoryLabel = (cat) => {
+    switch (cat) {
+      case 'Semua': return t('credentials.categories.all');
+      case 'BNSP': return t('credentials.categories.bnsp');
+      case 'IT & Digital': return t('credentials.categories.it');
+      case 'Teknik & Manufaktur': return t('credentials.categories.mfg');
+      case 'Konstruksi': return t('credentials.categories.construction');
+      case 'Pengembangan Diri': return t('credentials.categories.selfDev');
+      case 'Magang & Partisipasi': return t('credentials.categories.internship');
+      case 'Dokumen Pendukung': return t('credentials.categories.supportDocs');
+      default: return cat;
+    }
+  };
   return (
     <motion.div 
       className="card credential-card"
@@ -11,7 +27,7 @@ const CredentialCard = ({ credential, onClick }) => {
     >
       <div style={{ padding: 'var(--space-6)', flex: 1, display: 'flex', flexDirection: 'column', position: 'relative' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--space-2)' }}>
-          <p className="credential-category" style={{ margin: 0 }}>{credential.category}</p>
+          <p className="credential-category" style={{ margin: 0 }}>{getCategoryLabel(credential.category)}</p>
           <div style={{ display: 'flex', gap: '4px' }}>
             {credential.featured && (
               <span style={{ fontSize: '0.65rem', background: 'var(--primary-color)', color: 'white', padding: '2px 6px', borderRadius: '4px', fontWeight: 700 }}>STAR</span>
@@ -52,7 +68,7 @@ const CredentialCard = ({ credential, onClick }) => {
             />
           ) : (
             <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.5 }}>
-              <span>Thumbnail tidak tersedia</span>
+              <span>{t('credentials.noThumbnail')}</span>
             </div>
           )}
         </div>
@@ -84,7 +100,7 @@ const CredentialCard = ({ credential, onClick }) => {
             onClick();
           }}
         >
-          Lihat Sertifikat
+          {t('credentials.viewCertificate')}
         </button>
       </div>
     </motion.div>

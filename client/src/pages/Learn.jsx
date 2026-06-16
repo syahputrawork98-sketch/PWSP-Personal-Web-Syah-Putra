@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import EmptyState from '../components/EmptyState';
 import { getPublicLearningItems } from '../lib/api';
+import { useLanguage } from '../context/LanguageContext';
 
 const learningCategories = [
   "All",
@@ -77,10 +78,24 @@ const staticLearningItems = [
 ];
 
 const Learn = () => {
+  const { t } = useLanguage();
   const [activeCategory, setActiveCategory] = useState("All");
   const [learningItems, setLearningItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [usingFallback, setUsingFallback] = useState(false);
+
+  const getCategoryLabel = (cat) => {
+    switch (cat) {
+      case 'All': return t('learn.categories.all');
+      case 'Programming Languages': return t('learn.categories.programming');
+      case 'Frontend': return t('learn.categories.frontend');
+      case 'Backend': return t('learn.categories.backend');
+      case 'Database & Data': return t('learn.categories.database');
+      case 'DevOps & Deployment': return t('learn.categories.devops');
+      case 'Tools & Workflow': return t('learn.categories.tools');
+      default: return cat;
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -105,21 +120,20 @@ const Learn = () => {
   }, []);
 
   const formatStatus = (status) => {
-    if (!status) return 'Unknown';
+    if (!status) return t('learn.status.unknown');
     switch (status) {
-      case 'PLANNED': return 'Planned';
-      case 'LEARNING': return 'Learning';
-      case 'IN_PROGRESS': return 'In Progress';
-      case 'COMPLETED': return 'Completed';
-      case 'ARCHIVED': return 'Archived';
+      case 'PLANNED': return t('learn.status.planned');
+      case 'LEARNING': return t('learn.status.learning');
+      case 'IN_PROGRESS': return t('learn.status.inProgress');
+      case 'COMPLETED': return t('learn.status.completed');
+      case 'ARCHIVED': return t('learn.status.archived');
       default: return status;
     }
   };
 
   const getStatusColor = (status) => {
-    const formatted = formatStatus(status);
-    if (formatted === 'Completed') return '#10b981';
-    if (formatted === 'Planned' || formatted === 'Archived') return '#9ca3af';
+    if (status === 'COMPLETED') return '#10b981';
+    if (status === 'PLANNED' || status === 'ARCHIVED') return '#9ca3af';
     return '#f59e0b';
   };
 
@@ -153,15 +167,15 @@ const Learn = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-center" style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>
-            Learning Library
+            {t('learn.title')}
           </h2>
           <div style={{ width: '60px', height: '4px', background: 'var(--primary-color)', margin: 'var(--space-4) auto', borderRadius: 'var(--radius-full)' }} />
           <p style={{ maxWidth: '650px', margin: '0 auto', opacity: 0.8, fontSize: '1.1rem', lineHeight: 1.6 }}>
-            A curated archive of my learning progress, technical notes, and practice repositories.
+            {t('learn.description')}
           </p>
           {usingFallback && (
             <p style={{ fontSize: '0.85rem', color: '#f59e0b', marginTop: '1rem' }}>
-              Note: Currently displaying offline fallback data.
+              {t('learn.offlineFallback')}
             </p>
           )}
         </motion.div>
@@ -174,7 +188,7 @@ const Learn = () => {
               className={`filter-btn ${activeCategory === cat ? 'active' : ''}`}
               onClick={() => setActiveCategory(cat)}
             >
-              {cat}
+              {getCategoryLabel(cat)}
             </button>
           ))}
         </div>
@@ -182,7 +196,7 @@ const Learn = () => {
         {/* Grid */}
         {loading ? (
           <div style={{ padding: 'var(--space-12) 0', textAlign: 'center', opacity: 0.7 }}>
-            Loading learning items...
+            {t('learn.loading')}
           </div>
         ) : filteredItems.length > 0 ? (
           <motion.div 
@@ -208,7 +222,7 @@ const Learn = () => {
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--space-3)' }}>
                     <span style={{ fontSize: '0.75rem', fontWeight: 600, padding: '4px 8px', borderRadius: '4px', backgroundColor: 'var(--primary-color)', color: 'white', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                      {item.category}
+                      {getCategoryLabel(item.category)}
                     </span>
                     <span style={{ fontSize: '0.8rem', opacity: 0.7, fontWeight: 500, display: 'flex', alignItems: 'center', gap: '4px' }}>
                       <span style={{ 
@@ -224,7 +238,7 @@ const Learn = () => {
                   <h3 style={{ margin: '0 0 var(--space-2) 0', fontSize: '1.25rem', lineHeight: 1.4 }}>{item.title}</h3>
                   
                   <div style={{ fontSize: '0.85rem', opacity: 0.8, marginBottom: 'var(--space-4)', fontWeight: 500 }}>
-                    Level: {item.level || '-'}
+                    {t('learn.level')}: {item.level || '-'}
                   </div>
                   
                   <p style={{ opacity: 0.8, fontSize: '0.95rem', lineHeight: 1.6, marginBottom: 'var(--space-6)', flexGrow: 1 }}>
@@ -249,7 +263,7 @@ const Learn = () => {
                       className={`btn ${!hasRepo ? 'btn-secondary' : 'btn-primary'}`}
                       style={{ width: '100%', textAlign: 'center', pointerEvents: !hasRepo ? 'none' : 'auto', opacity: !hasRepo ? 0.6 : 1 }}
                     >
-                      {!hasRepo ? 'Repository Coming Soon' : 'View Repository'}
+                      {!hasRepo ? t('learn.repoComingSoon') : t('learn.viewRepo')}
                     </a>
                     {item.notesUrl && (
                       <a 
@@ -259,7 +273,7 @@ const Learn = () => {
                         className="btn btn-secondary"
                         style={{ width: '100%', textAlign: 'center' }}
                       >
-                        View Notes
+                        {t('learn.viewNotes')}
                       </a>
                     )}
                   </div>
@@ -269,7 +283,7 @@ const Learn = () => {
           </motion.div>
         ) : (
           <div style={{ padding: 'var(--space-12) 0' }}>
-            <EmptyState message={`No learning items found in ${activeCategory} category.`} />
+            <EmptyState message={t('learn.emptyCategory').replace('{category}', getCategoryLabel(activeCategory))} />
           </div>
         )}
       </div>
