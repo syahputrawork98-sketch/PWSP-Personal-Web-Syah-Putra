@@ -4,7 +4,7 @@
 Peningkatan kualitas portfolio berdasarkan review HRD Full Stack Developer agar lebih kuat dari sisi recruiter readability, project proof, experience clarity, credentials, CTA, SEO, dan audit teknis.
 
 ## Status
-Active
+Completed
 
 ## Story
 Meningkatkan keterbacaan website portfolio oleh crawler sederhana, recruiter tools, dan akses teks tanpa merombak arsitektur React SPA. Saat ini HTML awal hanya memuat root React sehingga beberapa crawler hanya membaca title/meta, bukan isi utama portfolio. Batch ini dimulai dengan menyisipkan static recruiter snapshot pada berkas HTML dasar (index.html).
@@ -22,10 +22,11 @@ Meningkatkan keterbacaan website portfolio oleh crawler sederhana, recruiter too
 - Batch F15I menyelesaikan hotfix recruiter snapshot dengan memperbaiki GitHub link lama/404 dan mengganti featured work statis agar lebih selaras dengan project Full Stack utama seperti MTB, RumahKu, dan SIQAH.
 - Batch F15J menyelesaikan polish keamanan klaim project fallback dengan merapikan status project dan melunakkan wording teknis yang terlalu absolut agar tetap kuat untuk HRD tanpa overclaim.
 - Batch F15K menyelesaikan polish copy halaman Projects dengan menambahkan recruiter guidance untuk Featured Full Stack Case Studies dan deskripsi pembeda Other Projects.
-- Batch F15F menyelesaikan audit keamanan ringan dan kesiapan GitHub recruiter-facing untuk memastikan tidak ada credential jelas, file scratch, atau link GitHub lama yang mengganggu sebelum QA final.
+- Batch F15F menyelesaikan audit keamanan ringan dan kesiapan GitHub recruiter-facing untuk memastikan tidak ada credential jelas, file scratch, or link GitHub lama yang mengganggu sebelum QA final.
 - Batch F15G menyelesaikan QA akhir F15 dengan build frontend, audit recruiter-facing, pemeriksaan link penting, dan penilaian akhir terhadap kesiapan portfolio untuk HRD Full Stack Developer.
 - Batch F15G.1 menyelesaikan rekonsiliasi asset CV PDF yang masuk pada commit F15G, memastikan file tersebut dipakai sebagai asset recruiter-facing dan mencatat rekomendasi follow-up jika diperlukan.
 - Batch F15G.2 menyelesaikan polish nama file CV dan penyelarasan link Download CV sehingga asset CV recruiter-facing menggunakan path URL-safe dan tidak berisiko 404.
+- Batch F15-CP (HRD Portfolio Score Improvement Checkpoint) diselesaikan sebagai penutup rangkaian optimasi portfolio rekrutmen. Pada bagian ini, halaman publik Credentials diperkuat secara visual melalui **Batch F04N** dengan penambahan Summary Stats, Featured Spotlight (prioritas sertifikat BNSP Node.js & React), serta Full Stack Skill Mapping.
 - Snapshot berisi professional summary, core stack, featured work, dan recruiter links.
 - Tampilan visual React Home saat JS aktif tidak terpengaruh sedikit pun.
 
@@ -55,6 +56,7 @@ Audit Result:
 | F15G | Lighthouse and Final HRD Score QA | Completed | Pengukuran skor akhir dengan Lighthouse/manual QA dan review akhir kesiapan HRD Full Stack. | F15F |
 | F15G.1 | CV PDF Scope Reconciliation Before Checkpoint | Completed | Memverifikasi asset CV PDF yang masuk pada commit F15G dan mencatat statusnya sebelum checkpoint F15. | F15G |
 | F15G.2 | CV Filename and Download Link Polish | Completed | Merapikan nama file CV menjadi URL-safe dan menyelaraskan semua link Download CV agar tidak 404. | F15G.1 |
+| F15-CP | HRD Portfolio Score Improvement Checkpoint | Completed | Konfirmasi checkpoint dan validasi dokumen akhir setelah peningkatan kualitas halaman Credentials. | F15G.2, F04N |
 
 ## F15G Final QA Result
 - Frontend build: Passed
@@ -88,13 +90,18 @@ Audit Result:
 - Preview CV URL check: Passed
 - Notes: File CV berhasil diganti namanya menjadi `cv-syah-putra-nugraha-web-developer.pdf` yang aman untuk URL web (slug). Semua link unduhan CV di dalam client frontend telah terkonfirmasi selaras dan berfungsi (200 OK) tanpa potensi 404.
 
+## F15-CP Checkpoint
+- Status Checkpoint: Selesai
+- Ringkasan: Rangkaian Polish Recruiter-Facing diakhiri dengan implementasi visual modern pada halaman Credentials (F04N), yang menyajikan ringkasan kuantitatif, sorotan utama sertifikat BNSP Node/React, dan pemetaan skill Full Stack secara terstruktur. Portfolio saat ini dinilai memiliki tingkat keterbacaan, validitas klaim, dan kredibilitas profesional yang sangat kuat bagi penilaian HRD.
+
 ## HOLD / Blocked Notes
 - Seluruh pengerjaan pada batch ini dirancang tanpa mengubah arsitektur SPA React atau menambahkan prerendering framework / SSR dependency baru.
 
 ## Next Step
-- Melanjutkan ke Batch F15-CP — HRD Portfolio Score Improvement Checkpoint.
+- Melanjutkan ke feature development berikutnya atau menunggu arahan/keputusan dari pengguna.
 
 ## Validation Checklist
 - Menjalankan build frontend (`npm run build`) dan memastikan kompilasi berjalan sukses.
 - Memastikan berkas HTML di index.html memiliki snapshot text-only yang valid saat diinspeksi.
 - Memastikan visual website React Home tidak bergeser atau rusak.
+
