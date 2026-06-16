@@ -280,7 +280,7 @@ Namun untuk rancangan jangka panjang, skema JSON berikut disepakati untuk Contac
 | F03T-SPEC | Site Settings Multilingual CMS Technical Specification | Completed | Mengunci spesifikasi teknis data shape, kebijakan fallback bahasa, alur API admin/publik, dan kebijakan translatabilitas. | - |
 | F03T.1 | SiteSetting Locale Shape & Backend Fallback Helper | Completed | Implementasi fungsi helper normalisasi bahasa, pendeteksi skema, resolusi fallback publik, dan perbaikan API PUT admin. | F03T-SPEC |
 | F03T.2 | Admin Hero Translation Tabs EN/ID/JA | Completed | Pembuatan antarmuka tab bahasa pada Admin Hero, input roles dinamis, dan penyelarasan payload simpan. | F03T.1 |
-| F03T.3 | Admin Profile Translation Tabs EN/ID/JA | Pending | Pembuatan antarmuka tab bahasa pada Admin Profile, editor rich-text, dan penyelarasan payload simpan. | F03T.1 |
+| F03T.3 | Admin Profile Translation Tabs EN/ID/JA | Completed | Pembuatan antarmuka tab bahasa pada Admin Profile, editor rich-text, dan penyelarasan payload simpan. | F03T.1 |
 | F03T.4 | Public Hero/Profile Locale Integration | Pending | Integrasi dynamic locale fetch di Home.jsx & About.jsx berdasarkan state locale aktif. | F03T.2, F03T.3 |
 | F03T.5 | Contact/Website Settings Locale Review | Pending | Tinjauan keamanan PUT Contact Admin agar bidang deskripsi tidak hilang, serta opsi multilingual ringan. | F03T.4 |
 | F03T.6 | Manual Translation UX Polish | Pending | Pemasangan lencana indikator status kelengkapan bahasa (Missing translation badge) dan visual draft helper. | F03T.5 |
@@ -327,5 +327,12 @@ Namun untuk rancangan jangka panjang, skema JSON berikut disepakati untuk Contac
 
 ---
 
+## F03T.3 Progress & Implementation Notes
+- **F03T.3 Completed**: Mengubah panel Admin Profile Settings dari format isian satu bahasa (flat) menjadi format multilingual tabbed UI untuk bahasa Inggris (EN), Indonesia (ID), dan Jepang (JA).
+- **Separation of Concerns**: Memisahkan input data global (`avatarUrl` dan `resumeUrl`) yang berlaku di semua bahasa dari data copy text spesifik bahasa (`aboutTitle`, `summaryTitle`, `summary`, `birthPlace`, `birthDate`).
+- **Data Shape & Normalization**: Menggunakan helper `normalizeProfileForm` untuk meratakan data masukan flat lama (legacy) ke dalam tab bahasa Inggris secara otomatis saat data dimuat, serta menyusun payload `translations` terstruktur saat disimpan via "Save All Locales". Mendukung pelestarian properti tambahan pada translation jika ada (seperti `professionalSummary`, dll.).
+
+---
+
 ## Next Step
-- Melanjutkan ke **Batch F03T.3 — Admin Profile Translation Tabs EN/ID/JA**.
+- Melanjutkan ke **Batch F03T-CP1 — Admin Site Settings Translation Tabs Checkpoint**.
