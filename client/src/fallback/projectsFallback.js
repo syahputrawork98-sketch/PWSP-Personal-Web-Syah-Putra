@@ -10,26 +10,69 @@ export const projectsFallback = [
   // IT & WEB
   // ==========================================
   {
-    id: "construction-monitoring-system",
-    title: "Sistem Monitoring Proyek Konstruksi",
-    subtitle: "Enterprise Management System",
+    id: "building-materials-management-system",
+    title: "Building Materials Management System / MTB",
+    subtitle: "POS & Inventory Operations",
     category: "IT & Web",
     status: "Production",
-    techStack: ["React.js", "Node.js", "Express.js", "MongoDB", "Framer Motion", "REST API"],
-    description: "Aplikasi enterprise Full Stack untuk pemantauan progres proyek konstruksi secara real-time. Memfasilitasi koordinasi data lapangan, logistik material, dan manajemen jadwal kerja terintegrasi dengan dasbor administratif.",
+    techStack: ["PHP", "Laravel", "MySQL", "Bootstrap", "AdminLTE", "REST API"],
+    description: "POS and inventory management system for building material operations, covering product data, stock movement, sales transactions, minimum stock alerts, and receipt printing.",
     role: "Full Stack Web Developer",
-    impact: "Membantu mempercepat proses rekapitulasi progres proyek, mengurangi pekerjaan manual secara signifikan, dan membuat data lapangan lebih mudah dipantau oleh tim manajemen.",
-    challenge: "Sinkronisasi data progres multi-proyek yang diunggah secara asinkronus oleh tim lapangan dengan kondisi konektivitas seluler yang tidak stabil, serta menyajikannya dalam visualisasi metrik yang konsisten di dasbor utama.",
-    solution: "Mengimplementasikan optimasi payload REST API, offline-first data caching sederhana di client, serta pemrosesan antrean di server Node.js. State management frontend dikelola menggunakan React hooks untuk pembaruan UI yang reaktif.",
-    features: ["Real-time Progress Dashboard", "Material & Inventory Tracking", "Digital Daily Log Reports", "Mobile-Optimized Photo Upload", "Multi-role Access Control (RBAC)"],
-    imageUrl: "https://images.unsplash.com/photo-1503387762-592dea58ef23?auto=format&fit=crop&q=80&w=800",
+    impact: "Meningkatkan akurasi pencatatan stok barang secara real-time, mempercepat proses transaksi di kasir, dan mengotomatisasi peringatan batas minimum stok bahan bangunan.",
+    challenge: "Mengelola ribuan SKU barang bangunan dengan variasi satuan yang kompleks dan melacak mutasi stok masuk-keluar secara akurat selama transaksi berlangsung.",
+    solution: "Mengoptimalkan skema relasi database MySQL untuk manajemen inventori, mengimplementasikan fitur auto-suggest pencarian produk, serta membuat sistem pencetakan struk kasir yang andal.",
+    features: ["POS Cashier Interface", "Real-time Stock Movement Tracking", "Minimum Stock Alert Notification", "Dynamic Receipt & Invoice Printing", "Comprehensive Sales Reports Dashboard"],
+    imageUrl: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&q=80&w=800",
     links: {
-      github: "https://github.com/syahputranugraha",
+      github: "https://github.com/syahputrawork98-sketch",
       demo: "",
       figma: ""
     },
     featured: true,
     orderIndex: 1
+  },
+  {
+    id: "construction-monitoring-system",
+    title: "RumahKu Construction Portal",
+    subtitle: "Construction Progress & Logistics Tracking",
+    category: "IT & Web",
+    status: "Production",
+    techStack: ["React.js", "Node.js", "Express.js", "MongoDB", "Framer Motion", "REST API"],
+    description: "Construction project portal for progress tracking, material logistics, project documentation, and operational monitoring.",
+    role: "Full Stack Web Developer",
+    impact: "Membantu mempercepat proses rekapitulasi progres proyek konstruksi di lapangan, mengurangi kesalahan pencatatan logistik material, dan mempermudah pemantauan oleh tim manajemen.",
+    challenge: "Sinkronisasi data progres multi-proyek yang diunggah secara asinkronus oleh tim lapangan dengan kondisi konektivitas seluler yang tidak stabil, serta menyajikannya dalam visualisasi metrik yang konsisten di dasbor utama.",
+    solution: "Mengimplementasikan optimasi payload REST API, offline-first data caching sederhana di client, serta pemrosesan antrean di server Node.js. State management frontend dikelola menggunakan React hooks untuk pembaruan UI yang reaktif.",
+    features: ["Real-time Progress Dashboard", "Material & Inventory Tracking", "Digital Daily Log Reports", "Mobile-Optimized Photo Upload", "Multi-role Access Control (RBAC)"],
+    imageUrl: "https://images.unsplash.com/photo-1503387762-592dea58ef23?auto=format&fit=crop&q=80&w=800",
+    links: {
+      github: "https://github.com/syahputrawork98-sketch",
+      demo: "",
+      figma: ""
+    },
+    featured: true,
+    orderIndex: 2
+  },
+  {
+    id: "siap-aqiqah",
+    title: "Siap Aqiqah / SIQAH",
+    subtitle: "E-Commerce & Order Workflow Platform",
+    category: "IT & Web",
+    status: "Production",
+    techStack: ["PHP", "Laravel", "MySQL", "Tailwind CSS", "Alpine.js", "Midtrans"],
+    description: "E-commerce and order management platform for aqiqah/qurban services, including product catalog, order flow, process tracking, and admin management.",
+    role: "Full Stack Web Developer",
+    impact: "Mempermudah pelanggan memesan paket layanan aqiqah secara online, menyederhanakan alur pelacakan proses pemotongan hewan, serta mengotomatisasi notifikasi transaksi untuk admin.",
+    challenge: "Menyediakan pelacakan alur kerja pesanan dari pembayaran, penyembelihan, pengemasan, hingga pengiriman secara real-time yang dapat diakses dengan mudah oleh pembeli.",
+    solution: "Membangun sistem tracking pesanan berbasis status alur kerja di database, mengintegrasikan WhatsApp gateway untuk notifikasi otomatis, dan merancang dasbor manajemen pesanan admin yang intuitif.",
+    features: ["Interactive Package Catalog", "Order Tracking & Progress System", "WhatsApp Notification Integration", "Payment Gateway Integration Support", "Admin Order Management Dashboard"],
+    imageUrl: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=800",
+    links: {
+      github: "https://github.com/syahputrawork98-sketch",
+      demo: ""
+    },
+    featured: true,
+    orderIndex: 3
   },
   {
     id: "event-organizer-showcase",
@@ -46,11 +89,11 @@ export const projectsFallback = [
     features: ["High-Performance Image Gallery", "Dynamic Event Categories Filter", "Automated Email Inquiry System", "Interactive Event Timeline Showcase", "Fully Responsive UI Layout"],
     imageUrl: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=800",
     links: {
-      github: "https://github.com/syahputranugraha",
+      github: "https://github.com/syahputrawork98-sketch",
       demo: ""
     },
-    featured: true,
-    orderIndex: 2
+    featured: false,
+    orderIndex: 4
   },
 
   // ==========================================
@@ -75,7 +118,7 @@ export const projectsFallback = [
       model: ""
     },
     featured: false,
-    orderIndex: 3
+    orderIndex: 5
   },
   {
     id: "mold-design-injection",
@@ -95,7 +138,7 @@ export const projectsFallback = [
       drive: ""
     },
     featured: false,
-    orderIndex: 4
+    orderIndex: 6
   },
 
   // ==========================================
@@ -120,7 +163,7 @@ export const projectsFallback = [
       preview: ""
     },
     featured: false,
-    orderIndex: 5
+    orderIndex: 7
   },
   {
     id: "robotic-arm-assembly",
@@ -140,7 +183,7 @@ export const projectsFallback = [
       model: ""
     },
     featured: false,
-    orderIndex: 6
+    orderIndex: 8
   },
 
   // ==========================================
@@ -165,7 +208,7 @@ export const projectsFallback = [
       drive: ""
     },
     featured: false,
-    orderIndex: 7
+    orderIndex: 9
   },
   {
     id: "warehouse-structure-rab",
@@ -185,6 +228,6 @@ export const projectsFallback = [
       rab: ""
     },
     featured: false,
-    orderIndex: 8
+    orderIndex: 10
   }
 ];
