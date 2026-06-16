@@ -54,6 +54,7 @@ Setelah rangkaian sub-batch lokalisasi publik dan antarmuka CMS admin multibahas
 | F03Q | Admin Project Translation Validation & UX Polish | Completed | Penambahan validasi sisi klien untuk wajib English, pengalihan tab aktif, indikator label visual, dan teks penolong. | F03P |
 | F03-CP2 | Multilingual Project System Checkpoint | Completed | Melakukan checkpoint dokumentasi setelah rangkaian F03M–F03Q selesai. | F03Q |
 | F03R | Multilingual CMS Expansion Planning | Completed | Analisa dan perencanaan perluasan sistem multilingual CMS manual EN/ID/JA ke area lain di luar Project. | F03-CP2 |
+| F03S-SPEC | Experience Multilingual CMS Technical Specification | Completed | Spesifikasi teknis detail integrasi multilingual CMS manual EN/ID/JA untuk area Experience. | F03R |
 
 
 ## HOLD / Blocked Notes
@@ -155,3 +156,138 @@ Untuk mengimplementasikan Experience Multilingual CMS, kita membutuhkan penyesua
 ### 8. Suggested Model Executor
 **Gemini 3.5 Flash High**.
 *Alasan*: Memerlukan sinkronisasi API admin, penulisan parser array multiline highlights di controller, tab switcher di form admin Experience, dan update mapper data publik di server.
+
+---
+
+## F03S-SPEC — Experience Multilingual CMS Technical Specification
+
+### 1. Current Experience Architecture
+Sistem pengalaman kerja (`Experience`) saat ini mengandalkan:
+- **Database Model**: Model `Experience` di `schema.prisma` menyimpan seluruh properti dalam satu tabel utama, termasuk kolom bahasa default/legacy seperti `role` (String), `description` (String?), dan `highlights` (String[]).
+- **Backend Controller**: Berkas `server/src/controllers/experience.controller.js` mengelola CRUD secara langsung pada model `Experience`.
+- **Public UI**: Halaman `client/src/pages/Experience.jsx` memanggil `/api/experiences` murni untuk mendapatkan seluruh daftar pengalaman dengan status `PUBLISHED` lalu merendernya dalam komponen `ExperienceCard.jsx`.
+- **Admin CMS**: Form input di `ExperienceForm.jsx` mengelola field teks datar secara langsung tanpa pemisahan bahasa.
+
+### 2. Proposed ExperienceTranslation Model
+Sistem multilingual manual didesain menggunakan tabel relasional baru yang sejajar dengan rancangan `ProjectTranslation`:
+```prisma
+model ExperienceTranslation {
+  id           String   @id @default(cuid())
+  experienceId String
+  locale       Locale
+  role         String
+  description  String?
+  highlights   String[]
+  experience   Experience @relation(fields: [experienceId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([experienceId, locale])
+  @@index([locale])
+}
+```
+Dan menambahkan hubungan relasi satu-ke-banyak pada model `Experience` utama:
+```prisma
+translations ExperienceTranslation[]
+```
+
+### 3. Translatable Fields
+Konten yang dapat bervariasi sesuai bahasa:
+1. `role` (String)
+2. `description` (String?)
+3. `highlights` (String[])
+
+### 4. Shared Fields
+Metadata global yang dipakai bersama untuk semua bahasa:
+1. `company` (String)
+2. `location` (String?)
+3. `type` (String?) // Employment type
+4. `startDate` (DateTime?)
+5. `endDate` (DateTime?)
+6. `isCurrent` (Boolean)
+7. `techStack` (String[])
+8. `experienceKind` (ExperienceKind)
+9. `status` (ExperienceStatus)
+10. `order` (Int)
+
+### 5. API Changes Needed
+#### Public API Updates (`GET /api/experiences`):
+- Menerima query parameter `?locale=EN/ID/JA` (case-insensitive).
+- Melakukan pemetaan data menggunakan mapper relasional:
+  1. Cari record `ExperienceTranslation` yang sesuai dengan `locale` yang diminta.
+  2. Jika tidak ada, gunakan fallback ke `EN`.
+  3. Jika `EN` pun kosong/tidak ada, gunakan kolom legacy di tabel `Experience` utama.
+- Mengembalikan data dalam format flat (backward compatible) dengan properti `locale` efektif dan array `availableLocales`.
+
+#### Admin API Updates (`POST /api/admin/experiences` & `PUT /api/admin/experiences/:id`):
+- Menerima objek input terstruktur `translations` yang berisi data locale:
+  ```json
+  {
+    "translations": {
+      "EN": { "role": "Senior Developer", "description": "...", "highlights": ["..."] },
+      "ID": { "role": "Developer Senior", "description": "...", "highlights": ["..."] },
+      "JA": { "role": "シニア開発者", "description": "...", "highlights": ["..."] }
+    }
+  }
+  ```
+- **Validasi**:
+  - `translations.EN.role` wajib diisi. Jika kosong, return status `400 Bad Request`.
+- **Legacy Sync**:
+  - Data `role`, `description`, dan `highlights` dari `translations.EN` disinkronkan secara otomatis ke tabel `Experience` utama demi backward compatibility.
+- **Empty Translation Clean-up**:
+  - Jika payload suatu locale opsional (`ID`/`JA`) dikirim tetapi seluruh bidang translatable di dalamnya kosong (role, description kosong, dan highlights tidak ada item), backend otomatis menghapus record translation tersebut (jika sebelumnya sudah ada) untuk mengembalikan status fallback ke EN.
+  - Jika payload locale opsional tidak dikirim sama sekali dalam body request, backend tidak akan mengubah data terjemahan lama di database.
+
+### 6. Admin CMS Changes Needed
+- **ExperienceForm (`ExperienceForm.jsx`) Tabbed Interface**:
+  - Integrasi tab navigasi trilingual (English 🇬🇧, Indonesia 🇮🇩, Japanese 🇯🇵).
+  - Tampilkan Shared Fields di bagian atas formulir.
+  - Pindahkan Translatable Fields ke dalam masing-masing tab bahasa.
+  - Tambahkan validasi sisi klien sebelum submit: jika `role` EN kosong, batalkan submit, tampilkan alert/pesan error, dan ubah tab aktif secara otomatis ke `EN`.
+  - Tombol tab ditandai label pembantu: `English (Required)` dan `Indonesia / Japanese (Optional)`.
+- **Edit & Create Pages Integration**:
+  - Mapping array `translations` dari respons detail API ke dalam state form, dan menyusun payload terstruktur saat submit.
+
+### 7. Public UI Changes Needed
+- **Active Locale Query**:
+  - Modifikasi `client/src/pages/Experience.jsx` agar memanggil backend API dengan query parameter `?locale=${locale}` dari context `useLanguage()`.
+- **UX Date & Text Localization**:
+  - Sesuaikan helper `getExperienceDisplayDate` di `client/src/lib/dateUtils.js` agar memformat string tanggal sesuai bahasa yang aktif (EN/ID/JA).
+  - Terjemahkan label dinamis `isCurrent` secara dinamis: `'Present'` (EN), `'Sekarang'` (ID), dan `'現在'` (JA).
+
+### 8. Fallback Strategy
+```mermaid
+graph TD
+    A[Request Locale: eg. JA] --> B{Apakah terjemahan JA ada?}
+    B -- Ya --> C[Tampilkan versi JA]
+    B -- Tidak --> D{Apakah terjemahan EN ada?}
+    D -- Ya --> E[Tampilkan versi EN]
+    D -- Tidak --> F[Tampilkan data kolom Legacy utama]
+```
+
+### 9. Migration Strategy
+1. **Model Definition**: Tambahkan model `ExperienceTranslation` di `schema.prisma`.
+2. **Relations**: Definisikan hubungan one-to-many dari `Experience` ke `ExperienceTranslation`.
+3. **Run Migration**: Jalankan `npx prisma migrate dev --name add_experience_translation`.
+4. **Seed Updates**: Perbarui `seed.js` agar secara otomatis membuat data `ExperienceTranslation` versi `EN` untuk data awal.
+
+### 10. Backward Compatibility Strategy
+- **Existing Columns**: Kolom `role`, `description`, dan `highlights` pada tabel `Experience` tetap dipertahankan.
+- **Synchronized Writes**: Setiap kali admin memperbarui data, versi `EN` akan disalin langsung ke kolom utama `Experience`.
+- **Flat Payload Response**: REST API publik tetap menyajikan payload terstruktur flat guna menghindari kegagalan parsing pada aplikasi client-side lama.
+
+### 11. Risk Level
+- **Low**: Migrasi hanya menambahkan satu tabel relasional baru (`ExperienceTranslation`) tanpa memodifikasi tipe data atau menghapus kolom penting di tabel `Experience` utama. Logika sinkronisasi EN menjamin ketersediaan data bagi pembaca legacy.
+
+### 12. Suggested Implementation Batches
+Pecah proses implementasi ke dalam unit kerja kecil yang aman:
+1. **F03S.1 — Experience Translation Schema & Migration**
+   - Penulisan skema relasional, pembuatan migrasi database, dan pembaruan berkas seed/sync script.
+2. **F03S.2 — Backend Experience Locale Mapping**
+   - Adaptasi controller backend untuk mendukung filter parameter `?locale=`, upsert terjemahan trilingual, sinkronisasi kolom legacy EN, dan safe cleanup data kosong.
+3. **F03S.3 — Admin Experience Translation Tabs**
+   - Modifikasi UI form admin, penambahan tab manual EN/ID/JA, validasi client-side, dan penanganan auto-redirect tab jika terjadi error EN.
+4. **F03S.4 — Public Experience Locale Integration**
+   - Integrasi state locale aktif ke pemanggilan endpoint publik dan lokalisasi format tanggal/penanda status kerja aktif.
+5. **F03S-CP — Experience Multilingual Checkpoint**
+   - Audit end-to-end, verifikasi integrasi UI & API di Anti-Gravity IDE, dan update walkthrough.

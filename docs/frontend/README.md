@@ -72,3 +72,20 @@ Admin Panel CMS telah berstatus *fully-mapped* dan mematuhi pilar CRUD:
 - **Active Tab Redirect**: Jika kolom wajib EN tidak lengkap, form membatalkan submit, memicu pesan error visual, dan otomatis memindahkan tab aktif kembali ke `EN` agar memudahkan admin melengkapinya.
 - **Visual Indicators & Guide**: Tombol tab navigasi diperjelas dengan keterangan `Required` pada `English` dan `Optional` pada `Indonesia` & `Japanese`. Ditambahkan pula baris petunjuk (helper text) di bawah switcher untuk memberikan kepastian alur pengisian translasi.
 
+## Planned UI Extensions - Experience Multilingual CMS (F03S-SPEC)
+
+### 1. Admin Experience Form Tab Switcher
+- **Tab Layout**: `ExperienceForm.jsx` akan ditambahkan tab navigasi untuk bahasa English (EN), Indonesia (ID), dan Japanese (JA).
+- **Shared vs Translatable Separation**:
+  - Kolom **Shared** diletakkan di bagian atas form (Company, Location, Employment Type, Start Date, End Date, Currently Working, Tech Stack, Experience Kind, Status, Display Order).
+  - Kolom **Translatable** dikelompokkan dalam tab konten di bagian bawah (Role/Title, Short Description, Highlights).
+- **Validation & UX**:
+  - Field `role` bahasa Inggris (EN) bersifat **Wajib** (Required).
+  - Jika form di-submit dengan field `role` EN kosong, proses submit dibatalkan, pesan kesalahan ditampilkan, dan tab aktif otomatis diarahkan ke `EN`.
+  - Tab `ID` dan `JA` ditandai sebagai `Optional`.
+
+### 2. Public Experience Page Locale Integration
+- **Locale Fetching**: Mengubah `client/src/pages/Experience.jsx` agar memanggil backend API dengan query parameter `?locale=${locale}` menggunakan state `locale` dari `useLanguage()`.
+- **Date Localization**: Memperbarui fungsi `getExperienceDisplayDate` di `client/src/lib/dateUtils.js` agar menerima parameter `locale` tambahan:
+  - Text `isCurrent` diterjemahkan berdasarkan bahasa terpilih: `'Present'` (EN), `'Sekarang'` (ID), dan `'現在'` (JA).
+  - Memformat tampilan bulan dan tahun agar sesuai dengan lokalisasi standar masing-masing bahasa.

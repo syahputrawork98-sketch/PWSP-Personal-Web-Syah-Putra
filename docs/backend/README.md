@@ -81,3 +81,27 @@ Sangat berkaitan dengan **F07 Backend API System** dan **F08 Admin Login and Aut
 | Admin | `/api/admin/cv-builder/*` | Completed (Restricted to Admin) | `server/src/routes/admin/cv-builder.routes.js` | Endpoint tata letak & JSON Config CV Builder. |
 | Admin | `/api/admin/*` | Completed (Restricted to Admin) | `server/src/routes/admin/*.routes.js` | Endpoint proteksi admin (CMS). Khusus untuk API Project, getById mengembalikan relasi `translations`. Create/update mendukung objek `translations` berisi data EN/ID/JA. EN wajib. Untuk ID/JA opsional; jika dikirim dalam keadaan kosong total, record terjemahan tersebut akan dihapus untuk menjaga mekanisme fallback ke EN. |
 | Public | `GET /api/cv/active` | F11 Config Contract | `server/src/routes/cv.routes.js` | Menyajikan URL berkas statis PDF CV final. |
+
+## Planned API Extensions (F03S-SPEC)
+
+### Admin Experience Controller Updates
+- **`GET /api/admin/experiences/:id`**: Diperbarui agar mengembalikan data Experience beserta relasi `translations` array-nya.
+- **`POST /api/admin/experiences`** & **`PUT /api/admin/experiences/:id`**: Menerima objek `translations` di dalam body request:
+  ```json
+  {
+    "translations": {
+      "EN": { "role": "Full Stack Developer", "description": "...", "highlights": ["...", "..."] },
+      "ID": { "role": "Pengembang Full Stack", "description": "...", "highlights": ["...", "..."] },
+      "JA": { "role": "フルスタックエンジニア", "description": "...", "highlights": ["...", "..."] }
+    }
+  }
+  ```
+  - **Validasi**: Locale `EN` wajib diisi. `ID` dan `JA` bersifat opsional.
+  - **Fallback/Delete**: Jika `ID`/`JA` dikirim kosong (kosong total setelah trim), record terjemahannya di database akan otomatis dihapus jika sudah ada.
+  - **Legacy Sync**: Sinkronisasi kolom `role`, `description`, dan `highlights` (array) di tabel `Experience` utama berdasarkan data terjemahan `EN`.
+
+### Public Experience API Updates
+- **`GET /api/experiences`**: Mendukung query parameter `?locale=EN/ID/JA`.
+  - Mengambil data dari tabel `ExperienceTranslation` relasional berdasarkan parameter locale.
+  - **Fallback**: Jika terjemahan untuk locale yang diminta tidak ada, sistem akan fallback mencari data terjemahan `EN`. Jika `EN` pun kosong/tidak ada, sistem akan menggunakan kolom legacy di tabel `Experience` utama.
+  - Respons dikembalikan dalam format objek flat agar backward compatible dengan client side lama.

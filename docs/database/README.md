@@ -102,3 +102,41 @@ erDiagram
   - `ProjectType`: `CLIENT_WORK`, `FREELANCE`, `CASE_STUDY`, `LEARNING_PROJECT`, `INTERNAL`.
   - `ProjectWorkStatus`: `COMPLETED`, `IN_PROGRESS`, `MAINTENANCE`, `ARCHIVED`.
 - **Constraint**: Kombinasi `projectId` dan `locale` bersifat unik (`@@unique([projectId, locale])`) untuk menjamin hanya ada satu terjemahan per bahasa untuk setiap proyek.
+
+## Multilingual Experience Schema (Batch F03S-SPEC Planned)
+Sebagai bagian dari rencana perluasan fitur multilingual CMS, model `Experience` akan diintegrasikan dengan model `ExperienceTranslation` relasional.
+
+### Data Model & Relationship (Planned)
+```mermaid
+erDiagram
+    Experience ||--o{ ExperienceTranslation : "has translations"
+    Experience {
+        string id PK
+        string role "backward compatible"
+        string company "shared"
+        string location "shared"
+        string type "shared"
+        DateTime startDate "shared"
+        DateTime endDate "shared"
+        boolean isCurrent "shared"
+        string description "backward compatible"
+        string[] highlights "backward compatible"
+        string[] techStack "shared"
+        ExperienceStatus status "shared"
+        ExperienceKind experienceKind "shared"
+        int order "shared"
+    }
+    ExperienceTranslation {
+        string id PK
+        string experienceId FK
+        Locale locale "EN / ID / JA"
+        string role
+        string description
+        string[] highlights
+    }
+```
+
+- **Backward Compatibility**: Kolom `role`, `description`, dan `highlights` di tabel `Experience` utama tetap dipertahankan sebagai fallback data warisan (legacy) jika terjemahan relasional tidak tersedia.
+- **Translatable Fields**: `role` (String), `description` (String), dan `highlights` (String[]).
+- **Shared Fields**: `company`, `location`, `type`, `startDate`, `endDate`, `isCurrent`, `techStack`, `status`, `experienceKind`, dan `order`.
+- **Constraint**: Kombinasi `experienceId` dan `locale` diatur unik (`@@unique([experienceId, locale])`) dengan indeks khusus pada kolom `locale` untuk performa kueri.
