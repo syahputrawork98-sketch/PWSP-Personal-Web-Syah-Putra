@@ -23,6 +23,7 @@ Meningkatkan keterbacaan website portfolio oleh crawler sederhana, recruiter too
 - Batch F15J menyelesaikan polish keamanan klaim project fallback dengan merapikan status project dan melunakkan wording teknis yang terlalu absolut agar tetap kuat untuk HRD tanpa overclaim.
 - Batch F15K menyelesaikan polish copy halaman Projects dengan menambahkan recruiter guidance untuk Featured Full Stack Case Studies dan deskripsi pembeda Other Projects.
 - Batch F15F menyelesaikan audit keamanan ringan dan kesiapan GitHub recruiter-facing untuk memastikan tidak ada credential jelas, file scratch, atau link GitHub lama yang mengganggu sebelum QA final.
+- Batch F15G menyelesaikan QA akhir F15 dengan build frontend, audit recruiter-facing, pemeriksaan link penting, dan penilaian akhir terhadap kesiapan portfolio untuk HRD Full Stack Developer.
 - Snapshot berisi professional summary, core stack, featured work, dan recruiter links.
 - Tampilan visual React Home saat JS aktif tidak terpengaruh sedikit pun.
 
@@ -49,13 +50,27 @@ Audit Result:
 | F15J | Project Claim Safety & Status Truthfulness Polish | Completed | Melunakkan klaim teknis dan merapikan status project fallback agar lebih jujur, aman, dan recruiter-friendly. | F15I |
 | F15K | Projects Page Recruiter Copy & Case Study Guidance | Completed | Memperkuat copy halaman Projects agar recruiter langsung memahami featured projects sebagai studi kasus Full Stack utama dan other projects sebagai pendukung. | F15J |
 | F15F | Security and GitHub Recruiter Audit | Completed | Audit repositori dan profil GitHub untuk kebutuhan rekrutmen. | F15K |
-| F15G | Lighthouse and Final HRD Score QA | Pending | Pengukuran skor akhir dengan Lighthouse QA. | F15F |
+| F15G | Lighthouse and Final HRD Score QA | Completed | Pengukuran skor akhir dengan Lighthouse/manual QA dan review akhir kesiapan HRD Full Stack. | F15F |
+
+## F15G Final QA Result
+- Frontend build: Passed
+- Lighthouse availability: Unavailable (Audited manually as fallback)
+- Home recruiter clarity: Clear
+- Projects recruiter clarity: Clear
+- Experience clarity: Clear
+- About clarity: Clear
+- Credentials clarity: Clear
+- Contact clarity: Clear
+- GitHub old link check: Clear
+- CV/download visibility: Clear
+- Estimated HRD Full Stack score: 85–90/100
+- Final recommendation: Ready for checkpoint
 
 ## HOLD / Blocked Notes
 - Seluruh pengerjaan pada batch ini dirancang tanpa mengubah arsitektur SPA React atau menambahkan prerendering framework / SSR dependency baru.
 
 ## Next Step
-- Melanjutkan ke Batch F15G — Lighthouse and Final HRD Score QA.
+- Melanjutkan ke Batch F15-CP — HRD Portfolio Score Improvement Checkpoint.
 
 ## Validation Checklist
 - Menjalankan build frontend (`npm run build`) dan memastikan kompilasi berjalan sukses.
