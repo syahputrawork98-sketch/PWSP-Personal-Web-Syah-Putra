@@ -51,18 +51,6 @@ const AdminProjectEdit = () => {
     }
   };
 
-  const translationEN = project?.translations?.find(t => t.locale === 'EN') || {};
-  const projectWithTranslation = project ? {
-    ...project,
-    role: translationEN.role || '',
-    projectContext: translationEN.projectContext || '',
-    problem: translationEN.problem || '',
-    solution: translationEN.solution || '',
-    keyFeatures: translationEN.keyFeatures || [],
-    responsibilities: translationEN.responsibilities || [],
-    outcomes: translationEN.outcomes || [],
-  } : null;
-
   if (loading) return <div style={{ textAlign: 'center', padding: 'var(--space-8)' }}>Loading project data...</div>;
 
   return (
@@ -75,9 +63,9 @@ const AdminProjectEdit = () => {
         </div>
       )}
 
-      {projectWithTranslation && (
+      {project && (
         <ProjectForm 
-          initialData={projectWithTranslation}
+          initialData={project}
           onSubmit={handleSubmit} 
           onCancel={() => navigate('/admin/projects')}
           loading={saving}

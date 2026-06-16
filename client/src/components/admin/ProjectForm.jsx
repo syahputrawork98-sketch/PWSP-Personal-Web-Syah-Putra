@@ -1,73 +1,132 @@
 import React, { useState, useEffect } from 'react';
 
 const ProjectForm = ({ initialData, onSubmit, onCancel, loading }) => {
-  const [formData, setFormData] = useState({
-    title: '',
+  const [activeTab, setActiveTab] = useState('EN'); // EN, ID, JA
+  const [prevEnTitle, setPrevEnTitle] = useState('');
+
+  const [sharedData, setSharedData] = useState({
     slug: '',
-    shortDescription: '',
-    description: '',
     imageUrl: '',
-    techStack: '', // Comma-separated string for input
+    techStack: '',
     githubUrl: '',
     liveUrl: '',
     figmaUrl: '',
     featured: false,
     status: 'DRAFT',
     order: 0,
-    role: '',
-    projectContext: '',
-    problem: '',
-    solution: '',
-    keyFeatures: '',
-    responsibilities: '',
-    outcomes: '',
+    projectType: '',
+    clientName: '',
+    projectStatus: '',
+  });
+
+  const [translationsData, setTranslationsData] = useState({
+    EN: { title: '', shortDescription: '', description: '', role: '', projectContext: '', problem: '', solution: '', keyFeatures: '', responsibilities: '', outcomes: '' },
+    ID: { title: '', shortDescription: '', description: '', role: '', projectContext: '', problem: '', solution: '', keyFeatures: '', responsibilities: '', outcomes: '' },
+    JA: { title: '', shortDescription: '', description: '', role: '', projectContext: '', problem: '', solution: '', keyFeatures: '', responsibilities: '', outcomes: '' }
   });
 
   useEffect(() => {
     if (initialData) {
-      setFormData({
-        ...initialData,
-        techStack: initialData.techStack ? initialData.techStack.join(', ') : '',
-        description: initialData.description || '',
+      setSharedData({
+        slug: initialData.slug || '',
         imageUrl: initialData.imageUrl || '',
+        techStack: initialData.techStack ? initialData.techStack.join(', ') : '',
         githubUrl: initialData.githubUrl || '',
         liveUrl: initialData.liveUrl || '',
         figmaUrl: initialData.figmaUrl || '',
-        role: initialData.role || '',
-        projectContext: initialData.projectContext || '',
-        problem: initialData.problem || '',
-        solution: initialData.solution || '',
-        keyFeatures: Array.isArray(initialData.keyFeatures) ? initialData.keyFeatures.join('\n') : (initialData.keyFeatures || ''),
-        responsibilities: Array.isArray(initialData.responsibilities) ? initialData.responsibilities.join('\n') : (initialData.responsibilities || ''),
-        outcomes: Array.isArray(initialData.outcomes) ? initialData.outcomes.join('\n') : (initialData.outcomes || ''),
+        featured: initialData.featured || false,
+        status: initialData.status || 'DRAFT',
+        order: initialData.order !== undefined ? initialData.order : 0,
+        projectType: initialData.projectType || '',
+        clientName: initialData.clientName || '',
+        projectStatus: initialData.projectStatus || '',
       });
+
+      const defaultTrans = {
+        EN: { title: '', shortDescription: '', description: '', role: '', projectContext: '', problem: '', solution: '', keyFeatures: '', responsibilities: '', outcomes: '' },
+        ID: { title: '', shortDescription: '', description: '', role: '', projectContext: '', problem: '', solution: '', keyFeatures: '', responsibilities: '', outcomes: '' },
+        JA: { title: '', shortDescription: '', description: '', role: '', projectContext: '', problem: '', solution: '', keyFeatures: '', responsibilities: '', outcomes: '' }
+      };
+
+      if (initialData.translations && Array.isArray(initialData.translations)) {
+        initialData.translations.forEach(t => {
+          if (defaultTrans[t.locale]) {
+            defaultTrans[t.locale] = {
+              title: t.title || '',
+              shortDescription: t.shortDescription || '',
+              description: t.description || '',
+              role: t.role || '',
+              projectContext: t.projectContext || '',
+              problem: t.problem || '',
+              solution: t.solution || '',
+              keyFeatures: Array.isArray(t.keyFeatures) ? t.keyFeatures.join('\n') : (t.keyFeatures || ''),
+              responsibilities: Array.isArray(t.responsibilities) ? t.responsibilities.join('\n') : (t.responsibilities || ''),
+              outcomes: Array.isArray(t.outcomes) ? t.outcomes.join('\n') : (t.outcomes || ''),
+            };
+          }
+        });
+      } else {
+        // Fallback to legacy flat fields for EN
+        defaultTrans.EN = {
+          title: initialData.title || '',
+          shortDescription: initialData.shortDescription || '',
+          description: initialData.description || '',
+          role: initialData.role || '',
+          projectContext: initialData.projectContext || '',
+          problem: initialData.problem || '',
+          solution: initialData.solution || '',
+          keyFeatures: Array.isArray(initialData.keyFeatures) ? initialData.keyFeatures.join('\n') : (initialData.keyFeatures || ''),
+          responsibilities: Array.isArray(initialData.responsibilities) ? initialData.responsibilities.join('\n') : (initialData.responsibilities || ''),
+          outcomes: Array.isArray(initialData.outcomes) ? initialData.outcomes.join('\n') : (initialData.outcomes || ''),
+        };
+      }
+
+      setTranslationsData(defaultTrans);
+      if (defaultTrans.EN.title) {
+        setPrevEnTitle(defaultTrans.EN.title);
+      }
     }
   }, [initialData]);
 
-  const handleChange = (e) => {
+  const handleSharedChange = (e) => {
     const { name, value, type, checked } = e.target;
-    
-    setFormData(prev => {
-      const newData = {
-        ...prev,
-        [name]: type === 'checkbox' ? checked : value
-      };
+    setSharedData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
 
-      // Auto-generate slug from title if slug is empty or was auto-generated
-      if (name === 'title' && (!prev.slug || prev.slug === prev.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''))) {
-        newData.slug = value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+  const handleTranslationChange = (e, lang) => {
+    const { name, value } = e.target;
+    setTranslationsData(prev => ({
+      ...prev,
+      [lang]: {
+        ...prev[lang],
+        [name]: value
       }
+    }));
 
-      return newData;
-    });
+    if (lang === 'EN' && name === 'title') {
+      const currentEnTitle = value;
+      const expectedOldSlug = prevEnTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+      const newGeneratedSlug = currentEnTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+      
+      setSharedData(prev => {
+        if (!prev.slug || prev.slug === expectedOldSlug) {
+          return { ...prev, slug: newGeneratedSlug };
+        }
+        return prev;
+      });
+      setPrevEnTitle(currentEnTitle);
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     
     // Process techStack string to array
-    const techArray = formData.techStack
-      ? formData.techStack.split(',').map(item => item.trim()).filter(item => item !== '')
+    const techArray = sharedData.techStack
+      ? sharedData.techStack.split(',').map(item => item.trim()).filter(item => item !== '')
       : [];
 
     const parseMultiline = (text) => {
@@ -78,13 +137,74 @@ const ProjectForm = ({ initialData, onSubmit, onCancel, loading }) => {
         .filter(line => line !== '');
     };
 
+    // Format all 3 translations
+    const formattedTranslations = {
+      EN: {
+        title: translationsData.EN.title.trim(),
+        shortDescription: translationsData.EN.shortDescription.trim(),
+        description: translationsData.EN.description.trim() || null,
+        role: translationsData.EN.role.trim() || null,
+        projectContext: translationsData.EN.projectContext.trim() || null,
+        problem: translationsData.EN.problem.trim() || null,
+        solution: translationsData.EN.solution.trim() || null,
+        keyFeatures: parseMultiline(translationsData.EN.keyFeatures),
+        responsibilities: parseMultiline(translationsData.EN.responsibilities),
+        outcomes: parseMultiline(translationsData.EN.outcomes)
+      },
+      ID: {
+        title: translationsData.ID.title.trim() || '',
+        shortDescription: translationsData.ID.shortDescription.trim() || '',
+        description: translationsData.ID.description.trim() || '',
+        role: translationsData.ID.role.trim() || '',
+        projectContext: translationsData.ID.projectContext.trim() || '',
+        problem: translationsData.ID.problem.trim() || '',
+        solution: translationsData.ID.solution.trim() || '',
+        keyFeatures: parseMultiline(translationsData.ID.keyFeatures),
+        responsibilities: parseMultiline(translationsData.ID.responsibilities),
+        outcomes: parseMultiline(translationsData.ID.outcomes)
+      },
+      JA: {
+        title: translationsData.JA.title.trim() || '',
+        shortDescription: translationsData.JA.shortDescription.trim() || '',
+        description: translationsData.JA.description.trim() || '',
+        role: translationsData.JA.role.trim() || '',
+        projectContext: translationsData.JA.projectContext.trim() || '',
+        problem: translationsData.JA.problem.trim() || '',
+        solution: translationsData.JA.solution.trim() || '',
+        keyFeatures: parseMultiline(translationsData.JA.keyFeatures),
+        responsibilities: parseMultiline(translationsData.JA.responsibilities),
+        outcomes: parseMultiline(translationsData.JA.outcomes)
+      }
+    };
+
     const submissionData = {
-      ...formData,
+      slug: sharedData.slug.trim(),
+      imageUrl: sharedData.imageUrl.trim() || null,
       techStack: techArray,
-      order: parseInt(formData.order) || 0,
-      keyFeatures: parseMultiline(formData.keyFeatures),
-      responsibilities: parseMultiline(formData.responsibilities),
-      outcomes: parseMultiline(formData.outcomes),
+      githubUrl: sharedData.githubUrl.trim() || null,
+      liveUrl: sharedData.liveUrl.trim() || null,
+      figmaUrl: sharedData.figmaUrl.trim() || null,
+      featured: sharedData.featured,
+      status: sharedData.status,
+      order: parseInt(sharedData.order) || 0,
+      projectType: sharedData.projectType || null,
+      clientName: sharedData.clientName.trim() || null,
+      projectStatus: sharedData.projectStatus || null,
+      
+      // Legacy flat support (populated from EN translation values)
+      title: formattedTranslations.EN.title,
+      shortDescription: formattedTranslations.EN.shortDescription,
+      description: formattedTranslations.EN.description,
+      role: formattedTranslations.EN.role,
+      projectContext: formattedTranslations.EN.projectContext,
+      problem: formattedTranslations.EN.problem,
+      solution: formattedTranslations.EN.solution,
+      keyFeatures: formattedTranslations.EN.keyFeatures,
+      responsibilities: formattedTranslations.EN.responsibilities,
+      outcomes: formattedTranslations.EN.outcomes,
+
+      // New translations payload
+      translations: formattedTranslations
     };
 
     onSubmit(submissionData);
@@ -92,121 +212,144 @@ const ProjectForm = ({ initialData, onSubmit, onCancel, loading }) => {
 
   return (
     <form onSubmit={handleSubmit} className="card" style={{ padding: 'var(--space-6)', display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-      <div className="form-group">
-        <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>Title *</label>
-        <input 
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          required
-          style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
-        />
-      </div>
+      
+      <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--primary-color)', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px', marginBottom: '8px' }}>
+        Shared Metadata (Common for all languages)
+      </h3>
 
-      <div className="form-group">
-        <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>Slug *</label>
-        <input 
-          name="slug"
-          value={formData.slug}
-          onChange={handleChange}
-          required
-          style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
-        />
-      </div>
-
-      <div className="form-group">
-        <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>Short Description *</label>
-        <textarea 
-          name="shortDescription"
-          value={formData.shortDescription}
-          onChange={handleChange}
-          required
-          rows="2"
-          style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
-        />
-      </div>
-
-      <div className="form-group">
-        <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>Description (Full)</label>
-        <textarea 
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          rows="4"
-          style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
-        />
-      </div>
-
-      <div className="form-group">
-        <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>Tech Stack (comma separated)</label>
-        <input 
-          name="techStack"
-          value={formData.techStack}
-          onChange={handleChange}
-          placeholder="e.g. React, Node.js, Prisma"
-          style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
-        />
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-4)' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 'var(--space-4)' }}>
         <div className="form-group">
-          <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>Image URL</label>
+          <label style={{ display: 'block', marginBottom: 'var(--space-2)', fontWeight: 600 }}>Slug *</label>
           <input 
-            name="imageUrl"
-            value={formData.imageUrl}
-            onChange={handleChange}
-            style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
+            name="slug"
+            value={sharedData.slug}
+            onChange={handleSharedChange}
+            required
+            placeholder="e.g. my-project-slug"
+            style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)', boxSizing: 'border-box' }}
           />
         </div>
+
         <div className="form-group">
-          <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>Order Index</label>
+          <label style={{ display: 'block', marginBottom: 'var(--space-2)', fontWeight: 600 }}>Project Type</label>
+          <select 
+            name="projectType"
+            value={sharedData.projectType}
+            onChange={handleSharedChange}
+            style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)', boxSizing: 'border-box' }}
+          >
+            <option value="">None (Optional)</option>
+            <option value="CLIENT_WORK">Client Work</option>
+            <option value="FREELANCE">Freelance</option>
+            <option value="CASE_STUDY">Case Study</option>
+            <option value="LEARNING_PROJECT">Learning Project</option>
+            <option value="INTERNAL">Internal</option>
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label style={{ display: 'block', marginBottom: 'var(--space-2)', fontWeight: 600 }}>Work Status</label>
+          <select 
+            name="projectStatus"
+            value={sharedData.projectStatus}
+            onChange={handleSharedChange}
+            style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)', boxSizing: 'border-box' }}
+          >
+            <option value="">None (Optional)</option>
+            <option value="COMPLETED">Completed</option>
+            <option value="IN_PROGRESS">In Progress</option>
+            <option value="MAINTENANCE">Maintenance</option>
+            <option value="ARCHIVED">Archived</option>
+          </select>
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 'var(--space-4)' }}>
+        <div className="form-group">
+          <label style={{ display: 'block', marginBottom: 'var(--space-2)', fontWeight: 600 }}>Client Name</label>
+          <input 
+            name="clientName"
+            value={sharedData.clientName}
+            onChange={handleSharedChange}
+            placeholder="e.g. Acme Corp (Optional)"
+            style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)', boxSizing: 'border-box' }}
+          />
+        </div>
+
+        <div className="form-group">
+          <label style={{ display: 'block', marginBottom: 'var(--space-2)', fontWeight: 600 }}>Image URL</label>
+          <input 
+            name="imageUrl"
+            value={sharedData.imageUrl}
+            onChange={handleSharedChange}
+            placeholder="https://..."
+            style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)', boxSizing: 'border-box' }}
+          />
+        </div>
+
+        <div className="form-group">
+          <label style={{ display: 'block', marginBottom: 'var(--space-2)', fontWeight: 600 }}>Order Index</label>
           <input 
             name="order"
             type="number"
-            value={formData.order}
-            onChange={handleChange}
-            style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
+            value={sharedData.order}
+            onChange={handleSharedChange}
+            style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)', boxSizing: 'border-box' }}
           />
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--space-4)' }}>
+      <div className="form-group">
+        <label style={{ display: 'block', marginBottom: 'var(--space-2)', fontWeight: 600 }}>Tech Stack (comma separated)</label>
+        <input 
+          name="techStack"
+          value={sharedData.techStack}
+          onChange={handleSharedChange}
+          placeholder="e.g. React, Node.js, Prisma"
+          style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)', boxSizing: 'border-box' }}
+        />
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 'var(--space-4)' }}>
         <div className="form-group">
-          <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>GitHub URL</label>
+          <label style={{ display: 'block', marginBottom: 'var(--space-2)', fontWeight: 600 }}>GitHub URL</label>
           <input 
             name="githubUrl"
-            value={formData.githubUrl}
-            onChange={handleChange}
-            style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
+            value={sharedData.githubUrl}
+            onChange={handleSharedChange}
+            placeholder="https://github.com/..."
+            style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)', boxSizing: 'border-box' }}
           />
         </div>
         <div className="form-group">
-          <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>Live Demo URL</label>
+          <label style={{ display: 'block', marginBottom: 'var(--space-2)', fontWeight: 600 }}>Live Demo URL</label>
           <input 
             name="liveUrl"
-            value={formData.liveUrl}
-            onChange={handleChange}
-            style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
+            value={sharedData.liveUrl}
+            onChange={handleSharedChange}
+            placeholder="https://..."
+            style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)', boxSizing: 'border-box' }}
           />
         </div>
         <div className="form-group">
-          <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>Figma URL</label>
+          <label style={{ display: 'block', marginBottom: 'var(--space-2)', fontWeight: 600 }}>Figma URL</label>
           <input 
             name="figmaUrl"
-            value={formData.figmaUrl}
-            onChange={handleChange}
-            style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
+            value={sharedData.figmaUrl}
+            onChange={handleSharedChange}
+            placeholder="https://figma.com/..."
+            style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)', boxSizing: 'border-box' }}
           />
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: 'var(--space-6)', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: 'var(--space-6)', alignItems: 'center', marginBottom: '12px' }}>
         <div className="form-group">
-          <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>Status</label>
+          <label style={{ display: 'block', marginBottom: 'var(--space-2)', fontWeight: 600 }}>Status</label>
           <select 
             name="status"
-            value={formData.status}
-            onChange={handleChange}
+            value={sharedData.status}
+            onChange={handleSharedChange}
             style={{ padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
           >
             <option value="DRAFT">DRAFT</option>
@@ -218,100 +361,169 @@ const ProjectForm = ({ initialData, onSubmit, onCancel, loading }) => {
             type="checkbox"
             id="featured"
             name="featured"
-            checked={formData.featured}
-            onChange={handleChange}
+            checked={sharedData.featured}
+            onChange={handleSharedChange}
           />
-          <label htmlFor="featured">Featured Project</label>
+          <label htmlFor="featured" style={{ fontWeight: 600 }}>Featured Project</label>
         </div>
       </div>
 
-      <hr style={{ border: 'none', borderTop: '1px solid var(--border-color)', margin: 'var(--space-6) 0' }} />
-      
-      <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-color)', marginBottom: 'var(--space-2)' }}>
-        Case Study Content (English)
+      <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--primary-color)', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px', marginTop: '12px' }}>
+        Localization Settings (Translatable Content)
       </h3>
-      
-      <div className="form-group">
-        <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>Role / Role Title</label>
-        <input 
-          name="role"
-          value={formData.role}
-          onChange={handleChange}
-          placeholder="e.g. Lead Architect, Full Stack Developer"
-          style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
-        />
+
+      {/* Translations Tab Navigation */}
+      <div style={{ display: 'flex', gap: '8px', borderBottom: '2px solid var(--border-color)', paddingBottom: '8px', marginBottom: '8px' }}>
+        {['EN', 'ID', 'JA'].map(lang => (
+          <button
+            key={lang}
+            type="button"
+            onClick={() => setActiveTab(lang)}
+            style={{
+              padding: '8px 16px',
+              borderRadius: '4px',
+              border: '1px solid ' + (activeTab === lang ? 'var(--primary-color)' : 'var(--border-color)'),
+              backgroundColor: activeTab === lang ? 'var(--primary-color)' : 'var(--surface-color)',
+              color: activeTab === lang ? '#ffffff' : 'var(--text-color)',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}
+          >
+            {lang === 'EN' && <span>🇬🇧 English *</span>}
+            {lang === 'ID' && <span>🇮🇩 Indonesia</span>}
+            {lang === 'JA' && <span>🇯🇵 Japanese</span>}
+          </button>
+        ))}
       </div>
 
-      <div className="form-group">
-        <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>Project Context</label>
-        <textarea 
-          name="projectContext"
-          value={formData.projectContext}
-          onChange={handleChange}
-          placeholder="Context, background, and overview of the project"
-          rows="3"
-          style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
-        />
-      </div>
+      {/* Translations Inputs for the Active Tab */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+        <div className="form-group">
+          <label style={{ display: 'block', marginBottom: 'var(--space-2)', fontWeight: 600 }}>
+            Title {activeTab === 'EN' ? '*' : '(Optional)'}
+          </label>
+          <input 
+            name="title"
+            value={translationsData[activeTab].title}
+            onChange={(e) => handleTranslationChange(e, activeTab)}
+            required={activeTab === 'EN'}
+            placeholder={`Project Title in ${activeTab === 'EN' ? 'English' : activeTab === 'ID' ? 'Indonesian' : 'Japanese'}`}
+            style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)', boxSizing: 'border-box' }}
+          />
+        </div>
 
-      <div className="form-group">
-        <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>The Problem</label>
-        <textarea 
-          name="problem"
-          value={formData.problem}
-          onChange={handleChange}
-          placeholder="Challenges, pain points, or problems to solve"
-          rows="3"
-          style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
-        />
-      </div>
+        <div className="form-group">
+          <label style={{ display: 'block', marginBottom: 'var(--space-2)', fontWeight: 600 }}>
+            Short Description {activeTab === 'EN' ? '*' : '(Optional)'}
+          </label>
+          <textarea 
+            name="shortDescription"
+            value={translationsData[activeTab].shortDescription}
+            onChange={(e) => handleTranslationChange(e, activeTab)}
+            required={activeTab === 'EN'}
+            rows="2"
+            placeholder={`Brief elevator pitch/summary in ${activeTab === 'EN' ? 'English' : activeTab === 'ID' ? 'Indonesian' : 'Japanese'}`}
+            style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)', boxSizing: 'border-box' }}
+          />
+        </div>
 
-      <div className="form-group">
-        <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>The Solution</label>
-        <textarea 
-          name="solution"
-          value={formData.solution}
-          onChange={handleChange}
-          placeholder="How the problems were solved and technical decisions"
-          rows="3"
-          style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
-        />
-      </div>
+        <div className="form-group">
+          <label style={{ display: 'block', marginBottom: 'var(--space-2)', fontWeight: 600 }}>Full Description</label>
+          <textarea 
+            name="description"
+            value={translationsData[activeTab].description}
+            onChange={(e) => handleTranslationChange(e, activeTab)}
+            rows="4"
+            placeholder={`Detailed descriptions in ${activeTab === 'EN' ? 'English' : activeTab === 'ID' ? 'Indonesian' : 'Japanese'}`}
+            style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)', boxSizing: 'border-box' }}
+          />
+        </div>
 
-      <div className="form-group">
-        <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>Key Features (one per line)</label>
-        <textarea 
-          name="keyFeatures"
-          value={formData.keyFeatures}
-          onChange={handleChange}
-          placeholder="Feature 1&#10;Feature 2&#10;Feature 3"
-          rows="4"
-          style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
-        />
-      </div>
+        <div className="form-group">
+          <label style={{ display: 'block', marginBottom: 'var(--space-2)', fontWeight: 600 }}>Role / Role Title</label>
+          <input 
+            name="role"
+            value={translationsData[activeTab].role}
+            onChange={(e) => handleTranslationChange(e, activeTab)}
+            placeholder="e.g. Lead Architect, Full Stack Developer"
+            style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)', boxSizing: 'border-box' }}
+          />
+        </div>
 
-      <div className="form-group">
-        <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>Key Responsibilities (one per line)</label>
-        <textarea 
-          name="responsibilities"
-          value={formData.responsibilities}
-          onChange={handleChange}
-          placeholder="Responsibility 1&#10;Responsibility 2"
-          rows="4"
-          style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
-        />
-      </div>
+        <div className="form-group">
+          <label style={{ display: 'block', marginBottom: 'var(--space-2)', fontWeight: 600 }}>Project Context</label>
+          <textarea 
+            name="projectContext"
+            value={translationsData[activeTab].projectContext}
+            onChange={(e) => handleTranslationChange(e, activeTab)}
+            placeholder="Background, scope, context and duration summary..."
+            rows="3"
+            style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)', boxSizing: 'border-box' }}
+          />
+        </div>
 
-      <div className="form-group">
-        <label style={{ display: 'block', marginBottom: 'var(--space-2)' }}>Outcomes & Impact (one per line)</label>
-        <textarea 
-          name="outcomes"
-          value={formData.outcomes}
-          onChange={handleChange}
-          placeholder="Outcome 1&#10;Outcome 2"
-          rows="4"
-          style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
-        />
+        <div className="form-group">
+          <label style={{ display: 'block', marginBottom: 'var(--space-2)', fontWeight: 600 }}>The Problem</label>
+          <textarea 
+            name="problem"
+            value={translationsData[activeTab].problem}
+            onChange={(e) => handleTranslationChange(e, activeTab)}
+            placeholder="Challenges faced, issues to resolve, bottlenecks..."
+            rows="3"
+            style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)', boxSizing: 'border-box' }}
+          />
+        </div>
+
+        <div className="form-group">
+          <label style={{ display: 'block', marginBottom: 'var(--space-2)', fontWeight: 600 }}>The Solution</label>
+          <textarea 
+            name="solution"
+            value={translationsData[activeTab].solution}
+            onChange={(e) => handleTranslationChange(e, activeTab)}
+            placeholder="Technical decisions, implementation details, resolutions..."
+            rows="3"
+            style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)', boxSizing: 'border-box' }}
+          />
+        </div>
+
+        <div className="form-group">
+          <label style={{ display: 'block', marginBottom: 'var(--space-2)', fontWeight: 600 }}>Key Features (one per line)</label>
+          <textarea 
+            name="keyFeatures"
+            value={translationsData[activeTab].keyFeatures}
+            onChange={(e) => handleTranslationChange(e, activeTab)}
+            placeholder="e.g.&#10;Real-time dashboard&#10;OAuth Google integration"
+            rows="4"
+            style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)', boxSizing: 'border-box' }}
+          />
+        </div>
+
+        <div className="form-group">
+          <label style={{ display: 'block', marginBottom: 'var(--space-2)', fontWeight: 600 }}>Key Responsibilities (one per line)</label>
+          <textarea 
+            name="responsibilities"
+            value={translationsData[activeTab].responsibilities}
+            onChange={(e) => handleTranslationChange(e, activeTab)}
+            placeholder="e.g.&#10;Designing postgresql relational schema&#10;Deploying client container on Vercel"
+            rows="4"
+            style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)', boxSizing: 'border-box' }}
+          />
+        </div>
+
+        <div className="form-group">
+          <label style={{ display: 'block', marginBottom: 'var(--space-2)', fontWeight: 600 }}>Outcomes & Impact (one per line)</label>
+          <textarea 
+            name="outcomes"
+            value={translationsData[activeTab].outcomes}
+            onChange={(e) => handleTranslationChange(e, activeTab)}
+            placeholder="e.g.&#10;Increased user engagement by 20%&#10;Reduced load time by 300ms"
+            rows="4"
+            style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)', boxSizing: 'border-box' }}
+          />
+        </div>
       </div>
 
       <div style={{ display: 'flex', gap: 'var(--space-4)', marginTop: 'var(--space-6)' }}>

@@ -42,7 +42,7 @@ Setelah rangkaian sub-batch database relasional dan lokalisasi selesai (F03H–F
 | F03-CP | Project Portfolio Checkpoint | Completed | Melakukan checkpoint dokumentasi setelah rangkaian F03H–F03L selesai. | F03L |
 | F03M | Public EN/ID Language Switcher Foundation | Completed | Membuat foundation language switcher EN/ID di public site, dictionary lokalisasi, dan request API locale. | F03L |
 | F03N | Public Static UI EN/ID Coverage Expansion | Completed | Perluas cakupan bilingual EN/ID ke halaman About, Credentials, Learn, Contact, dan komponen public terkait. | F03M |
-
+| F03O | Admin Project Translation Tabs EN/ID/JA | Completed | Integrasi tab manajemen terjemahan manual EN/ID/JA di CMS admin tanpa migration & otomatis kelola fallback. | F03N |
 
 
 ## HOLD / Blocked Notes
@@ -82,3 +82,4 @@ Setelah rangkaian sub-batch database relasional dan lokalisasi selesai (F03H–F
 - [F03-CP] Melakukan checkpoint dokumentasi setelah seluruh rangkaian implementasi multilingual case study selesai. Menyelaraskan status pada index utama history dan status aktif di berkas status global, serta memastikan integritas logic database dan visual page stabil.
 - [F03M] Membuat fondasi lokalisasi multibahasa di public site. Mengimplementasikan `LanguageProvider` dan context hook untuk mengelola state bahasa aktif (default: `EN`), menyimpan preferensi di `localStorage` (`pw_locale`), serta menyediakan dictionary map lokal (`client/src/i18n.js`) untuk element statis web (Navbar, Home, Experience, Projects, detail modal). Halaman Projects disesuaikan untuk menyuntikkan parameter kueri `?locale=${locale}` secara otomatis dalam request data proyek ke backend API.
 - [F03N] Memperluas cakupan bilingual EN/ID ke halaman publik yang belum tersentuh (About, Credentials, Learn, Contact) beserta komponen pendukung publik (CredentialCard, CredentialModal). Melakukan inlining komponen `ExperienceReframing` dan `CredentialsSection` agar dapat diterjemahkan secara bersih tanpa merusak batas modifikasi berkas.
+- [F03O] Menambahkan kemampuan edit & create portfolio project multibahasa (EN, ID, JA) secara manual di Admin CMS. Frontend menggunakan sistem tab di ProjectForm, mengelompokkan field global di atas dan field terjemahan di bawah tabs. Backend Controller memproses payload terjemahan secara kondisional: locale EN wajib, sementara ID/JA opsional. Jika tab ID/JA dikosongkan total, record `ProjectTranslation` terkait akan didelete (jika ada) untuk memulihkan fallback otomatis ke EN. Payload tanpa key `translations` (dari legacy API) tetap aman dan tidak menghapus terjemahan lama.
