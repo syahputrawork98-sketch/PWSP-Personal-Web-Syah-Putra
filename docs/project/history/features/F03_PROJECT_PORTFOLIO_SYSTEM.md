@@ -16,6 +16,14 @@ Mencakup sistem portfolio, kategori proyek, project card, modal detail, dan link
 - Curation data proyek dilakukan dengan berorientasi pada kebutuhan rekrutmen HRD Full Stack Developer (Batch F03D).
 - Restrukturisasi database Project untuk fondasi multibahasa berhasil diterapkan (Batch F03H) dengan model translations relasional.
 
+### F03-CP Checkpoint Summary
+Setelah rangkaian sub-batch database relasional dan lokalisasi selesai (F03H–F03L), Project Portfolio System telah diperkuat dengan kemampuan studi kasus multibahasa:
+- **Multilingual Database Foundation** (`F03H`): Skema Prisma terstruktur dengan model `ProjectTranslation` relasional untuk mendukung locale `EN`, `ID`, dan `JA` tanpa merusak kompatibilitas field legacy.
+- **Public API Locale Support** (`F03I`): Endpoint publik (`/api/projects` & `/api/projects/:slug`) mendukung query parameter `?locale=` dengan fallback otomatis ke `EN` dan mengembalikan respons format flat/non-breaking.
+- **Admin EN Translation Sync** (`F03J`): API admin menyinkronkan data legacy dan model translation `EN` secara otomatis di bawah layar ketika admin melakukan create atau update.
+- **Public Case Study UI Foundation** (`F03K`): Modal detail proyek di frontend (`ProjectDetailModal.jsx`) siap menampilkan data case study (Context, Problem, Solution, Key Features, Responsibilities, Outcomes) secara kondisional dengan label bahasa Inggris sebagai baseline, tanpa merusak render detail proyek legacy.
+- **Admin Case Study Content Editor** (`F03L`): Halaman edit admin dilengkapi section editor studi kasus Inggris (EN) dengan form textareas multiline untuk `keyFeatures`, `responsibilities`, dan `outcomes` (satu baris per item) yang secara dinamis dikonversi ke array di backend.
+
 ## Sub-Batch Roadmap
 | Sub-Batch | Name | Status | Purpose | Dependency |
 |---|---|---|---|---|
@@ -31,6 +39,7 @@ Mencakup sistem portfolio, kategori proyek, project card, modal detail, dan link
 | F03J | Admin Project EN Translation Sync / Adaptation | Completed | Adaptasi Admin API agar otomatis membuat/upsert ProjectTranslation locale EN ketika admin melakukan create/update project. | F03I |
 | F03K | Public Project Case Study UI Foundation | Completed | Menyiapkan komponen modal detail proyek di frontend agar siap merender data case study secara conditional menggunakan label English. | F03J |
 | F03L | Admin Project Case Study Content Editor | Completed | Menambahkan kemampuan Admin Project Form untuk mengelola konten case study default English/EN. | F03K |
+| F03-CP | Project Portfolio Checkpoint | Completed | Melakukan checkpoint dokumentasi setelah rangkaian F03H–F03L selesai. | F03L |
 
 ## HOLD / Blocked Notes
 - Asset finalization masuk ke lingkup F06. Sebagian project data belum komplit sepenuhnya.
@@ -64,4 +73,5 @@ Mencakup sistem portfolio, kategori proyek, project card, modal detail, dan link
 - [F03J] Mengadaptasi Admin Project API (create, update, getById) agar sinkronisasi `ProjectTranslation` locale `EN` otomatis dikelola backend tanpa memecah form admin lama (backward compatible payload). Project detail by ID sekarang mengembalikan object lengkap include `translations`. Pembuatan project baru otomatis membuat record translations EN, dan update project otomatis meng-upsert translations EN (menyinkronkan legacy fields dan optional `role` jika disertakan).
 - [F03K] Menyiapkan fondasi UI case study di frontend dan backend. Di sisi server, mapper `projectTranslationMapper.js` diperbarui agar menyertakan semua parameter case study flat (`projectContext`, `problem`, `solution` terjemahan, `keyFeatures`, `responsibilities`, `outcomes`). Di sisi client, `ProjectDetailModal.jsx` dimodifikasi agar merender section case study secara kondisional (hanya tampil jika data tersedia dan tidak memakan ruang/membuat layout janggal jika datanya kosong) menggunakan penamaan label bahasa Inggris sebagai baseline. Skema rendering legacy (Fitur Utama, Tantangan & Solusi lama) tetap dipertahankan demi backward compatibility.
 - [F03L] Mengintegrasikan form editor studi kasus Inggris (EN) ke Admin Project Form (`ProjectForm.jsx`) dengan menambahkan input `role`, textarea `projectContext`, `problem`, `solution`, serta multiline textareas untuk `keyFeatures`, `responsibilities`, dan `outcomes` (satu baris per item). Admin CRUD API (`adminProjects.controller.js`) diperbarui untuk memvalidasi parameter array ini dan menyimpannya langsung pada record `ProjectTranslation` locale `EN`. `AdminProjectEdit.jsx` memflaten data EN ke dalam form `initialData` agar edit ulang berjalan dengan benar.
+- [F03-CP] Melakukan checkpoint dokumentasi setelah seluruh rangkaian implementasi multilingual case study selesai. Menyelaraskan status pada index utama history dan status aktif di berkas status global, serta memastikan integritas logic database dan visual page stabil.
 
