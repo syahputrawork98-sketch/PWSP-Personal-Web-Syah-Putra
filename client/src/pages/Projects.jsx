@@ -124,6 +124,23 @@ const Projects = () => {
           ))}
         </div>
           <>
+            {/* Featured Projects Heading */}
+            {featuredProjects.length > 0 && (
+              <motion.div
+                style={{ marginBottom: 'var(--space-6)' }}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+              >
+                <h3 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: 'var(--space-2)' }}>
+                  {t('projects.featuredTitle')}
+                </h3>
+                <p style={{ opacity: 0.75, fontSize: '0.95rem', lineHeight: 1.5, maxWidth: '720px' }}>
+                  {t('projects.featuredDescription')}
+                </p>
+              </motion.div>
+            )}
+
             {/* Featured Projects Grid */}
             {featuredProjects.length > 0 && (
               <motion.div 
@@ -154,9 +171,12 @@ const Projects = () => {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
               >
-                <h3 style={{ opacity: 0.6, fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '2px', borderBottom: '1px solid var(--border-color)', paddingBottom: 'var(--space-4)' }}>
+                <h3 style={{ opacity: 0.6, fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '2px', borderBottom: '1px solid var(--border-color)', paddingBottom: 'var(--space-2)', marginBottom: 'var(--space-2)' }}>
                   {t('projects.otherProjects')}
                 </h3>
+                <p style={{ opacity: 0.7, fontSize: '0.9rem', lineHeight: 1.5, maxWidth: '720px' }}>
+                  {t('projects.otherDescription')}
+                </p>
               </motion.div>
             )}
 
