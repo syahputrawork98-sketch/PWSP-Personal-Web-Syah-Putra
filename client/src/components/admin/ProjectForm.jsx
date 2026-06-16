@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 const ProjectForm = ({ initialData, onSubmit, onCancel, loading }) => {
   const [activeTab, setActiveTab] = useState('EN'); // EN, ID, JA
   const [prevEnTitle, setPrevEnTitle] = useState('');
+  const [validationError, setValidationError] = useState('');
 
   const [sharedData, setSharedData] = useState({
     slug: '',
@@ -106,6 +107,10 @@ const ProjectForm = ({ initialData, onSubmit, onCancel, loading }) => {
       }
     }));
 
+    if (lang === 'EN' && (name === 'title' || name === 'shortDescription') && value.trim()) {
+      setValidationError('');
+    }
+
     if (lang === 'EN' && name === 'title') {
       const currentEnTitle = value;
       const expectedOldSlug = prevEnTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
@@ -123,6 +128,16 @@ const ProjectForm = ({ initialData, onSubmit, onCancel, loading }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setValidationError('');
+
+    const enTitle = translationsData.EN.title ? translationsData.EN.title.trim() : '';
+    const enShortDesc = translationsData.EN.shortDescription ? translationsData.EN.shortDescription.trim() : '';
+
+    if (!enTitle || !enShortDesc) {
+      setValidationError('English title and short description are required because English is the default fallback language.');
+      setActiveTab('EN');
+      return;
+    }
     
     // Process techStack string to array
     const techArray = sharedData.techStack
@@ -372,6 +387,12 @@ const ProjectForm = ({ initialData, onSubmit, onCancel, loading }) => {
         Localization Settings (Translatable Content)
       </h3>
 
+      {validationError && (
+        <div style={{ backgroundColor: '#fee2e2', color: '#dc2626', padding: '10px 16px', borderRadius: '4px', border: '1px solid #fca5a5', fontWeight: 600, fontSize: '0.9rem', marginBottom: '12px' }}>
+          ⚠️ {validationError}
+        </div>
+      )}
+
       {/* Translations Tab Navigation */}
       <div style={{ display: 'flex', gap: '8px', borderBottom: '2px solid var(--border-color)', paddingBottom: '8px', marginBottom: '8px' }}>
         {['EN', 'ID', 'JA'].map(lang => (
@@ -392,11 +413,15 @@ const ProjectForm = ({ initialData, onSubmit, onCancel, loading }) => {
               gap: '6px'
             }}
           >
-            {lang === 'EN' && <span>🇬🇧 English *</span>}
-            {lang === 'ID' && <span>🇮🇩 Indonesia</span>}
-            {lang === 'JA' && <span>🇯🇵 Japanese</span>}
+            {lang === 'EN' && <span>🇬🇧 English (Required)</span>}
+            {lang === 'ID' && <span>🇮🇩 Indonesia (Optional)</span>}
+            {lang === 'JA' && <span>🇯🇵 Japanese (Optional)</span>}
           </button>
         ))}
+      </div>
+
+      <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '12px', fontStyle: 'italic' }}>
+        💡 English content is required and serves as the default fallback. Indonesian and Japanese translations are optional.
       </div>
 
       {/* Translations Inputs for the Active Tab */}

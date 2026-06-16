@@ -66,3 +66,9 @@ Admin Panel CMS telah berstatus *fully-mapped* dan mematuhi pilar CRUD:
 - **Dynamic Translation Fallback**: Fungsi helper translator `t(path)` di `LanguageContext.jsx` dirancang dengan fallback bertingkat. Jika path pencarian dictionary untuk locale aktif (`JA` atau `ID`) mengembalikan nilai tidak terdefinisi (missing key), sistem otomatis melakukan pencarian ulang (fallback) ke kamus bahasa Inggris (`EN`), guna mencegah tampilan UI kosong (*blank*) atau menampilkan path string mentah.
 - **Visual Switcher Exposure**: Dropdown pemilih bahasa `<select className="lang-select">` pada `Navbar.jsx` untuk mode desktop maupun mobile kini menyertakan opsi `JA`.
 - **API Fetch Synchronization**: Saat pengguna memilih bahasa Jepang, request data proyek publik secara otomatis menyematkan parameter kueri `?locale=JA` ke backend API. Jika data proyek tidak memiliki versi terjemahan Jepang di database, backend secara otomatis melakukan fallback data terjemahan ke versi `EN` sesuai kontrak API.
+
+## Admin Project Translation Validation & UX Polish (Batch F03Q)
+- **Client-Side Validation**: `ProjectForm.jsx` memvalidasi kelengkapan bidang wajib bahasa Inggris (EN `title` dan `shortDescription`) sebelum pengiriman data (`onSubmit`).
+- **Active Tab Redirect**: Jika kolom wajib EN tidak lengkap, form membatalkan submit, memicu pesan error visual, dan otomatis memindahkan tab aktif kembali ke `EN` agar memudahkan admin melengkapinya.
+- **Visual Indicators & Guide**: Tombol tab navigasi diperjelas dengan keterangan `Required` pada `English` dan `Optional` pada `Indonesia` & `Japanese`. Ditambahkan pula baris petunjuk (helper text) di bawah switcher untuk memberikan kepastian alur pengisian translasi.
+
