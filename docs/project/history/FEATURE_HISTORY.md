@@ -22,6 +22,7 @@ Dokumen ini adalah index history aktif berbasis fitur. Detail setiap fitur disim
 | F13 | Mobile Responsive UI Improvement | Completed | features/F13_MOBILE_RESPONSIVE_UI_IMPROVEMENT.md |
 | F14 | Repository Normalization and Documentation Sync | Partial / Backend Audit Ready | features/F14_REPOSITORY_NORMALIZATION_DOCUMENTATION_SYNC.md |
 | F15 | HRD Portfolio Score Improvement | Completed | features/F15_HRD_PORTFOLIO_SCORE_IMPROVEMENT.md |
+| F16 | Frontend i18n Modularization & Technical Debt Cleanup | Completed / Checkpointed | features/F16_FRONTEND_I18N_MODULARIZATION.md |
 
 ## Major Checkpoints & Phase Updates
 
@@ -42,4 +43,10 @@ Rangkaian fase multibahasa (Experience Multilingual CMS Integration) telah disel
 - **F03S.3**: Admin CMS Experience tabs manual EN/ID/JA dengan validasi wajib `role` Inggris, sinkronisasi otomatis EN ke field legacy, dan auto-cleanup record kosong.
 - **F03S.4**: Integrasi locale aktif pada halaman publik Experience, lokalisasi dinamis format tanggal dan label status kerja aktif ("Present"/"Sekarang"/"現在").
 - **F03S-CP**: Checkpoint dokumentasi fase multibahasa sistem pengalaman kerja (Experience).
+
+### F16 — Frontend i18n Modularization & Technical Debt Cleanup (F16A - F16-CP)
+Fase refaktorisasi basis kode lokalisasi untuk modularitas kamus bahasa:
+- **F16A**: Memecah `client/src/i18n.js` yang bersifat monolithic menjadi berkas-berkas lokalisasi modular per section/page di bawah `client/src/i18n/sections/`, serta menyatukannya kembali via aggregator `client/src/i18n/index.js` dan adapter re-export.
+- **F16-CP**: Checkpoint dokumentasi fase modularisasi dictionary lokalisasi frontend.
+
 
