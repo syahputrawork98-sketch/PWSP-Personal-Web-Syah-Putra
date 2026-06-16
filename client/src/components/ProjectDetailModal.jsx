@@ -124,7 +124,7 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
               {/* Main Content Layout Grid */}
               <div className="project-modal-grid-container" style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr', gap: 'var(--space-8)' }}>
                 
-                {/* Left Column: Summary & Features & Challenges */}
+                {/* Left Column: Summary & Features & Challenges & Case Study Foundation */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
                   <div>
                     <h4 style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1.5px', color: 'var(--primary-color)', marginBottom: 'var(--space-3)', fontWeight: 700 }}>
@@ -134,6 +134,39 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
                       {project.description || 'Detail deskripsi proyek belum tersedia.'}
                     </p>
                   </div>
+
+                  {project.projectContext && (
+                    <div>
+                      <h4 style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1.5px', color: 'var(--primary-color)', marginBottom: 'var(--space-3)', fontWeight: 700 }}>
+                        Project Context
+                      </h4>
+                      <p style={{ lineHeight: 1.75, opacity: 0.95, fontSize: '1.02rem', color: 'var(--text-primary)', margin: 0 }}>
+                        {project.projectContext}
+                      </p>
+                    </div>
+                  )}
+
+                  {project.problem && (
+                    <div>
+                      <h4 style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1.5px', color: 'var(--primary-color)', marginBottom: 'var(--space-3)', fontWeight: 700 }}>
+                        The Problem
+                      </h4>
+                      <p style={{ lineHeight: 1.75, opacity: 0.95, fontSize: '1.02rem', color: 'var(--text-primary)', margin: 0 }}>
+                        {project.problem}
+                      </p>
+                    </div>
+                  )}
+
+                  {project.solution && project.problem && (
+                    <div>
+                      <h4 style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1.5px', color: 'var(--primary-color)', marginBottom: 'var(--space-3)', fontWeight: 700 }}>
+                        The Solution
+                      </h4>
+                      <p style={{ lineHeight: 1.75, opacity: 0.95, fontSize: '1.02rem', color: 'var(--text-primary)', margin: 0 }}>
+                        {project.solution}
+                      </p>
+                    </div>
+                  )}
 
                   {project.features && project.features.length > 0 && (
                     <div>
@@ -151,7 +184,55 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
                     </div>
                   )}
 
-                  {(project.challenge || project.solution) && (
+                  {project.keyFeatures && Array.isArray(project.keyFeatures) && project.keyFeatures.length > 0 && (
+                    <div>
+                      <h4 style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1.5px', color: 'var(--primary-color)', marginBottom: 'var(--space-3)', fontWeight: 700 }}>
+                        Key Features
+                      </h4>
+                      <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
+                        {project.keyFeatures.map((feature, i) => (
+                          <li key={i} style={{ fontSize: '0.95rem', display: 'flex', alignItems: 'flex-start', gap: '10px', lineHeight: 1.5, color: 'var(--text-primary)' }}>
+                            <span style={{ color: 'var(--primary-color)', fontWeight: 'bold' }}>✓</span>
+                            <span>{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {project.responsibilities && Array.isArray(project.responsibilities) && project.responsibilities.length > 0 && (
+                    <div>
+                      <h4 style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1.5px', color: 'var(--primary-color)', marginBottom: 'var(--space-3)', fontWeight: 700 }}>
+                        Key Responsibilities
+                      </h4>
+                      <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
+                        {project.responsibilities.map((resp, i) => (
+                          <li key={i} style={{ fontSize: '0.95rem', display: 'flex', alignItems: 'flex-start', gap: '10px', lineHeight: 1.5, color: 'var(--text-primary)' }}>
+                            <span style={{ color: 'var(--primary-color)', fontWeight: 'bold' }}>▪</span>
+                            <span>{resp}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {project.outcomes && Array.isArray(project.outcomes) && project.outcomes.length > 0 && (
+                    <div>
+                      <h4 style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1.5px', color: 'var(--primary-color)', marginBottom: 'var(--space-3)', fontWeight: 700 }}>
+                        Outcomes & Impact
+                      </h4>
+                      <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
+                        {project.outcomes.map((outcome, i) => (
+                          <li key={i} style={{ fontSize: '0.95rem', display: 'flex', alignItems: 'flex-start', gap: '10px', lineHeight: 1.5, color: 'var(--text-primary)' }}>
+                            <span style={{ color: 'var(--primary-color)', fontWeight: 'bold' }}>✦</span>
+                            <span>{outcome}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {(project.challenge || (project.solution && !project.problem)) && (
                     <div style={{ 
                       padding: 'var(--space-5)', 
                       background: 'rgba(var(--primary-color-rgb), 0.03)', 
@@ -167,7 +248,7 @@ const ProjectDetailModal = ({ isOpen, onClose, project }) => {
                           <p style={{ fontSize: '0.9rem', lineHeight: 1.6, opacity: 0.85, margin: 0, color: 'var(--text-primary)' }}>{project.challenge}</p>
                         </div>
                       )}
-                      {project.solution && (
+                      {project.solution && !project.problem && (
                         <div>
                           <h5 style={{ fontSize: '0.85rem', fontWeight: 700, margin: '0 0 var(--space-1)', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Solusi</h5>
                           <p style={{ fontSize: '0.9rem', lineHeight: 1.6, opacity: 0.85, margin: 0, color: 'var(--text-primary)' }}>{project.solution}</p>

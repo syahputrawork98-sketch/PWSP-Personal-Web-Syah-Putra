@@ -40,6 +40,14 @@ const mapProjectWithTranslation = (project, requestedLocale) => {
   const shortDescription = (translation && translation.shortDescription) || project.shortDescription;
   const description = (translation && translation.description) || project.description || null;
   const role = (translation && translation.role) || null;
+  
+  // Case Study Fields from translation
+  const projectContext = (translation && translation.projectContext) || null;
+  const problem = (translation && translation.problem) || null;
+  const solution = (translation && translation.solution) || null;
+  const keyFeatures = (translation && translation.keyFeatures) || [];
+  const responsibilities = (translation && translation.responsibilities) || [];
+  const outcomes = (translation && translation.outcomes) || [];
 
   // Available locales based on translations that exist in the database
   const availableLocales = translations.map(t => t.locale);
@@ -63,6 +71,12 @@ const mapProjectWithTranslation = (project, requestedLocale) => {
     clientName: project.clientName,
     projectStatus: project.projectStatus,
     role,
+    projectContext,
+    problem,
+    solution,
+    keyFeatures,
+    responsibilities,
+    outcomes,
     locale: translation ? translation.locale : 'EN', // The effective locale used
     availableLocales,
     createdAt: project.createdAt,
