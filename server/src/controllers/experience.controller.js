@@ -1,18 +1,27 @@
 const prisma = require('../lib/prisma');
+const { mapExperienceWithTranslation } = require('../utils/experienceTranslationMapper');
 
 // Public
 const getAllPublicExperiences = async (req, res, next) => {
   try {
     const experiences = await prisma.experience.findMany({
       where: { status: 'PUBLISHED' },
+      include: {
+        translations: true,
+      },
       orderBy: [
         { order: 'asc' },
         { startDate: 'desc' },
       ],
     });
 
-    console.log(`[API] getAllPublicExperiences: Found ${experiences.length} records with status PUBLISHED`);
-    res.json({ success: true, data: { experiences } });
+    const { locale } = req.query;
+    const mappedExperiences = experiences.map(exp => 
+      mapExperienceWithTranslation(exp, locale)
+    );
+
+    console.log(`[API] getAllPublicExperiences: Found ${experiences.length} records with status PUBLISHED (locale: ${locale || 'none'})`);
+    res.json({ success: true, data: { experiences: mappedExperiences } });
   } catch (error) {
     next(error);
   }
@@ -22,6 +31,9 @@ const getAllPublicExperiences = async (req, res, next) => {
 const getAllAdminExperiences = async (req, res, next) => {
   try {
     const experiences = await prisma.experience.findMany({
+      include: {
+        translations: true,
+      },
       orderBy: [
         { order: 'asc' },
         { startDate: 'desc' },
@@ -39,6 +51,9 @@ const getExperienceById = async (req, res, next) => {
   try {
     const experience = await prisma.experience.findUnique({
       where: { id },
+      include: {
+        translations: true,
+      },
     });
 
     if (!experience) {
@@ -83,6 +98,9 @@ const createExperience = async (req, res, next) => {
         status: status || 'DRAFT',
         experienceKind: resolvedKind,
         order: parseInt(order) || 0,
+      },
+      include: {
+        translations: true,
       },
     });
 
@@ -130,6 +148,9 @@ const updateExperience = async (req, res, next) => {
         status: status !== undefined ? status : existingExperience.status,
         experienceKind: resolvedKind,
         order: order !== undefined ? parseInt(order) : existingExperience.order,
+      },
+      include: {
+        translations: true,
       },
     });
 
