@@ -33,3 +33,13 @@ Rangkaian fase multibahasa (Multilingual Project System) telah diselesaikan seca
 - **F03P**: Integrasi bahasa Jepang (JA) di context publik, i18n dictionary JA, dan fallback bertingkat.
 - **F03Q**: Validasi sisi klien di Admin Project (wajib EN title & short description), auto redirect tab aktif, dan petunjuk visual.
 - **F03-CP2**: Checkpoint dokumentasi fase multibahasa sistem proyek.
+
+### F03S — Experience Multilingual CMS Integration (F03S-SPEC - F03S-CP)
+Rangkaian fase multibahasa (Experience Multilingual CMS Integration) telah diselesaikan secara penuh:
+- **F03S-SPEC**: Spesifikasi teknis terperinci mengenai migrasi database, model relasional, backend query mapper, admin translation tabs, dan integration scope.
+- **F03S.1**: Penambahan model `ExperienceTranslation` relasional dan migrasi database tanpa merusak field legacy.
+- **F03S.2**: Endpoint publik `/api/experiences` mendukung query `?locale=` dengan fallback dinamis (requested locale -> EN -> legacy fields) dan respons format flat backward-compatible.
+- **F03S.3**: Admin CMS Experience tabs manual EN/ID/JA dengan validasi wajib `role` Inggris, sinkronisasi otomatis EN ke field legacy, dan auto-cleanup record kosong.
+- **F03S.4**: Integrasi locale aktif pada halaman publik Experience, lokalisasi dinamis format tanggal dan label status kerja aktif ("Present"/"Sekarang"/"現在").
+- **F03S-CP**: Checkpoint dokumentasi fase multibahasa sistem pengalaman kerja (Experience).
+

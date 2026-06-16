@@ -31,6 +31,14 @@ Setelah rangkaian sub-batch lokalisasi publik dan antarmuka CMS admin multibahas
 - **Public JA Language Switcher Exposure** (`F03P`): Bahasa Jepang (JA) didukung penuh sebagai pilihan di navbar switcher publik. Kamus i18n JA lengkap ditambahkan untuk semua elemen halaman statis publik dengan mekanisme fallback otomatis ke EN jika suatu kunci/elemen kosong.
 - **Admin Translation Validation & UX Polish** (`F03Q`): Form admin dibekali validasi sisi klien yang melarang penyimpanan jika judul/deskripsi pendek bahasa Inggris (EN) kosong, otomatis memindahkan tab aktif ke `EN` saat error terjadi, serta menambahkan petunjuk pengisian visual.
 
+### F03S-CP Checkpoint Summary
+Setelah rangkaian sub-batch lokalisasi publik dan antarmuka CMS admin multibahasa untuk Experience selesai (F03S-SPEC sampai F03S.4), Experience Multilingual CMS Integration telah diselesaikan secara penuh:
+- **ExperienceTranslation Schema & Migration** (`F03S.1`): Model database relasional ditambahkan di Prisma schema untuk melokalisasi `role`, `description`, dan `highlights` tanpa merusak kolom legacy.
+- **Backend Experience Locale Mapping** (`F03S.2`): API `/api/experiences` diperluas dengan query parameter `?locale=` yang memetakan konten secara otomatis berdasarkan prioritas fallback: requested locale -> `EN` -> legacy fields.
+- **Admin Experience Translation Tabs** (`F03S.3`): Form pengeditan dan pembuatan di Admin CMS Experience mendukung tab manual terjemahan `EN`, `ID`, dan `JA` dengan sinkronisasi data `EN` otomatis ke field legacy, validasi wajib isi untuk `role` Inggris (EN), serta auto-cleanup record kosong.
+- **Public Experience Locale Integration** (`F03S.4`): Halaman publik Experience secara otomatis memuat locale aktif via context language switcher, mendukung rendering tanggal lokal (`en-US`, `id-ID`, `ja-JP`), dan lokalisasi label status kerja aktif ("Present"/"Sekarang"/"現在").
+- **Karakteristik & Kebijakan Multibahasa**: Pengelolaan terjemahan dilakukan secara manual tanpa auto-translate API. Bahasa Inggris wajib diisi sebagai baseline default, sedangkan bahasa Indonesia & Jepang bersifat opsional.
+
 ## Sub-Batch Roadmap
 | Sub-Batch | Name | Status | Purpose | Dependency |
 |---|---|---|---|---|
@@ -59,7 +67,7 @@ Setelah rangkaian sub-batch lokalisasi publik dan antarmuka CMS admin multibahas
 | F03S.2 | Backend Experience Locale Mapping | Completed | Adaptasi API & controller backend untuk penanganan multilingual data Experience. | F03S.1 |
 | F03S.3 | Admin Experience Translation Tabs | Completed | Pembuatan tab manajemen bahasa manual EN/ID/JA di CMS Admin untuk Experience. | F03S.2 |
 | F03S.4 | Public Experience Locale Integration | Completed | Integrasi locale aktif pada halaman publik Experience dan localized date display. | F03S.3 |
-| F03S-CP | Experience Multilingual Checkpoint | Planned | Checkpoint dokumentasi akhir dan validasi menyeluruh integrasi multilingual Experience. | F03S.4 |
+| F03S-CP | Experience Multilingual Checkpoint | Completed | Checkpoint dokumentasi akhir dan validasi menyeluruh integrasi multilingual Experience. | F03S.4 |
 
 
 ## HOLD / Blocked Notes
@@ -108,6 +116,7 @@ Setelah rangkaian sub-batch lokalisasi publik dan antarmuka CMS admin multibahas
 - [F03S.2] Mengadaptasi backend controller dan membuat helper `experienceTranslationMapper.js` agar endpoint publik `/api/experiences` mendukung query parameter `?locale=` dengan fallback dinamis (Requested locale -> EN -> legacy fields) serta menyajikan payload flat backward-compatible. API admin get/list diupdate untuk mengembalikan relasi terjemahan.
 - [F03S.3] Integrasi tab navigasi trilingual (EN, ID, JA) manual di formulir Admin CMS Experience (`ExperienceForm.jsx`), pemisahan input global (shared) dan lokal (translatable), validasi role Inggris wajib pada sisi client & server, sinkronisasi otomatis EN ke field legacy, dan penanganan auto-delete/fallback jika data opsional dikosongkan.
 - [F03S.4] Integrasi locale aktif pada halaman publik Experience (`Experience.jsx`) dengan menambahkan query parameter `?locale=` pada API call, melakukan re-fetch secara otomatis pada saat preferensi bahasa di-switch oleh pengguna, dan melokalisasikan data tanggal serta label 'Present/Sekarang/現在' secara lokal.
+- [F03S-CP] Melakukan checkpoint dokumentasi akhir dan validasi menyeluruh integrasi multilingual Experience, menyelaraskan status pada indeks utama history dan status aktif di berkas status global.
 
 ## F03R — Multilingual CMS Expansion Planning
 
@@ -300,3 +309,45 @@ Pecah proses implementasi ke dalam unit kerja kecil yang aman:
    - Integrasi state locale aktif ke pemanggilan endpoint publik dan lokalisasi format tanggal/penanda status kerja aktif.
 5. **F03S-CP — Experience Multilingual Checkpoint**
    - Audit end-to-end, verifikasi integrasi UI & API di Anti-Gravity IDE, dan update walkthrough.
+
+---
+
+## F03S-CP — Experience Multilingual Checkpoint
+
+Fase integrasi multibahasa manual EN/ID/JA untuk entitas Pengalaman Kerja (`Experience`) telah selesai diimplementasikan secara end-to-end dan melalui validasi menyeluruh di Anti-Gravity IDE. 
+
+### Ringkasan Pencapaian Teknis & Fungsional
+
+1. **Struktur Basis Data Multilingual (`F03S.1`)**:
+   - Model `ExperienceTranslation` relasional telah ditambahkan pada `schema.prisma`.
+   - Hubungan one-to-many dari `Experience` ke `ExperienceTranslation` berjalan lancar.
+   - Kolom legacy `role`, `description`, dan `highlights` tetap dipertahankan demi *backward compatibility*.
+   - Perubahan skema telah berhasil dimigrasikan ke database lokal via Prisma CLI (`npx prisma migrate dev`).
+
+2. **Kueri Lokalisasi & Fallback API (`F03S.2`)**:
+   - Endpoint publik `/api/experiences` mendukung query parameter `?locale=EN/ID/JA` (case-insensitive).
+   - Penanganan query locale menggunakan mapper `experienceTranslationMapper.js` dengan prioritas fallback bertingkat:
+     `Kueri Locale Terpilih` $\rightarrow$ `Terjemahan English (EN)` $\rightarrow$ `Legacy Fields (Model Utama)`.
+   - Data respons dikembalikan dalam bentuk objek flat non-breaking untuk melindungi antarmuka client-side yang lama.
+   - API Admin CRUD (`adminExperiences.controller.js`) diperluas untuk mengembalikan data relasional terjemahan secara lengkap (`include: { translations: true }`).
+
+3. **Manajemen Editor Trilingual Admin (`F03S.3`)**:
+   - CMS Admin Experience (`ExperienceForm.jsx`) diperkuat dengan antarmuka editor berbasis tabs (English, Indonesia, Japanese).
+   - Kolom metadata global (Shared) seperti perusahaan, tanggal, stack, dan status dipisahkan di bagian atas form.
+   - Validasi sisi klien (client-side validation) mewajibkan judul pekerjaan/role bahasa Inggris (`EN.role`). Jika kosong saat disimpan, pengiriman dibatalkan, pesan kesalahan ditampilkan, dan tab fokus otomatis beralih ke `EN`.
+   - Sinkronisasi otomatis dari `EN.role`, `EN.description`, dan `EN.highlights` ke model `Experience` utama dilakukan oleh server untuk kompatibilitas data legacy.
+   - Penanganan pembersihan data opsional (`ID` & `JA` kosong total) otomatis memicu operasi `delete` pada terjemahan terkait di database agar fallback EN berjalan optimal.
+
+4. **Integrasi & Lokalisasi Halaman Publik (`F03S.4`)**:
+   - Halaman `client/src/pages/Experience.jsx` dimodifikasi agar membaca locale aktif dari context language switcher global (`useLanguage()`).
+   - Penambahan parameter kueri `?locale=${locale}` ke pemanggilan endpoint `/api/experiences` dengan re-fetch otomatis.
+   - Lokalisasi string tanggal kerja serta string label aktif (`isCurrent`):
+     - EN: `"Present"`, format tanggal `en-US` (e.g. `"Jun 2026"`).
+     - ID: `"Sekarang"`, format tanggal `id-ID` (e.g. `"Jun 2026"`).
+     - JA: `"現在"`, format tanggal `ja-JP` (e.g. `"2026年6月"`).
+
+### Rencana Langkah Berikutnya (Next Step Candidates)
+
+Dengan selesainya seluruh target multilingual Project & Experience System pada F03, status portfolio multibahasa telah terpenuhi sepenuhnya. Arah pengembangan selanjutnya siap ditransisikan ke:
+1. **F05 / F06 — Media Assets and Link Integration**: Melakukan audit dan inventarisasi berkas tautan external dan asset final (seperti Drive, Cloudinary, static file ATS PDF, live link candidate repositori) pasca normalisasi.
+2. **New Roomchat Planning**: Transisi ke roomchat baru dengan planning sistematis untuk fitur selanjutnya yang siap dikembangkan (seperti sinkronisasi Neon final).
