@@ -1,6 +1,6 @@
 /**
  * Targeted Sync Script for BNSP Credential
- * ID: bnsp-web-node-react-2025
+ * ID: bnsp-web-node-react
  * 
  * Safely updates or inserts the BNSP certification in the Neon database
  * without triggering a full seed (which deletes live data).
@@ -18,7 +18,7 @@ const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
 
-const TARGET_ID = 'bnsp-web-node-react-2025';
+const TARGET_ID = 'bnsp-web-node-react';
 
 async function main() {
   const applySync = process.env.APPLY_CREDENTIAL_SYNC === 'true';

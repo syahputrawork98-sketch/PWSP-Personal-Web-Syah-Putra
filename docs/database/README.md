@@ -49,6 +49,15 @@ Kami telah menyediakan opsi menggunakan Docker Compose agar lebih mudah.
 2. **Production Migration Command**: Gunakan perintah `npx prisma migrate deploy` di production untuk menerapkan skema database tanpa menghapus data interaktif.
 3. **Seed Policy**: Menjalankan seed (`npm run seed`) hanya diperuntukkan untuk environment lokal (development) atau inisialisasi awal (initial deployment) yang benar-benar disengaja.
 4. **Danger Zone (Peringatan Keras)**: **JANGAN** pernah jalankan script seed di production setelah website hidup dan terisi data riil dari CMS, karena operasi `deleteMany` di dalam seed script akan menghapus seluruh data production Anda!
+5. **Safe Synchronization Scripts**:
+   - Untuk melakukan sinkronisasi data publik terbaru ke Neon database secara aman tanpa menghapus live data CMS (misalnya, data user atau data proyek custom), gunakan script sinkronisasi yang tersedia di `server/scripts/`:
+     - Targeted BNSP Credential Sync: `npm run sync:credential:bnsp` (menargetkan `bnsp-web-node-react`)
+     - Full Public Content Sync: `npm run sync:public-content`
+   - Kedua script di atas secara default berjalan dalam mode **Dry-Run (Read-Only)** untuk keamanan.
+   - Untuk mengaplikasikan perubahan secara riil ke database target, set environment variable manual:
+     - `APPLY_CREDENTIAL_SYNC=true npm run sync:credential:bnsp`
+     - `APPLY_PUBLIC_CONTENT_SYNC=true npm run sync:public-content`
+
 
 ## Catatan Penting
 - Database tidak boleh dikerjakan bersamaan dengan frontend UI besar tanpa scope yang jelas.
